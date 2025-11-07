@@ -74,6 +74,65 @@ export const BlockPreview = ({ block, index }: BlockPreviewProps) => {
             </h2>
           </div>
         );
+      case "twin-teaser":
+        return (
+          <div className="flex gap-4 p-4">
+            <div className="w-1/2 space-y-2">
+              {block.content.leftImageUrl ? (
+                <img 
+                  src={block.content.leftImageUrl} 
+                  alt={block.content.leftHeadline || "Image"} 
+                  className="w-full h-32 object-cover rounded"
+                />
+              ) : (
+                <div className="w-full h-32 bg-muted rounded flex items-center justify-center text-muted-foreground text-sm">
+                  Bez slike
+                </div>
+              )}
+              <h4 className="font-bold text-primary text-sm">{block.content.leftHeadline || "Bez naslova"}</h4>
+              <p className="text-xs text-foreground line-clamp-2">{block.content.leftText || "Bez teksta"}</p>
+              {block.content.leftButtonText && (
+                <div className="inline-block px-3 py-1 bg-primary text-primary-foreground rounded text-xs mt-2">
+                  {block.content.leftButtonText}
+                </div>
+              )}
+            </div>
+            <div className="w-1/2 space-y-2">
+              {block.content.rightImageUrl ? (
+                <img 
+                  src={block.content.rightImageUrl} 
+                  alt={block.content.rightHeadline || "Image"} 
+                  className="w-full h-32 object-cover rounded"
+                />
+              ) : (
+                <div className="w-full h-32 bg-muted rounded flex items-center justify-center text-muted-foreground text-sm">
+                  Bez slike
+                </div>
+              )}
+              <h4 className="font-bold text-primary text-sm">{block.content.rightHeadline || "Bez naslova"}</h4>
+              <p className="text-xs text-foreground line-clamp-2">{block.content.rightText || "Bez teksta"}</p>
+              {block.content.rightButtonText && (
+                <div className="inline-block px-3 py-1 bg-primary text-primary-foreground rounded text-xs mt-2">
+                  {block.content.rightButtonText}
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      case "paragraph":
+        return (
+          <div className="p-6 text-center space-y-3">
+            <div>
+              <p className="font-bold text-primary">{block.content.greeting || "Hello,"}</p>
+              <p className="text-sm text-foreground mt-2">{block.content.text || "Bez teksta"}</p>
+            </div>
+            {block.content.buttonText && (
+              <div className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded text-sm">
+                {block.content.buttonText}
+              </div>
+            )}
+          </div>
+        );
       default:
         return null;
     }

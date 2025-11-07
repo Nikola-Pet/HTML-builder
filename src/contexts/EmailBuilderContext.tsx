@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export interface BlockData {
   id: string;
-  type: "image-text" | "banner" | "headline";
+  type: "image-text" | "banner" | "headline" | "twin-teaser" | "paragraph";
   content: Record<string, any>;
 }
 

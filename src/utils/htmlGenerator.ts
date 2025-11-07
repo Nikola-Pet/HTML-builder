@@ -347,6 +347,10 @@ function generateBlockHTML(block: BlockData): string {
       return generateBannerBlock(block.content);
     case "headline":
       return generateHeadlineBlock(block.content);
+    case "twin-teaser":
+      return generateTwinTeaserBlock(block.content);
+    case "paragraph":
+      return generateParagraphBlock(block.content);
     default:
       return "";
   }
@@ -502,6 +506,242 @@ function generateHeadlineBlock(content: any): string {
                               </tbody>
                             </table>
                           </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</center>`;
+}
+
+function generateTwinTeaserBlock(content: any): string {
+  const leftImageUrl = content.leftImageUrl || "https://dummyimage.com/1280x720";
+  const leftImageLinkUrl = content.leftImageLinkUrl || "https://www.example.com";
+  const leftHeadline = content.leftHeadline || "Headline";
+  const leftText = content.leftText || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const leftButtonText = content.leftButtonText || "Please click me";
+  const leftButtonUrl = content.leftButtonUrl || "https://www.example.com/";
+  
+  const rightImageUrl = content.rightImageUrl || "https://dummyimage.com/1280x720";
+  const rightImageLinkUrl = content.rightImageLinkUrl || "https://www.example.com";
+  const rightHeadline = content.rightHeadline || "Headline";
+  const rightText = content.rightText || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const rightButtonText = content.rightButtonText || "Please click me";
+  const rightButtonUrl = content.rightButtonUrl || "https://www.example.com/";
+  
+  return `<center role="main" class="wrapper" style="table-layout: fixed !important; width: 100%; background-color: #efeff0;">
+  <div class="webkit" style="max-width: 640px !important; background-color: #ffffff !important; display: block !important; margin: 0; width: 100%; font-family: Arial, Helvetica, sans-serif; mso-line-height-rule: exactly; -webkit-font-smoothing: antialiased; -ms-text-size-adjust: none !important; padding: 0;">
+    <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#efeff0" style="border-spacing: 0; background-color: #efeff0 !important; border-collapse: collapse; width: 100%;" role="presentation">
+      <tbody>
+        <tr>
+          <td>
+            <table border="0" align="center" cellpadding="0" cellspacing="0" width="640" style="width: 640px;" class="width-100 dark-bgd" bgcolor="#ffffff" role="presentation">
+              <tbody>
+                <tr>
+                  <td width="16"></td>
+                  <td>
+                    <table align="center" bgcolor="#EFEFF0" border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0; width: 100%;" class="width-100 dark-bgd" role="presentation">
+                      <tbody>
+                        <tr>
+                          <td align="center" bgcolor="#FFFFFF" width="296" valign="top" class="templateColumnContainer">
+                            <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+                              <tbody>
+                                <tr>
+                                  <td align="center" style="font-size: 0; line-height: 0;">
+                                    <a rel="noopener noreferrer" href="${leftImageLinkUrl}" target="_blank" aria-label="Image [description]">
+                                      <img src="${leftImageUrl}" alt="Image" title="Image" width="296" height="auto" style="border: 0; width: 100%;">
+                                    </a>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 30px 0 0 0;">
+                                    <table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+                                      <tbody>
+                                        <tr>
+                                          <td width="12"></td>
+                                          <td>
+                                            <table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="dark-bgd" role="presentation">
+                                              <tbody>
+                                                <tr>
+                                                  <td style="padding: 0 0 18px 0;">
+                                                    <h5 translate="yes" style="font-size: 18px; line-height: 24px; color: #003b6a; text-transform: uppercase; letter-spacing: -0.02em; font-family: 'Arial Black', Arial, Helvetica, sans-serif !important; font-weight: 900; text-align: left; padding: 0; margin: 0;" class="dark-font">${leftHeadline}</h5>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="padding: 0 0 24px 0;">
+                                                    <p role="paragraph" translate="yes" style="font-size: 16px; line-height: 24px; color: #000000; font-family: Arial, Helvetica, sans-serif; padding: 0; margin: 0;" class="dark-font">
+                                                      ${leftText}
+                                                    </p>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="padding: 0 0 24px 0;">
+                                                    <a href="${leftButtonUrl}" class="dark-button" style="font-size: 16px; line-height: 24px; font-family: Arial, Helvetica, sans-serif !important; text-decoration: none; padding: 13px 16px; color: #ffffff; display: inline-block; background-color: #003b6a; mso-padding-alt: 0;" aria-label="Please click me to read more about [headline]">
+                                                      <!--[if mso]>
+                                                        <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 20pt;">&nbsp;</i>
+                                                      <![endif]-->
+                                                      <span translate="yes" style="mso-text-raise: 10pt; color: #ffffff;">${leftButtonText}</span>
+                                                      <!--[if mso]>
+                                                        <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+                                                      <![endif]-->
+                                                    </a>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                          <td width="12"></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td bgcolor="#ffffff" style="padding: 0 0 32px 0;" class="block-vertical-spacing dark-bgd"></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                          <td align="center" bgcolor="#ffffff" width="16" valign="top" class="templateColumnContainer dark-bgd"></td>
+                          <td align="center" bgcolor="#ffffff" width="296" valign="top" class="templateColumnContainer">
+                            <table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+                              <tbody>
+                                <tr>
+                                  <td align="center" style="font-size: 0; line-height: 0;">
+                                    <a rel="noopener noreferrer" href="${rightImageLinkUrl}" target="_blank" aria-label="Image [description]">
+                                      <img src="${rightImageUrl}" alt="Image" title="Image" width="296" height="auto" style="border: 0; width: 100%;">
+                                    </a>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td style="padding: 30px 0 0 0;">
+                                    <table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+                                      <tbody>
+                                        <tr>
+                                          <td width="12"></td>
+                                          <td>
+                                            <table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="dark-bgd" role="presentation">
+                                              <tbody>
+                                                <tr>
+                                                  <td style="padding: 0 0 18px 0;">
+                                                    <h5 translate="yes" style="font-size: 18px; line-height: 24px; color: #003b6a; text-transform: uppercase; letter-spacing: -0.02em; font-family: 'Arial Black', Arial, Helvetica, sans-serif !important; text-align: left; font-weight: 900; padding: 0; margin: 0;" class="dark-font">${rightHeadline}</h5>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="padding: 0 0 24px 0;">
+                                                    <p role="paragraph" translate="yes" style="font-size: 16px; line-height: 24px; color: #000000; font-family: Arial, Helvetica, sans-serif; padding: 0; margin: 0;" class="dark-font">
+                                                      ${rightText}
+                                                    </p>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td style="padding: 0 0 24px 0;">
+                                                    <a href="${rightButtonUrl}" class="dark-button" style="font-size: 16px; line-height: 24px; font-family: Arial, Helvetica, sans-serif !important; text-decoration: none; padding: 13px 16px; color: #ffffff; display: inline-block; background-color: #003b6a; mso-padding-alt: 0;" aria-label="Please click me to read more about [headline]">
+                                                      <!--[if mso]>
+                                                        <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 20pt;">&nbsp;</i>
+                                                      <![endif]-->
+                                                      <span translate="yes" style="mso-text-raise: 10pt; color: #ffffff;">${rightButtonText}</span>
+                                                      <!--[if mso]>
+                                                        <i style="letter-spacing: 25px; mso-font-width: -100%;">&nbsp;</i>
+                                                      <![endif]-->
+                                                    </a>
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                          </td>
+                                          <td width="12"></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td bgcolor="#ffffff" style="padding: 0 0 32px 0;" class="block-vertical-spacing dark-bgd"></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td width="16"></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</center>`;
+}
+
+function generateParagraphBlock(content: any): string {
+  const greeting = content.greeting || "Hello,";
+  const text = content.text || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const buttonText = content.buttonText || "Please click me";
+  const buttonUrl = content.buttonUrl || "https://www.example.com/";
+  
+  return `<center role="main" class="wrapper" style="table-layout: fixed !important; width: 100%; background-color: #efeff0;">
+  <div class="webkit" style="max-width: 640px !important; background-color: #ffffff !important; display: block !important; margin: 0; width: 100%; font-family: Arial, Helvetica, sans-serif; mso-line-height-rule: exactly; -webkit-font-smoothing: antialiased; -ms-text-size-adjust: none !important; padding: 0;">
+    <table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#efeff0" style="border-spacing: 0; background-color: #efeff0 !important; border-collapse: collapse; width: 100%;" role="presentation">
+      <tbody>
+        <tr>
+          <td>
+            <table width="640" align="center" border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0; background-color: #ffffff; width: 640px;" class="width-100 dark-bgd" role="presentation">
+              <tbody>
+                <tr>
+                  <td>
+                    <table align="center" border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0; width: 100%;" role="presentation">
+                      <tbody>
+                        <tr>
+                          <td width="16"></td>
+                          <td style="padding: 0; background: #ffffff;" class="dark-bgd">
+                            <table style="background-color: #ffffff; text-align: center; width: 100%;" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" align="center" class="dark-bgd" role="presentation">
+                              <tbody>
+                                <tr>
+                                  <td style="padding: 0 0 18px 0;">
+                                    <p role="paragraph" translate="yes" style="font-family: Arial, Helvetica, sans-serif !important; line-height: 24px !important; font-size: 18px; padding: 0; margin: 0; color: #003e64; font-weight: 900; text-align: center;" class="dark-font">${greeting}</p>
+                                    <br>
+                                    <p role="paragraph" translate="yes" style="font-family: Arial, Helvetica, sans-serif; line-height: 24px !important; font-size: 16px; padding: 0; margin: 0; text-align: center;">${text}</p>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                          <td width="16"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding: 0 0 32px 0;" class="block-vertical-spacing">
+                    <table border="0" cellpadding="0" cellspacing="0" role="presentation">
+                      <tbody>
+                        <tr>
+                          <td width="16"></td>
+                          <td align="center" valign="middle">
+                            <a href="${buttonUrl}" class="dark-button" style="border: 1px solid #003e64; font-size: 16px; line-height: 24px; font-family: Arial, Helvetica, sans-serif !important; text-decoration: none; padding: 13px 16px; color: #ffffff; display: inline-block; background-color: #003e64; mso-padding-alt: 0;" aria-label="Please click me to read more about [headline]">
+                              <!--[if mso]>
+                                <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 20pt;">&nbsp;</i>
+                              <![endif]-->
+                              <span translate="yes" style="mso-text-raise: 10pt; color: #ffffff;">${buttonText}</span>
+                              <!--[if mso]>
+                                <i style="letter-spacing: 25px; mso-font-width: -100%; mso-text-raise: 20pt;">&nbsp;</i>
+                              <![endif]-->
+                            </a>
+                          </td>
+                          <td width="16"></td>
                         </tr>
                       </tbody>
                     </table>

@@ -4,7 +4,7 @@ import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BlockEditorModal } from "./BlockEditorModal";
-import { ImageIcon, Layout, Type } from "lucide-react";
+import { ImageIcon, Layout, Type, Columns, FileText } from "lucide-react";
 
 interface BlockLibraryModalProps {
   isOpen: boolean;
@@ -29,6 +29,18 @@ const blockTypes = [
     name: "Headline",
     description: "Large centered headline text",
     icon: Type,
+  },
+  {
+    type: "twin-teaser" as const,
+    name: "TwinTeaser",
+    description: "Two columns with image, headline, text and CTA",
+    icon: Columns,
+  },
+  {
+    type: "paragraph" as const,
+    name: "Paragraph",
+    description: "Text paragraph with CTA button",
+    icon: FileText,
   },
 ];
 
