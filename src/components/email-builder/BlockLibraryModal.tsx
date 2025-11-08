@@ -152,22 +152,23 @@ export const BlockLibraryModal = ({ isOpen, onClose }: BlockLibraryModalProps) =
                       <span>Desktop Preview</span>
                       <span className="text-gray-500">640px width</span>
                     </div>
-                    <div className="relative bg-gray-100 p-4 flex justify-center"  style={{ maxHeight: "420px" }}>
+                    <div className="relative bg-gray-100 p-4 flex justify-center"  style={{ maxHeight: "300px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                       <div 
-                        className="bg-white shadow-lg rounded-sm flex-shrink-0"
+                        className="bg-white shadow-lg rounded-sm flex-  -0"
                         style={{
                           width: "640px",
                           minWidth: "640px",
                           border: "1px solid #e5e7eb",
                           overflow: "hidden",
-                          transform: "scale(0.5)",
+                          transform: "scale(0.65)",
+                          minHeight: "min-content",
                         }}
                       >
                         <iframe
                           srcDoc={previewHTMLs[blockType.type]}
                           className="w-full border-0"
                           style={{
-                            height: "450px",
+                            height: "400px",
                             pointerEvents: "none",
                             display: "block",
                           }}
