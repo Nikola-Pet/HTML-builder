@@ -339,7 +339,7 @@ export const BlockEditorModal = ({
                 <span>Desktop Preview</span>
                 <span className="text-gray-500">640px width</span>
               </div>
-              <div className="relative bg-gray-100 p-4 flex justify-center" style={{ maxHeight: "420px" }}>
+              <div className="relative bg-gray-100 p-4 flex justify-center overflow-auto" style={{ maxHeight: "680px" }}>
                 <div 
                   className="bg-white shadow-lg rounded-sm flex-shrink-0"
                   style={{
@@ -347,14 +347,16 @@ export const BlockEditorModal = ({
                     minWidth: "640px",
                     border: "1px solid #e5e7eb",
                     overflow: "hidden",
-                    transform: "scale(0.5)",
+                    transform: "scale(0.75)",
+                    transformOrigin: "top center",
                   }}
                 >
                   <iframe
                     srcDoc={previewHTML}
                     className="w-full border-0"
                     style={{
-                      height: "450px",
+                      height: "600px",
+                      maxHeight: "none",
                       pointerEvents: "none",
                       display: "block",
                     }}
