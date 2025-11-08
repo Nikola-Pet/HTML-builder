@@ -240,60 +240,64 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
 
   return (
     <div className="container mx-auto px-6 py-8 max-w-6xl">
-      {blocks.length === 0 ? (
-        <div className="bg-card rounded-lg shadow-lg border p-12">
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="text-center space-y-4">
-              <div className="mx-auto w-20 h-20 bg-secondary rounded-full flex items-center justify-center">
-                <Plus className="h-10 w-10 text-secondary-foreground" />
-              </div>
-              <h3 className="text-xl font-bold text-foreground">No blocks yet</h3>
-              <p className="text-muted-foreground max-w-md">
-                Start building your email by adding content blocks. Click the button below to get started.
-              </p>
-              <Button onClick={onAddBlock} size="lg">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Your First Block
-              </Button>
-            </div>
+      <div className="space-y-6">
+        {/* Email Template Preview - Stacked */}
+        <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
+          <div className="bg-gray-100 px-4 py-2 border-b flex items-center justify-between">
+            <span className="text-sm font-semibold text-foreground">Email Template Preview</span>
+            <span className="text-xs text-gray-500">Desktop View - 640px width</span>
           </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {/* Email Template Preview - Stacked */}
-          <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
-            <div className="bg-gray-100 px-4 py-2 border-b flex items-center justify-between">
-              <span className="text-sm font-semibold text-foreground">Email Template Preview</span>
-              <span className="text-xs text-gray-500">Desktop View - 640px width</span>
-            </div>
-            <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
-              {/* Header */}
-              <TemplateSection html={headerHTML} title="Header Preview" />
-              
-              {/* Blocks */}
-              {blocks.map((block, index) => (
+          <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
+            {/* Header */}
+            <TemplateSection html={headerHTML} title="Header Preview" />
+            
+            {/* Blocks or Empty State */}
+            {blocks.length === 0 ? (
+              <div className="bg-gray-50 p-4 flex justify-center">
+                <div className="bg-white shadow-lg rounded-sm flex-shrink-0" style={{ width: "640px", minWidth: "640px", border: "1px solid #e5e7eb" }}>
+                  <div className="flex flex-col items-center justify-center py-20 px-8">
+                    <div className="text-center space-y-4">
+                      <div className="mx-auto w-20 h-20 bg-secondary rounded-full flex items-center justify-center">
+                        <Plus className="h-10 w-10 text-secondary-foreground" />
+                      </div>
+                      <h3 className="text-xl font-bold text-foreground">No blocks yet</h3>
+                      <p className="text-muted-foreground max-w-md">
+                        Start building your email by adding content blocks. Click the button below to get started.
+                      </p>
+                      <Button onClick={onAddBlock} size="lg">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Your First Block
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              blocks.map((block, index) => (
                 <BlockPreviewItem
                   key={block.id}
                   block={block}
                   index={index}
                   totalBlocks={blocks.length}
                 />
-              ))}
-              
-              {/* Footer */}
-              <TemplateSection html={footerHTML} title="Footer Preview" />
-            </div>
+              ))
+            )}
+            
+            {/* Footer */}
+            <TemplateSection html={footerHTML} title="Footer Preview" />
           </div>
+        </div>
 
-          {/* Add Block Button */}
+        {/* Add Block Button */}
+        {blocks.length > 0 && (
           <div className="text-center">
             <Button onClick={onAddBlock} variant="outline" size="lg">
               <Plus className="h-4 w-4 mr-2" />
               Add Block
             </Button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
