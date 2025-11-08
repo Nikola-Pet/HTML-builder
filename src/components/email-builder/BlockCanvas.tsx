@@ -54,7 +54,7 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
         }
       } catch (error) {
         setBlockHeight(300);
-        iframe.style.height = "300px";
+        iframe.style.height = "auto";
       }
     };
 
@@ -126,7 +126,8 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
               className="w-full border-0"
               style={{
                 height: "auto",
-                minHeight: "300px",
+                maxHeight: "none",
+                minHeight: "auto",
                 pointerEvents: "none",
                 display: "block",
               }}
@@ -212,7 +213,8 @@ const TemplateSection = ({ html, title }: TemplateSectionProps) => {
           className="w-full border-0"
           style={{
             height: "auto",
-            minHeight: "300px",
+            maxHeight: "none",
+            minHeight: "auto",
             pointerEvents: "none",
             display: "block",
           }}
@@ -264,7 +266,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
               <span className="text-sm font-semibold text-foreground">Email Template Preview</span>
               <span className="text-xs text-gray-500">Desktop View - 640px width</span>
             </div>
-            <div className="bg-gray-100 p-4 space-y-0 overflow-auto" style={{ maxHeight: "80vh" }}>
+            <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
               {/* Header */}
               <TemplateSection html={headerHTML} title="Header Preview" />
               
