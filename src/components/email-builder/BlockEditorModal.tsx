@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { Button } from "@/components/ui/button";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
 
 interface BlockEditorModalProps {
   isOpen: boolean;
@@ -305,84 +306,14 @@ export const BlockEditorModal = ({
     }
   };
 
-  const renderPreview = () => {
-    switch (type) {
-      case "image-text":
-        return (
-          <div className="bg-card p-4 rounded-lg border">
-            <div className="flex gap-4">
-              <div className="w-1/2 h-40 bg-muted rounded flex items-center justify-center text-muted-foreground text-sm">
-                {formData.imageUrl ? "Image" : "No image"}
-              </div>
-              <div className="w-1/2 space-y-2">
-                <h3 className="font-bold text-primary">{formData.headline || "Headline"}</h3>
-                <p className="text-sm text-foreground">{formData.text || "Text content"}</p>
-                <button className="bg-primary text-primary-foreground px-4 py-2 rounded text-sm">
-                  {formData.buttonText || "Button"}
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      case "banner":
-        return (
-          <div className="bg-card rounded-lg border overflow-hidden">
-            <div className="w-full h-48 bg-muted flex items-center justify-center text-muted-foreground">
-              {formData.imageUrl ? "Banner Image" : "No image"}
-            </div>
-          </div>
-        );
-      case "headline":
-        return (
-          <div className="bg-card p-8 rounded-lg border text-center">
-            <h2 className="text-2xl font-bold text-primary">
-              {formData.text || "Headline text"}
-            </h2>
-          </div>
-        );
-      case "twin-teaser":
-        return (
-          <div className="bg-card p-4 rounded-lg border">
-            <div className="flex gap-4">
-              <div className="w-1/2 space-y-2">
-                <div className="h-32 bg-muted rounded flex items-center justify-center text-muted-foreground text-sm">
-                  {formData.leftImageUrl ? "Image" : "No image"}
-                </div>
-                <h3 className="font-bold text-primary text-sm">{formData.leftHeadline || "Headline"}</h3>
-                <p className="text-xs text-foreground line-clamp-2">{formData.leftText || "Text"}</p>
-                <button className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
-                  {formData.leftButtonText || "Button"}
-                </button>
-              </div>
-              <div className="w-1/2 space-y-2">
-                <div className="h-32 bg-muted rounded flex items-center justify-center text-muted-foreground text-sm">
-                  {formData.rightImageUrl ? "Image" : "No image"}
-                </div>
-                <h3 className="font-bold text-primary text-sm">{formData.rightHeadline || "Headline"}</h3>
-                <p className="text-xs text-foreground line-clamp-2">{formData.rightText || "Text"}</p>
-                <button className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs">
-                  {formData.rightButtonText || "Button"}
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      case "paragraph":
-        return (
-          <div className="bg-card p-6 rounded-lg border text-center space-y-4">
-            <div>
-              <p className="font-bold text-primary">{formData.greeting || "Hello,"}</p>
-              <p className="text-sm text-foreground mt-2">{formData.text || "Text content"}</p>
-            </div>
-            <button className="bg-primary text-primary-foreground px-4 py-2 rounded text-sm">
-              {formData.buttonText || "Button"}
-            </button>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+  const previewHTML = useMemo(() => {
+    const previewBlock: BlockData = {
+      id: "preview",
+      type,
+      content: formData,
+    };
+    return generateBlockPreviewHTML(previewBlock);
+  }, [type, formData]);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -403,7 +334,37 @@ export const BlockEditorModal = ({
           {/* Preview */}
           <div className="space-y-4">
             <h3 className="font-semibold text-foreground">Live Preview</h3>
-            {renderPreview()}
+            <div className="border rounded-lg bg-gray-50 overflow-hidden">
+              <div className="bg-gray-100 px-3 py-1 text-xs text-gray-600 border-b flex items-center justify-between">
+                <span>Desktop Preview</span>
+                <span className="text-gray-500">640px width</span>
+              </div>
+              <div className="relative bg-gray-100 p-4 flex justify-center" style={{ maxHeight: "420px" }}>
+                <div 
+                  className="bg-white shadow-lg rounded-sm flex-shrink-0"
+                  style={{
+                    width: "640px",
+                    minWidth: "640px",
+                    border: "1px solid #e5e7eb",
+                    overflow: "hidden",
+                    transform: "scale(0.5)",
+                  }}
+                >
+                  <iframe
+                    srcDoc={previewHTML}
+                    className="w-full border-0"
+                    style={{
+                      height: "450px",
+                      pointerEvents: "none",
+                      display: "block",
+                    }}
+                    title="Live Preview"
+                    sandbox="allow-same-origin"
+                    scrolling="no"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

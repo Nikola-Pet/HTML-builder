@@ -340,20 +340,34 @@ const FOOTER = `<center role="main" class="wrapper" style="table-layout: fixed !
 const MASTER_TEMPLATE_END = `</body></html>`;
 
 function generateBlockHTML(block: BlockData): string {
+  const blockId = block.id;
+  let blockHTML = "";
+  
   switch (block.type) {
     case "image-text":
-      return generateImageTextBlock(block.content);
+      blockHTML = generateImageTextBlock(block.content);
+      break;
     case "banner":
-      return generateBannerBlock(block.content);
+      blockHTML = generateBannerBlock(block.content);
+      break;
     case "headline":
-      return generateHeadlineBlock(block.content);
+      blockHTML = generateHeadlineBlock(block.content);
+      break;
     case "twin-teaser":
-      return generateTwinTeaserBlock(block.content);
+      blockHTML = generateTwinTeaserBlock(block.content);
+      break;
     case "paragraph":
-      return generateParagraphBlock(block.content);
+      blockHTML = generateParagraphBlock(block.content);
+      break;
     default:
       return "";
   }
+  
+  // Add data-block-id attribute to the outer center element
+  return blockHTML.replace(
+    /<center role="main"/g,
+    `<center role="main" data-block-id="${blockId}"`
+  );
 }
 
 function generateImageTextBlock(content: any): string {
@@ -765,4 +779,162 @@ ${HEADER}
 ${contentBlocks}
 ${FOOTER}
 ${MASTER_TEMPLATE_END}`;
+}
+
+export function generateBlockPreviewHTML(block: BlockData): string {
+  const blockHTML = generateBlockHTML(block);
+  
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type" />
+<title>Block Preview</title>
+<style>
+body {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  background-color: #efeff0;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+img {
+  border: 0;
+}
+p {
+  padding: 0 !important;
+  margin: 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+a:visited {
+  color: #007BC0 !important;
+}
+.wrapper {
+  width: 100% !important;
+  table-layout: fixed !important;
+  background-color: #efeff0 !important;
+}
+.webkit {
+  max-width: 640px !important;
+  background-color: #ffffff !important;
+  display: block !important;
+  margin: 0 auto !important;
+  width: 100%;
+}
+</style>
+</head>
+<body>
+${blockHTML}
+</body>
+</html>`;
+}
+
+export function generateHeaderPreviewHTML(): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type" />
+<title>Header Preview</title>
+<style>
+body {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  background-color: #efeff0;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+img {
+  border: 0;
+}
+p {
+  padding: 0 !important;
+  margin: 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+a:visited {
+  color: #007BC0 !important;
+}
+.wrapper {
+  width: 100% !important;
+  table-layout: fixed !important;
+  background-color: #efeff0 !important;
+}
+.webkit {
+  max-width: 640px !important;
+  background-color: #ffffff !important;
+  display: block !important;
+  margin: 0 auto !important;
+  width: 100%;
+}
+</style>
+</head>
+<body>
+${HEADER}
+</body>
+</html>`;
+}
+
+export function generateFooterPreviewHTML(): string {
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta content="text/html;charset=UTF-8" http-equiv="Content-Type" />
+<title>Footer Preview</title>
+<style>
+body {
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  background-color: #efeff0;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+img {
+  border: 0;
+}
+p {
+  padding: 0 !important;
+  margin: 0 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+a:visited {
+  color: #007BC0 !important;
+}
+.wrapper {
+  width: 100% !important;
+  table-layout: fixed !important;
+  background-color: #efeff0 !important;
+}
+.webkit {
+  max-width: 640px !important;
+  background-color: #003b6a !important;
+  display: block !important;
+  margin: 0 auto !important;
+  width: 100%;
+}
+</style>
+</head>
+<body>
+${FOOTER}
+</body>
+</html>`;
 }
