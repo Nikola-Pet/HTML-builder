@@ -159,7 +159,7 @@ export const BlockLibraryModal = ({ isOpen, onClose }: BlockLibraryModalProps) =
                 <p className="text-muted-foreground">No blocks found matching "{searchQuery}"</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {filteredBlockTypes.map((blockType) => {
                 const Icon = blockType.icon;
                 return (
@@ -185,7 +185,7 @@ export const BlockLibraryModal = ({ isOpen, onClose }: BlockLibraryModalProps) =
                         <span>Desktop Preview</span>
                         <span className="text-gray-500">640px width</span>
                       </div>
-                      <div className="relative bg-gray-100 p-4 flex justify-center"  style={{ maxHeight: "300px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                      <div className="relative bg-gray-100 p-4 flex justify-center"  style={{ maxHeight: "250px", display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <div 
                           className="bg-white shadow-lg rounded-sm flex-shrink-0"
                           style={{
@@ -193,7 +193,7 @@ export const BlockLibraryModal = ({ isOpen, onClose }: BlockLibraryModalProps) =
                             minWidth: "640px",
                             border: "1px solid #e5e7eb",
                             overflow: "hidden",
-                            transform: "scale(0.65)",
+                            transform: "scale(0.45)",
                             minHeight: "min-content",
                           }}
                         >
