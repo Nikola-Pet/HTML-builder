@@ -14,6 +14,7 @@ interface EmailBuilderContextType {
   duplicateBlock: (id: string) => void;
   moveBlock: (id: string, direction: "up" | "down") => void;
   reorderBlocks: (startIndex: number, endIndex: number) => void;
+  overrideBlocks: (blocks: BlockData[]) => void;
 }
 
 const EmailBuilderContext = createContext<EmailBuilderContextType | undefined>(undefined);
@@ -74,6 +75,10 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
     setBlocks(result);
   };
 
+  const overrideBlocks = (newBlocks: BlockData[]) => {
+    setBlocks(newBlocks);
+  };
+
   return (
     <EmailBuilderContext.Provider
       value={{
@@ -84,6 +89,7 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         duplicateBlock,
         moveBlock,
         reorderBlocks,
+        overrideBlocks,
       }}
     >
       {children}
