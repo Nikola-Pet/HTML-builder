@@ -8,16 +8,9 @@ import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
 import { generateHTML } from "@/utils/htmlGenerator";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
+import { BLOCK_DISPLAY_NAMES } from "@/constants/blockDisplayNames";
 
 type CellStyle = NonNullable<XLSX.CellObject["s"]>;
-
-const blockNameToType: Record<string, BlockData["type"]> = {
-  "Image Text": "image-text",
-  Banner: "banner",
-  Headline: "headline",
-  "Twin Teaser": "twin-teaser",
-  Paragraph: "paragraph",
-};
 
 const toTitleCase = (label: string) =>
   label
@@ -26,6 +19,19 @@ const toTitleCase = (label: string) =>
     .filter(Boolean)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+
+const blockNameToType: Record<string, BlockData["type"]> = (() => {
+  const mapping: Record<string, BlockData["type"]> = {};
+
+  (Object.entries(BLOCK_DISPLAY_NAMES) as [BlockData["type"], string][]).forEach(
+    ([type, displayName]) => {
+      mapping[displayName] = type;
+      mapping[toTitleCase(displayName)] = type;
+    }
+  );
+
+  return mapping;
+})();
 
 const labelToKey = (label: string) => {
   const words = label
@@ -92,7 +98,8 @@ const EmailBuilder = () => {
 
     blocks.forEach((block, index) => {
       const entries = Object.entries(block.content ?? {});
-      const blockName = formatLabel(block.type);
+      const blockName =
+        BLOCK_DISPLAY_NAMES[block.type] ?? formatLabel(block.type);
 
       if (entries.length === 0) {
         rows.push([

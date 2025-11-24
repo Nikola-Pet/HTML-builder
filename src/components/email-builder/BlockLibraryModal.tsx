@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { BlockEditorModal } from "./BlockEditorModal";
 import { ImageIcon, Layout, Type, Columns, FileText, Search } from "lucide-react";
 import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
+import { BLOCK_DISPLAY_NAMES } from "@/constants/blockDisplayNames";
 
 interface BlockLibraryModalProps {
   isOpen: boolean;
@@ -16,31 +17,31 @@ interface BlockLibraryModalProps {
 const blockTypes = [
   {
     type: "image-text" as const,
-    name: "LeftTeaser",
+    name: BLOCK_DISPLAY_NAMES["image-text"],
     description: "Image on left, text and CTA on right",
     icon: ImageIcon,
   },
   {
     type: "banner" as const,
-    name: "Keyvisual",
+    name: BLOCK_DISPLAY_NAMES.banner,
     description: "Full-width banner image with link",
     icon: Layout,
   },
   {
     type: "headline" as const,
-    name: "Headline",
+    name: BLOCK_DISPLAY_NAMES.headline,
     description: "Large centered headline text",
     icon: Type,
   },
   {
     type: "twin-teaser" as const,
-    name: "TwinTeaser",
+    name: BLOCK_DISPLAY_NAMES["twin-teaser"],
     description: "Two columns with image, headline, text and CTA",
     icon: Columns,
   },
   {
     type: "paragraph" as const,
-    name: "Paragraph",
+    name: BLOCK_DISPLAY_NAMES.paragraph,
     description: "Text paragraph with CTA button",
     icon: FileText,
   },
