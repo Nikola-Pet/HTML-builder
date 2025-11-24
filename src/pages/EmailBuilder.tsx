@@ -1,13 +1,5 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import {
-  ArrowLeft,
-  Plus,
-  Download,
-  FileSpreadsheet,
-  Upload,
-} from "lucide-react";
 import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { BlockLibraryModal } from "@/components/email-builder/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
@@ -15,6 +7,7 @@ import { generateHTML } from "@/utils/htmlGenerator";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
 import { BLOCK_DISPLAY_NAMES } from "@/constants/blockDisplayNames";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 type CellStyle = NonNullable<XLSX.CellObject["s"]>;
 
@@ -59,6 +52,8 @@ const labelToKey = (label: string) => {
 };
 
 const EmailBuilder = () => {
+  useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
+  
   const navigate = useNavigate();
   const {
     blocks,
@@ -289,69 +284,6 @@ const EmailBuilder = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="border-b bg-card sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-lg font-bold text-foreground">
-                  Email Builder
-                </h1>
-                <p className="text-xs text-muted-foreground">
-                  {blocks.length} blocks
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsLibraryOpen(true)}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Block
-                </Button>
-                <Button variant="outline" onClick={handleImportTrigger}>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Import Excel
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".xlsx,.xls"
-                  className="hidden"
-                  onChange={handleImportExcel}
-                  title="Import Excel briefing"
-                  placeholder="Excel file"
-                  aria-label="Import Excel briefing"
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  onClick={handleDownloadHTML}
-                  disabled={blocks.length === 0}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download HTML
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={handleDownloadExcel}
-                  disabled={blocks.length === 0}
-                >
-                  <FileSpreadsheet className="h-4 w-4 mr-2" />
-                  Download Excel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <BlockCanvas onAddBlock={() => setIsLibraryOpen(true)} />

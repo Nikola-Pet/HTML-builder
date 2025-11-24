@@ -6,6 +6,20 @@
 All colors MUST be HSL.
 */
 
+html,
+body {
+  font-family: boschsans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  --font-size: 1rem;
+  line-height: 1.5;
+  --line-height: 1.5;
+  font-weight: 400;
+  background-color: white;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 98%;

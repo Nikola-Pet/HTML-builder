@@ -25,6 +25,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 interface BlockCanvasProps {
   onAddBlock: () => void;
@@ -45,6 +46,8 @@ const BlockPreviewItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [blockHeight, setBlockHeight] = useState(300);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
 
   const blockHTML = useMemo(() => {
     return generateBlockPreviewHTML(block);

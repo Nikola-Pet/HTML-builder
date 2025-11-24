@@ -2,31 +2,41 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { EmailBuilderProvider } from "./contexts/EmailBuilderContext";
-import TemplatePicker from "./pages/TemplatePicker";
-import EmailBuilder from "./pages/EmailBuilder";
-import NotFound from "./pages/NotFound";
+import AppRoutes from "./routes/AppRoutes";
+import SideNav from "./layout/SideNav/SideNav";
+import { Breadcrumb, BreadcrumbsContext } from "./contexts/breadcrumbsContext";
+import { useState } from "react";
+import Header from "./layout/Header/Header";
+
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  const [breadcrumbs, setBreadcrumbs] = useState<Breadcrumb[]>([]);
+  return (
   <QueryClientProvider client={queryClient}>
+    <BreadcrumbsContext.Provider value={{ breadcrumbs, setBreadcrumbs }}>
     <EmailBuilderProvider>
       <TooltipProvider>
+        <div className="o-header"></div>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<TemplatePicker />} />
-            <Route path="/builder" element={<EmailBuilder />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div style={{ display: "flex" }}>
+            <SideNav />
+            <main style={{ flex: 1, overflow: "auto" }}>
+             <Header />
+              <AppRoutes />
+            </main>
+          </div>
         </BrowserRouter>
       </TooltipProvider>
     </EmailBuilderProvider>
+    </BreadcrumbsContext.Provider>
   </QueryClientProvider>
-);
+  )
+};
 
 export default App;
