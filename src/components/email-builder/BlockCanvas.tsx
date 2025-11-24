@@ -1,8 +1,22 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Copy, Trash2, ChevronUp, ChevronDown, MoreVertical } from "lucide-react";
-import { generateBlockPreviewHTML, generateHeaderPreviewHTML, generateFooterPreviewHTML } from "@/utils/htmlGenerator";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Plus,
+  Edit,
+  Copy,
+  Trash2,
+  ChevronUp,
+  ChevronDown,
+  MoreVertical,
+} from "lucide-react";
+import {
+  generateBlockPreviewHTML,
+  generateHeaderPreviewHTML,
+  generateFooterPreviewHTML,
+} from "@/utils/htmlGenerator";
 import { BlockData } from "@/contexts/EmailBuilderContext";
 import { BlockEditorModal } from "./BlockEditorModal";
 import {
@@ -22,7 +36,11 @@ interface BlockPreviewItemProps {
   totalBlocks: number;
 }
 
-const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) => {
+const BlockPreviewItem = ({
+  block,
+  index,
+  totalBlocks,
+}: BlockPreviewItemProps) => {
   const { deleteBlock, duplicateBlock, moveBlock } = useEmailBuilder();
   const [isEditing, setIsEditing] = useState(false);
   const [blockHeight, setBlockHeight] = useState(300);
@@ -38,7 +56,8 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
 
     const adjustHeight = () => {
       try {
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+        const iframeDocument =
+          iframe.contentDocument || iframe.contentWindow?.document;
         if (iframeDocument) {
           const body = iframeDocument.body;
           const html = iframeDocument.documentElement;
@@ -60,7 +79,7 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
 
     iframe.onload = adjustHeight;
     const timeoutId = setTimeout(adjustHeight, 100);
-    
+
     return () => clearTimeout(timeoutId);
   }, [blockHTML]);
 
@@ -71,7 +90,11 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="h-8 w-8 bg-white shadow-md">
+              <Button
+                variant="secondary"
+                size="icon"
+                className="h-8 w-8 bg-white shadow-md"
+              >
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -110,8 +133,11 @@ const BlockPreviewItem = ({ block, index, totalBlocks }: BlockPreviewItemProps) 
         </div>
 
         {/* Block Preview */}
-        <div className="bg-gray-50 p-4 flex justify-center" style={{ minHeight: `${blockHeight}px` }}>
-          <div 
+        <div
+          className="bg-gray-50 p-4 flex justify-center"
+          style={{ minHeight: `${blockHeight}px` }}
+        >
+          <div
             className="bg-white shadow-lg rounded-sm flex-shrink-0"
             style={{
               width: "640px",
@@ -170,7 +196,8 @@ const TemplateSection = ({ html, title }: TemplateSectionProps) => {
 
     const adjustHeight = () => {
       try {
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow?.document;
+        const iframeDocument =
+          iframe.contentDocument || iframe.contentWindow?.document;
         if (iframeDocument) {
           const body = iframeDocument.body;
           const html = iframeDocument.documentElement;
@@ -192,13 +219,16 @@ const TemplateSection = ({ html, title }: TemplateSectionProps) => {
 
     iframe.onload = adjustHeight;
     const timeoutId = setTimeout(adjustHeight, 100);
-    
+
     return () => clearTimeout(timeoutId);
   }, [html]);
 
   return (
-    <div className="bg-gray-50 p-4 flex justify-center" style={{ minHeight: `${sectionHeight}px` }}>
-      <div 
+    <div
+      className="bg-gray-50 p-4 flex justify-center"
+      style={{ minHeight: `${sectionHeight}px` }}
+    >
+      <div
         className="bg-white shadow-lg rounded-sm flex-shrink-0"
         style={{
           width: "640px",
@@ -228,7 +258,8 @@ const TemplateSection = ({ html, title }: TemplateSectionProps) => {
 };
 
 export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
-  const { blocks } = useEmailBuilder();
+  const { blocks, subjectLine, preheader, setSubjectLine, setPreheader } =
+    useEmailBuilder();
 
   const headerHTML = useMemo(() => {
     return generateHeaderPreviewHTML();
@@ -241,28 +272,74 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
   return (
     <div className="container mx-auto px-6 py-8 max-w-6xl">
       <div className="space-y-6">
+        {/* Subject Line & Preheader */}
+        <div className="bg-card rounded-lg shadow border p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-foreground">
+              Master Template Metadata
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Subject line i preheader su sastavni deo master template-a.
+            </p>
+          </div>
+          <div className="grid gap-4 ">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="subject-line">Subject line</Label>
+              <Input
+                id="subject-line"
+                placeholder="Unesite subject line"
+                value={subjectLine}
+                onChange={(event) => setSubjectLine(event.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="preheader">Preheader</Label>
+              <Input
+                id="preheader"
+                placeholder="Unesite preheader"
+                value={preheader}
+                onChange={(event) => setPreheader(event.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Email Template Preview - Stacked */}
         <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
           <div className="bg-gray-100 px-4 py-2 border-b flex items-center justify-between">
-            <span className="text-sm font-semibold text-foreground">Email Template Preview</span>
-            <span className="text-xs text-gray-500">Desktop View - 640px width</span>
+            <span className="text-sm font-semibold text-foreground">
+              Email Template Preview
+            </span>
+            <span className="text-xs text-gray-500">
+              Desktop View - 640px width
+            </span>
           </div>
           <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
             {/* Header */}
             <TemplateSection html={headerHTML} title="Header Preview" />
-            
+
             {/* Blocks or Empty State */}
             {blocks.length === 0 ? (
               <div className="bg-gray-50 p-4 flex justify-center">
-                <div className="bg-white shadow-lg rounded-sm flex-shrink-0" style={{ width: "640px", minWidth: "640px", border: "1px solid #e5e7eb" }}>
+                <div
+                  className="bg-white shadow-lg rounded-sm flex-shrink-0"
+                  style={{
+                    width: "640px",
+                    minWidth: "640px",
+                    border: "1px solid #e5e7eb",
+                  }}
+                >
                   <div className="flex flex-col items-center justify-center py-20 px-8">
                     <div className="text-center space-y-4">
                       <div className="mx-auto w-20 h-20 bg-secondary rounded-full flex items-center justify-center">
                         <Plus className="h-10 w-10 text-secondary-foreground" />
                       </div>
-                      <h3 className="text-xl font-bold text-foreground">No blocks yet</h3>
+                      <h3 className="text-xl font-bold text-foreground">
+                        No blocks yet
+                      </h3>
                       <p className="text-muted-foreground max-w-md">
-                        Start building your email by adding content blocks. Click the button below to get started.
+                        Start building your email by adding content blocks.
+                        Click the button below to get started.
                       </p>
                       <Button onClick={onAddBlock} size="lg">
                         <Plus className="h-4 w-4 mr-2" />
@@ -282,7 +359,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
                 />
               ))
             )}
-            
+
             {/* Footer */}
             <TemplateSection html={footerHTML} title="Footer Preview" />
           </div>

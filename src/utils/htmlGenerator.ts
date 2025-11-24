@@ -363,23 +363,40 @@ a:visited {
 </head>
 <body>`;
 
-const SUBJECTLINE = `<div style="text-align: center; width: 100%; padding: 10px;" class="sapMktBlock"
+// Dynamic subject line block generator (previously SUBJECTLINE constant)
+function generateSubjectLineBlock(subjectLine: string): string {
+  const safe = escapeHtml(subjectLine);
+  return `<div style="text-align: center; width: 100%; padding: 10px;" class="sapMktBlock"
 data-sap-hpa-ceimo-block-type="SUBJECT"
 data-sap-hpa-ceimo-condition=""
 data-sap-hpa-ceimo-blockid="1663339614972477"
 data-sap-hpa-ceimo-blockid-parent=""
-data-sap-hpa-ceimo-block-editable="X">
-</div>`;
+data-sap-hpa-ceimo-block-editable="X">${safe}</div>`;
+}
 
-const PREHEADER = `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
+// Dynamic preheader generator (previously PREHEADER constant) – hidden preview text for inbox
+function generatePreheaderBlock(preheader: string): string {
+  const safe = escapeHtml(preheader);
+  return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
 <div style="float: left; width: 100%" class="sapMktBlock"
 data-sap-hpa-ceimo-block-type="TEXT"
 data-sap-hpa-ceimo-condition=""
 data-sap-hpa-ceimo-blockid="1763988864454984"
 data-sap-hpa-ceimo-blockid-parent=""
 data-sap-hpa-ceimo-block-editable="X">
-<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">&zwnj;Learn more about the Bosch B2B Portal features and benefits <br><br><br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</div>
-<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp; &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div></div><!--[if mso]></td></tr></table><![endif]-->`;
+<div style="display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">${safe}</div>
+</div><!--[if mso]></td></tr></table><![endif]-->`;
+}
+
+// Simple HTML escaper to prevent injection inside subject/preheader content
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 const HEADER = `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
@@ -891,7 +908,7 @@ function getLinkAlias(url?: string): string {
 function generateBlockHTML(block: BlockData): string {
   const blockId = block.id;
   let blockHTML = "";
-  
+
   switch (block.type) {
     case "image-text":
       blockHTML = generateImageTextBlock(block.content);
@@ -911,7 +928,7 @@ function generateBlockHTML(block: BlockData): string {
     default:
       return "";
   }
-  
+
   // Add data-block-id attribute to the outer center element
   return blockHTML.replace(
     /<center role="main"/g,
@@ -919,16 +936,20 @@ function generateBlockHTML(block: BlockData): string {
   );
 }
 
-function generateImageTextBlock(content: any): string {
-  const imageLinkUrl = content.imageLinkUrl || content.buttonUrl || "https://www.example.com";
+type GenericContent = Record<string, unknown>;
+function generateImageTextBlock(content: GenericContent): string {
+  const imageLinkUrl =
+    content.imageLinkUrl || content.buttonUrl || "https://www.example.com";
   const buttonUrl = content.buttonUrl || "https://www.example.com/";
   const imageUrl = content.imageUrl || "https://dummyimage.com/1280x720";
   const headline = content.headline || "Headline";
-  const text = content.text || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const text =
+    content.text ||
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
   const buttonText = content.buttonText || "Please click me";
-  const imageLinkAlias = getLinkAlias(imageLinkUrl);
-  const buttonAlias = getLinkAlias(buttonUrl);
-  
+  const imageLinkAlias = getLinkAlias(String(imageLinkUrl));
+  const buttonAlias = getLinkAlias(String(buttonUrl));
+
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
       style="float: left; width: 100%"
@@ -1192,12 +1213,12 @@ function generateImageTextBlock(content: any): string {
     <!--[if mso]></td></tr></table><![endif]-->`;
 }
 
-function generateBannerBlock(content: any): string {
+function generateBannerBlock(content: GenericContent): string {
   const linkUrl = content.linkUrl || "https://www.example.com/";
   const imageUrl = content.imageUrl || "https://dummyimage.com/1280x720";
   const altText = content.altText || "Banner image [description]";
-  const linkAlias = getLinkAlias(linkUrl);
-  
+  const linkAlias = getLinkAlias(String(linkUrl));
+
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
       style="float: left; width: 100%"
@@ -1324,9 +1345,9 @@ function generateBannerBlock(content: any): string {
     <!--[if mso]></td></tr></table><![endif]-->`;
 }
 
-function generateHeadlineBlock(content: any): string {
+function generateHeadlineBlock(content: GenericContent): string {
   const text = content.text || "Lorem Ipsum is simply dummy text";
-  
+
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
       style="float: left; width: 100%"
@@ -1485,24 +1506,32 @@ function generateHeadlineBlock(content: any): string {
     <!--[if mso]></td></tr></table><![endif]-->`;
 }
 
-function generateTwinTeaserBlock(content: any): string {
-  const leftImageUrl = content.leftImageUrl || "https://dummyimage.com/1280x720";
-  const leftImageLinkUrl = content.leftImageLinkUrl || "https://www.example.com";
+function generateTwinTeaserBlock(content: GenericContent): string {
+  const leftImageUrl =
+    content.leftImageUrl || "https://dummyimage.com/1280x720";
+  const leftImageLinkUrl =
+    content.leftImageLinkUrl || "https://www.example.com";
   const leftHeadline = content.leftHeadline || "Headline";
-  const leftText = content.leftText || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const leftText =
+    content.leftText ||
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
   const leftButtonText = content.leftButtonText || "Please click me";
   const leftButtonUrl = content.leftButtonUrl || "https://www.example.com/";
-  
-  const rightImageUrl = content.rightImageUrl || "https://dummyimage.com/1280x720";
-  const rightImageLinkUrl = content.rightImageLinkUrl || "https://www.example.com";
+
+  const rightImageUrl =
+    content.rightImageUrl || "https://dummyimage.com/1280x720";
+  const rightImageLinkUrl =
+    content.rightImageLinkUrl || "https://www.example.com";
   const rightHeadline = content.rightHeadline || "Headline";
-  const rightText = content.rightText || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const rightText =
+    content.rightText ||
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
   const rightButtonText = content.rightButtonText || "Please click me";
   const rightButtonUrl = content.rightButtonUrl || "https://www.example.com/";
-  const leftImageLinkAlias = getLinkAlias(leftImageLinkUrl);
-  const leftButtonAlias = getLinkAlias(leftButtonUrl);
-  const rightImageLinkAlias = getLinkAlias(rightImageLinkUrl);
-  const rightButtonAlias = getLinkAlias(rightButtonUrl);
+  const leftImageLinkAlias = getLinkAlias(String(leftImageLinkUrl));
+  const leftButtonAlias = getLinkAlias(String(leftButtonUrl));
+  const rightImageLinkAlias = getLinkAlias(String(rightImageLinkUrl));
+  const rightButtonAlias = getLinkAlias(String(rightButtonUrl));
 
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
@@ -1925,15 +1954,16 @@ function generateTwinTeaserBlock(content: any): string {
                                                               font-family: Arial,
                                                                 Helvetica,
                                                                 sans-serif;
-`
+`;
 }
-function generateParagraphBlock(content: any): string {
+function generateParagraphBlock(content: GenericContent): string {
   const greeting = content.greeting || "Hello,";
-  const text = content.text || "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
+  const text =
+    content.text ||
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
   const buttonText = content.buttonText || "Please click me";
   const buttonUrl = content.buttonUrl || "https://www.example.com/";
-  const buttonAlias = getLinkAlias(buttonUrl);
-
+  const buttonAlias = getLinkAlias(String(buttonUrl));
 
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
@@ -2164,15 +2194,20 @@ function generateParagraphBlock(content: any): string {
         </div>
       </center>
     </div>
-    <!--[if mso]></td></tr></table><![endif]-->`
+    <!--[if mso]></td></tr></table><![endif]-->`;
 }
 
-export function generateHTML(blocks: BlockData[]): string {
+export function generateHTML(
+  blocks: BlockData[],
+  subjectLine: string,
+  preheader: string
+): string {
   const contentBlocks = blocks.map(generateBlockHTML).join("\n");
-  
+  const subjectHTML = generateSubjectLineBlock(subjectLine || "");
+  const preheaderHTML = generatePreheaderBlock(preheader || "");
   return `${MASTER_TEMPLATE_START}
-${SUBJECTLINE}
-${PREHEADER}
+${subjectHTML}
+${preheaderHTML}
 ${HEADER}
 ${contentBlocks}
 ${FOOTER}
@@ -2181,7 +2216,7 @@ ${MASTER_TEMPLATE_END}`;
 
 export function generateBlockPreviewHTML(block: BlockData): string {
   const blockHTML = generateBlockHTML(block);
-  
+
   return `<!DOCTYPE html>
 <html>
 <head>

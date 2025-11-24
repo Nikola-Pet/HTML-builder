@@ -8,6 +8,8 @@ export interface BlockData {
 
 interface EmailBuilderContextType {
   blocks: BlockData[];
+  subjectLine: string;
+  preheader: string;
   addBlock: (block: BlockData) => void;
   updateBlock: (id: string, content: Record<string, any>) => void;
   deleteBlock: (id: string) => void;
@@ -15,12 +17,16 @@ interface EmailBuilderContextType {
   moveBlock: (id: string, direction: "up" | "down") => void;
   reorderBlocks: (startIndex: number, endIndex: number) => void;
   overrideBlocks: (blocks: BlockData[]) => void;
+  setSubjectLine: (value: string) => void;
+  setPreheader: (value: string) => void;
 }
 
 const EmailBuilderContext = createContext<EmailBuilderContextType | undefined>(undefined);
 
 export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
   const [blocks, setBlocks] = useState<BlockData[]>([]);
+  const [subjectLine, setSubjectLine] = useState("");
+  const [preheader, setPreheader] = useState("");
 
   const addBlock = (block: BlockData) => {
     setBlocks((prev) => [...prev, block]);
@@ -83,6 +89,8 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
     <EmailBuilderContext.Provider
       value={{
         blocks,
+        subjectLine,
+        preheader,
         addBlock,
         updateBlock,
         deleteBlock,
@@ -90,6 +98,8 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         moveBlock,
         reorderBlocks,
         overrideBlocks,
+        setSubjectLine,
+        setPreheader,
       }}
     >
       {children}

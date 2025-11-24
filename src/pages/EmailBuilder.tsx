@@ -1,7 +1,13 @@
 import { ChangeEvent, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Plus, Download, FileSpreadsheet, Upload } from "lucide-react";
+import {
+  ArrowLeft,
+  Plus,
+  Download,
+  FileSpreadsheet,
+  Upload,
+} from "lucide-react";
 import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { BlockLibraryModal } from "@/components/email-builder/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
@@ -23,12 +29,12 @@ const toTitleCase = (label: string) =>
 const blockNameToType: Record<string, BlockData["type"]> = (() => {
   const mapping: Record<string, BlockData["type"]> = {};
 
-  (Object.entries(BLOCK_DISPLAY_NAMES) as [BlockData["type"], string][]).forEach(
-    ([type, displayName]) => {
-      mapping[displayName] = type;
-      mapping[toTitleCase(displayName)] = type;
-    }
-  );
+  (
+    Object.entries(BLOCK_DISPLAY_NAMES) as [BlockData["type"], string][]
+  ).forEach(([type, displayName]) => {
+    mapping[displayName] = type;
+    mapping[toTitleCase(displayName)] = type;
+  });
 
   return mapping;
 })();
@@ -54,17 +60,26 @@ const labelToKey = (label: string) => {
 
 const EmailBuilder = () => {
   const navigate = useNavigate();
-  const { blocks, overrideBlocks } = useEmailBuilder();
+  const {
+    blocks,
+    overrideBlocks,
+    subjectLine,
+    preheader,
+    setSubjectLine,
+    setPreheader,
+  } = useEmailBuilder();
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDownloadHTML = () => {
-    const html = generateHTML(blocks);
+    const html = generateHTML(blocks, subjectLine, preheader);
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `email-template-${new Date().toISOString().split("T")[0]}.html`;
+    a.download = `email-template-${
+      new Date().toISOString().split("T")[0]
+    }.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -76,9 +91,12 @@ const EmailBuilder = () => {
     const workbook = XLSX.utils.book_new();
     const now = new Date();
 
-    const rows: (string | number)[][] = [
-      ["#", "Name Block", "Field", "Value"],
-    ];
+    const rows: (string | number)[][] = [["#", "Name Block", "Field", "Value"]];
+    // Add metadata rows at the top for subject line and preheader
+    rows.push(["", "__METADATA__", "Subject Line", subjectLine || ""]);
+    rows.push(["", "__METADATA__", "Preheader", preheader || ""]);
+    // Empty separator after metadata
+    rows.push(["", "", "", ""]);
     const separatorRows: number[] = [];
 
     const formatValue = (value: unknown) => {
@@ -102,12 +120,7 @@ const EmailBuilder = () => {
         BLOCK_DISPLAY_NAMES[block.type] ?? formatLabel(block.type);
 
       if (entries.length === 0) {
-        rows.push([
-          index + 1,
-          blockName,
-          "No custom fields",
-          "",
-        ]);
+        rows.push([index + 1, blockName, "No custom fields", ""]);
       } else {
         entries.forEach(([field, value], fieldIndex) => {
           rows.push([
@@ -126,12 +139,7 @@ const EmailBuilder = () => {
     });
 
     const blocksSheet = XLSX.utils.aoa_to_sheet(rows);
-    blocksSheet["!cols"] = [
-      { wch: 6 },
-      { wch: 24 },
-      { wch: 28 },
-      { wch: 60 },
-    ];
+    blocksSheet["!cols"] = [{ wch: 6 }, { wch: 24 }, { wch: 28 }, { wch: 60 }];
 
     const separatorStyle: CellStyle = {
       fill: { patternType: "solid", fgColor: { rgb: "FFCCE5FF" } },
@@ -188,13 +196,17 @@ const EmailBuilder = () => {
     try {
       const arrayBuffer = await file.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
-      const worksheet = workbook.Sheets["Blocks"] || workbook.Sheets[workbook.SheetNames[0]];
+      const worksheet =
+        workbook.Sheets["Blocks"] || workbook.Sheets[workbook.SheetNames[0]];
 
       if (!worksheet) {
         throw new Error("Worksheet 'Blocks' not found");
       }
 
-      const rows = XLSX.utils.sheet_to_json<Record<string, any>>(worksheet, {
+      interface ExcelRow {
+        [key: string]: string | number | boolean | null | undefined;
+      }
+      const rows = XLSX.utils.sheet_to_json<ExcelRow>(worksheet, {
         defval: "",
         blankrows: false,
       });
@@ -210,7 +222,18 @@ const EmailBuilder = () => {
         const blockName = toTitleCase(String(row["Name Block"] || "").trim());
         const fieldLabel = String(row["Field"] || "").trim();
         const value = row["Value"];
-        const isSeparator = !blockName && !fieldLabel && (value === "" || value === undefined);
+        const isSeparator =
+          !blockName && !fieldLabel && (value === "" || value === undefined);
+
+        // Handle metadata rows
+        if (row["Name Block"] === "__METADATA__") {
+          if (fieldLabel === "Subject Line") {
+            setSubjectLine(String(value || ""));
+          } else if (fieldLabel === "Preheader") {
+            setPreheader(String(value || ""));
+          }
+          return; // skip normal block parsing
+        }
 
         if (blockName) {
           if (currentBlock) {
@@ -239,7 +262,8 @@ const EmailBuilder = () => {
 
         if (currentBlock && fieldLabel) {
           const key = labelToKey(fieldLabel);
-          currentBlock.content[key] = typeof value === "string" ? value : value?.toString() ?? "";
+          currentBlock.content[key] =
+            typeof value === "string" ? value : value?.toString() ?? "";
         }
       });
 
@@ -256,7 +280,9 @@ const EmailBuilder = () => {
     } catch (error) {
       console.error(error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to import Excel. Please check the file format."
+        error instanceof Error
+          ? error.message
+          : "Failed to import Excel. Please check the file format."
       );
     }
   };
@@ -272,13 +298,20 @@ const EmailBuilder = () => {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-lg font-bold text-foreground">Email Builder</h1>
-                <p className="text-xs text-muted-foreground">{blocks.length} blocks</p>
+                <h1 className="text-lg font-bold text-foreground">
+                  Email Builder
+                </h1>
+                <p className="text-xs text-muted-foreground">
+                  {blocks.length} blocks
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <Button variant="outline" onClick={() => setIsLibraryOpen(true)}>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsLibraryOpen(true)}
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Block
                 </Button>
@@ -292,10 +325,16 @@ const EmailBuilder = () => {
                   accept=".xlsx,.xls"
                   className="hidden"
                   onChange={handleImportExcel}
+                  title="Import Excel briefing"
+                  placeholder="Excel file"
+                  aria-label="Import Excel briefing"
                 />
               </div>
               <div className="flex items-center gap-2">
-                <Button onClick={handleDownloadHTML} disabled={blocks.length === 0}>
+                <Button
+                  onClick={handleDownloadHTML}
+                  disabled={blocks.length === 0}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Download HTML
                 </Button>
