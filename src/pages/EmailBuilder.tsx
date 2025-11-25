@@ -8,6 +8,8 @@ import * as XLSX from "xlsx";
 import { toast } from "sonner";
 import { BLOCK_DISPLAY_NAMES } from "@/constants/blockDisplayNames";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Download, FileSpreadsheet, Plus, Upload } from "lucide-react";
 
 type CellStyle = NonNullable<XLSX.CellObject["s"]>;
 
@@ -284,6 +286,55 @@ const EmailBuilder = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
+            {/* Header */}
+      <header className="border-b bg-card sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-6 py-3">
+          <div className="flex items-end justify-end">
+            <div className="flex items-end gap-3">
+              <div className="flex items-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsLibraryOpen(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Block
+                </Button>
+                <Button variant="outline" onClick={handleImportTrigger}>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Import Excel
+                </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".xlsx,.xls"
+                  className="hidden"
+                  onChange={handleImportExcel}
+                  title="Import Excel briefing"
+                  placeholder="Excel file"
+                  aria-label="Import Excel briefing"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={handleDownloadHTML}
+                  disabled={blocks.length === 0}
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download HTML
+                </Button>
+                <Button
+                  variant="secondary"
+                  onClick={handleDownloadExcel}
+                  disabled={blocks.length === 0}
+                >
+                  <FileSpreadsheet className="h-4 w-4 mr-2" />
+                  Download Excel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <BlockCanvas onAddBlock={() => setIsLibraryOpen(true)} />
