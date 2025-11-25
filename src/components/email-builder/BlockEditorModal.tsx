@@ -82,7 +82,7 @@ export const BlockEditorModal = ({
 
         <div className="grid md:grid-cols-2 gap-6 overflow-auto flex-1">
           {/* Form */}
-          <div className="space-y-4">
+          <div className="space-y-4 pl-2">
             <h3 className="font-semibold text-foreground">Block Settings</h3>
             <BlockFormRenderer
               type={type}
