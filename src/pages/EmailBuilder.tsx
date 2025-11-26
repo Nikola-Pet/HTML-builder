@@ -3,7 +3,7 @@ import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
 import { BlockLibraryModal } from "@/components/modals/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import EmailBuilderMenu from "@/components/menus/EmailBuilderMenu";
+import EmailEditorMenu from "@/components/menus/EmailEditorMenu";
 
 const EmailBuilder = () => {
   useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
@@ -20,7 +20,7 @@ const EmailBuilder = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      {/*<EmailBuilderMenu
+      {/*<EmailEditorMenu
         blocks={blocks}
         subjectLine={subjectLine}
         preheader={preheader}

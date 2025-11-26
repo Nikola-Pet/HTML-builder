@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { TemplateCard } from "@/components/cards/TemplateCard";
 
-const TemplatePicker = () => {
+const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleSelectTemplate = () => {
@@ -38,4 +38,4 @@ const TemplatePicker = () => {
   );
 };
 
-export default TemplatePicker;
+export default Dashboard;

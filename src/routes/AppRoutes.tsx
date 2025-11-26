@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
-import TemplatePicker from "../pages/TemplatePicker";
+import Dashboard from "../pages/Dashboard";
 import EmailBuilder from "../pages/EmailBuilder";
 import NotFound from "../pages/NotFound";
 
@@ -23,7 +23,7 @@ function AppRoutes() {
         path="/"
         element={
           <ErrorBoundaryWrapper>
-            <TemplatePicker />
+            <Dashboard />
           </ErrorBoundaryWrapper>
         }
       />

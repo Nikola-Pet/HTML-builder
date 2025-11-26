@@ -15,7 +15,7 @@ import {
   handleImportExcel as importExcel,
 } from "@/utils/emailExportImport";
 
-interface EmailBuilderMenuProps {
+interface EmailEditorMenuProps {
   blocks: BlockData[];
   subjectLine: string;
   preheader: string;
@@ -25,7 +25,7 @@ interface EmailBuilderMenuProps {
   onAddBlock: () => void;
 }
 
-const EmailBuilderMenu = ({
+const EmailEditorMenu = ({
   blocks,
   subjectLine,
   preheader,
@@ -33,7 +33,7 @@ const EmailBuilderMenu = ({
   setPreheader,
   overrideBlocks,
   onAddBlock,
-}: EmailBuilderMenuProps) => {
+}: EmailEditorMenuProps) => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -130,4 +130,4 @@ const EmailBuilderMenu = ({
   );
 };
 
-export default EmailBuilderMenu;
+export default EmailEditorMenu;
