@@ -10,6 +10,10 @@ interface EmailBuilderContextType {
   blocks: BlockData[];
   subjectLine: string;
   preheader: string;
+  newsletterId: string | null;
+  newsletterName: string;
+  template: string;
+  language: string;
   addBlock: (block: BlockData) => void;
   updateBlock: (id: string, content: Record<string, any>) => void;
   deleteBlock: (id: string) => void;
@@ -19,14 +23,24 @@ interface EmailBuilderContextType {
   overrideBlocks: (blocks: BlockData[]) => void;
   setSubjectLine: (value: string) => void;
   setPreheader: (value: string) => void;
+  setNewsletterId: (id: string | null) => void;
+  setNewsletterName: (name: string) => void;
+  setTemplate: (template: string) => void;
+  setLanguage: (language: string) => void;
 }
 
-const EmailBuilderContext = createContext<EmailBuilderContextType | undefined>(undefined);
+const EmailBuilderContext = createContext<EmailBuilderContextType | undefined>(
+  undefined
+);
 
 export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
   const [blocks, setBlocks] = useState<BlockData[]>([]);
   const [subjectLine, setSubjectLine] = useState("");
   const [preheader, setPreheader] = useState("");
+  const [newsletterId, setNewsletterId] = useState<string | null>(null);
+  const [newsletterName, setNewsletterName] = useState("Untitled Newsletter");
+  const [template, setTemplate] = useState("masterTemplateBI");
+  const [language, setLanguage] = useState("EN");
 
   const addBlock = (block: BlockData) => {
     setBlocks((prev) => [...prev, block]);
@@ -91,6 +105,10 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         blocks,
         subjectLine,
         preheader,
+        newsletterId,
+        newsletterName,
+        template,
+        language,
         addBlock,
         updateBlock,
         deleteBlock,
@@ -100,6 +118,10 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         overrideBlocks,
         setSubjectLine,
         setPreheader,
+        setNewsletterId,
+        setNewsletterName,
+        setTemplate,
+        setLanguage,
       }}
     >
       {children}

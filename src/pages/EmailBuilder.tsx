@@ -10,7 +10,27 @@ const EmailBuilder = () => {
   useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
   const navigate = useNavigate();
 
-  const { blocks, subjectLine, preheader } = useEmailBuilder();
+  const {
+    blocks,
+    subjectLine,
+    preheader,
+    newsletterId,
+    newsletterName,
+    template,
+    language,
+    setSubjectLine,
+    setPreheader,
+    overrideBlocks,
+    setNewsletterId,
+  } = useEmailBuilder();
+
+  // Debug: Check if setNewsletterId is available
+  console.log(
+    "EmailBuilder - setNewsletterId:",
+    typeof setNewsletterId,
+    setNewsletterId
+  );
+
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
   return (

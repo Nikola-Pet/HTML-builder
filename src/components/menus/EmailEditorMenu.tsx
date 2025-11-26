@@ -16,6 +16,7 @@ import {
   handleDownloadExcel as downloadExcel,
   handleImportExcel as importExcel,
 } from "@/utils/emailExportImport";
+import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
 import { toast } from "sonner";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
 
@@ -23,9 +24,14 @@ interface EmailEditorMenuProps {
   blocks: BlockData[];
   subjectLine: string;
   preheader: string;
+  newsletterId: string | null;
+  newsletterName: string;
+  template: string;
+  language: string;
   setSubjectLine: (value: string) => void;
   setPreheader: (value: string) => void;
   overrideBlocks: (blocks: BlockData[]) => void;
+  setNewsletterId: (id: string | null) => void;
   onUndo?: () => void;
   onRedo?: () => void;
   onDelete?: () => void;
@@ -38,9 +44,14 @@ const EmailEditorMenu = ({
   blocks,
   subjectLine,
   preheader,
+  newsletterId,
+  newsletterName,
+  template,
+  language,
   setSubjectLine,
   setPreheader,
   overrideBlocks,
+  setNewsletterId,
   onUndo,
   onRedo,
   onDelete,
@@ -108,6 +119,88 @@ const EmailEditorMenu = ({
   // Open Briefing
   const handleOpenBriefing = () => {
     navigate("/briefing");
+  };
+
+  // Save Newsletter
+  const handleSaveNewsletter = () => {
+    try {
+      console.log("Save newsletter clicked");
+      console.log("Current state:", {
+        blocks: blocks.length,
+        subjectLine,
+        preheader,
+        newsletterId,
+        newsletterName,
+        template,
+        language,
+      });
+      console.log(
+        "setNewsletterId is:",
+        typeof setNewsletterId,
+        setNewsletterId
+      );
+
+      if (!subjectLine.trim()) {
+        toast.error("Please add a subject line before saving.");
+        return;
+      }
+
+      if (blocks.length === 0) {
+        toast.error("Please add at least one block before saving.");
+        return;
+      }
+
+      const newsletterData = {
+        name: newsletterName || "Untitled Newsletter",
+        subjectLine,
+        preheader,
+        header: {
+          template,
+          language,
+        },
+        blocks,
+        footer: {
+          template,
+          language,
+        },
+      };
+
+      console.log("Newsletter data to save:", newsletterData);
+
+      if (newsletterId) {
+        // Update existing newsletter
+        console.log("Updating existing newsletter:", newsletterId);
+        const updated = updateNewsletter(newsletterId, newsletterData);
+        if (updated) {
+          console.log("Newsletter updated:", updated);
+          toast.success("Newsletter updated successfully!");
+        } else {
+          console.error("Failed to update newsletter");
+          toast.error("Failed to update newsletter.");
+        }
+      } else {
+        // Save new newsletter
+        console.log("Saving new newsletter");
+        const saved = saveNewsletter(newsletterData);
+        console.log("Newsletter saved:", saved);
+
+        // Check if setNewsletterId is a function before calling
+        if (typeof setNewsletterId === "function") {
+          setNewsletterId(saved.id);
+          console.log("Newsletter ID set to:", saved.id);
+        } else {
+          console.error("setNewsletterId is not a function:", setNewsletterId);
+        }
+
+        toast.success("Newsletter saved successfully!");
+      }
+    } catch (error) {
+      console.error("Error saving newsletter:", error);
+      toast.error(
+        "Failed to save newsletter: " +
+          (error instanceof Error ? error.message : String(error))
+      );
+    }
   };
 
   // Open delete confirmation modal
@@ -192,9 +285,9 @@ const EmailEditorMenu = ({
             </Button>
             <Button
               variant="primary"
-              onClick={handleDownloadExcelClick}
+              onClick={handleSaveNewsletter}
               disabled={blocks.length === 0}
-              title="Download Excel"
+              title="Save Newsletter"
               icon="save"
             >
               Save
