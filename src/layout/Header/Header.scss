@@ -6,8 +6,8 @@ header {
   background-color: var(--bosch-white);
   color: var(--bosch-black);
   position: relative;
-  margin-top: 8px;
   height: 3rem;
+  border-bottom: 1px solid var(--bosch-gray-90);
 
   .header-title {
     font-size: 1.25rem;
