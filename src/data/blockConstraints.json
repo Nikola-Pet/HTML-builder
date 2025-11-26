@@ -1,0 +1,112 @@
+{
+  "banner": {
+    "imageUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "linkUrl": {
+      "required": true,
+      "maxLength": 2048
+    }
+  },
+  "headline": {
+    "text": {
+      "required": true,
+      "maxLength": 100
+    }
+  },
+  "imageText": {
+    "imageUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "imageLinkUrl": {
+      "required": false,
+      "maxLength": 2048
+    },
+    "headline": {
+      "required": true,
+      "maxLength": 100
+    },
+    "text": {
+      "required": true,
+      "maxLength": 500
+    },
+    "buttonText": {
+      "required": true,
+      "maxLength": 30
+    },
+    "buttonUrl": {
+      "required": true,
+      "maxLength": 2048
+    }
+  },
+  "paragraph": {
+    "greeting": {
+      "required": true,
+      "maxLength": 50
+    },
+    "text": {
+      "required": true,
+      "maxLength": 500
+    },
+    "buttonText": {
+      "required": true,
+      "maxLength": 30
+    },
+    "buttonUrl": {
+      "required": true,
+      "maxLength": 2048
+    }
+  },
+  "twinTeaser": {
+    "leftImageUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "leftImageLinkUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "leftHeadline": {
+      "required": true,
+      "maxLength": 100
+    },
+    "leftText": {
+      "required": true,
+      "maxLength": 300
+    },
+    "leftButtonText": {
+      "required": true,
+      "maxLength": 30
+    },
+    "leftButtonUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "rightImageUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "rightImageLinkUrl": {
+      "required": true,
+      "maxLength": 2048
+    },
+    "rightHeadline": {
+      "required": true,
+      "maxLength": 100
+    },
+    "rightText": {
+      "required": true,
+      "maxLength": 300
+    },
+    "rightButtonText": {
+      "required": true,
+      "maxLength": 30
+    },
+    "rightButtonUrl": {
+      "required": true,
+      "maxLength": 2048
+    }
+  }
+}
