@@ -1,6 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { validateField, getCharacterCountStatus } from "@/utils/formValidation";
+import { useState } from "react";
 
 interface TwinTeaserFormProps {
   formData: Record<string, any>;
@@ -11,113 +13,125 @@ export const TwinTeaserForm = ({
   formData,
   updateFormData,
 }: TwinTeaserFormProps) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleFieldChange = (fieldName: string, value: string) => {
+    updateFormData(fieldName, value);
+
+    // Validate field
+    const error = validateField("twin-teaser", fieldName, value);
+    setErrors((prev) => ({
+      ...prev,
+      [fieldName]: error || "",
+    }));
+  };
+
+  const renderField = (
+    fieldName: string,
+    label: string,
+    placeholder: string,
+    required: boolean = false,
+    isTextarea: boolean = false,
+    rows?: number
+  ) => {
+    const status = getCharacterCountStatus(
+      "twin-teaser",
+      fieldName,
+      formData[fieldName] || ""
+    );
+    const InputComponent = isTextarea ? Textarea : Input;
+
+    return (
+      <div className="space-y-2">
+        <Label>
+          {label} {required && <span className="text-red-500">*</span>}
+        </Label>
+        <InputComponent
+          value={formData[fieldName] || ""}
+          onChange={(e) => handleFieldChange(fieldName, e.target.value)}
+          placeholder={placeholder}
+          className={errors[fieldName] ? "border-red-500" : ""}
+          {...(isTextarea && rows ? { rows } : {})}
+        />
+        {errors[fieldName] && (
+          <p className="text-sm text-red-500">{errors[fieldName]}</p>
+        )}
+        {status && (
+          <p
+            className={`text-sm ${
+              status.isOverLimit ? "text-red-500" : "text-gray-500"
+            }`}
+          >
+            {status.current}/{status.max} characters
+          </p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
       <div className="space-y-4 border-b pb-4">
         <h4 className="font-semibold">Left Column</h4>
-        <div className="space-y-2">
-          <Label>Image URL</Label>
-          <Input
-            value={formData.leftImageUrl || ""}
-            onChange={(e) => updateFormData("leftImageUrl", e.target.value)}
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Image Link URL</Label>
-          <Input
-            value={formData.leftImageLinkUrl || ""}
-            onChange={(e) => updateFormData("leftImageLinkUrl", e.target.value)}
-            placeholder="https://example.com"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Headline</Label>
-          <Input
-            value={formData.leftHeadline || ""}
-            onChange={(e) => updateFormData("leftHeadline", e.target.value)}
-            placeholder="Enter headline"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Text Content</Label>
-          <Textarea
-            value={formData.leftText || ""}
-            onChange={(e) => updateFormData("leftText", e.target.value)}
-            placeholder="Enter text content"
-            rows={3}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Button Text</Label>
-          <Input
-            value={formData.leftButtonText || ""}
-            onChange={(e) => updateFormData("leftButtonText", e.target.value)}
-            placeholder="Please click me"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Button Link</Label>
-          <Input
-            value={formData.leftButtonUrl || ""}
-            onChange={(e) => updateFormData("leftButtonUrl", e.target.value)}
-            placeholder="https://example.com"
-          />
-        </div>
+        {renderField(
+          "leftImageUrl",
+          "Image URL",
+          "https://example.com/image.jpg",
+          true
+        )}
+        {renderField(
+          "leftImageLinkUrl",
+          "Image Link URL",
+          "https://example.com",
+          true
+        )}
+        {renderField("leftHeadline", "Headline", "Enter headline", true)}
+        {renderField(
+          "leftText",
+          "Text Content",
+          "Enter text content",
+          true,
+          true,
+          3
+        )}
+        {renderField("leftButtonText", "Button Text", "Please click me", true)}
+        {renderField(
+          "leftButtonUrl",
+          "Button Link",
+          "https://example.com",
+          true
+        )}
       </div>
       <div className="space-y-4 pt-4">
         <h4 className="font-semibold">Right Column</h4>
-        <div className="space-y-2">
-          <Label>Image URL</Label>
-          <Input
-            value={formData.rightImageUrl || ""}
-            onChange={(e) => updateFormData("rightImageUrl", e.target.value)}
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Image Link URL</Label>
-          <Input
-            value={formData.rightImageLinkUrl || ""}
-            onChange={(e) =>
-              updateFormData("rightImageLinkUrl", e.target.value)
-            }
-            placeholder="https://example.com"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Headline</Label>
-          <Input
-            value={formData.rightHeadline || ""}
-            onChange={(e) => updateFormData("rightHeadline", e.target.value)}
-            placeholder="Enter headline"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Text Content</Label>
-          <Textarea
-            value={formData.rightText || ""}
-            onChange={(e) => updateFormData("rightText", e.target.value)}
-            placeholder="Enter text content"
-            rows={3}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Button Text</Label>
-          <Input
-            value={formData.rightButtonText || ""}
-            onChange={(e) => updateFormData("rightButtonText", e.target.value)}
-            placeholder="Please click me"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label>Button Link</Label>
-          <Input
-            value={formData.rightButtonUrl || ""}
-            onChange={(e) => updateFormData("rightButtonUrl", e.target.value)}
-            placeholder="https://example.com"
-          />
-        </div>
+        {renderField(
+          "rightImageUrl",
+          "Image URL",
+          "https://example.com/image.jpg",
+          true
+        )}
+        {renderField(
+          "rightImageLinkUrl",
+          "Image Link URL",
+          "https://example.com",
+          true
+        )}
+        {renderField("rightHeadline", "Headline", "Enter headline", true)}
+        {renderField(
+          "rightText",
+          "Text Content",
+          "Enter text content",
+          true,
+          true,
+          3
+        )}
+        {renderField("rightButtonText", "Button Text", "Please click me", true)}
+        {renderField(
+          "rightButtonUrl",
+          "Button Link",
+          "https://example.com",
+          true
+        )}
       </div>
     </>
   );

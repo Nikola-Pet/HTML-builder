@@ -1,0 +1,69 @@
+{
+  "masterTemplateBI": {
+    "name": "Bosch Professional Master Template",
+    "marketingArea": "BI",
+    "region": "Europe",
+    "languages": [
+      {
+        "code": "EN",
+        "boschLogo": "https://www.bosch-professional.com/gb/en/",
+        "readOnline": "Read online",
+        "followUs": "Follow us",
+        "instagram": "https://www.instagram.com/boschprouk/",
+        "facebook": "https://www.facebook.com/BoschProfessionalPowerToolsUK",
+        "youtube": "https://www.youtube.com/user/BoschProfessionalUK"
+      },
+      {
+        "code": "DE",
+        "boschLogo": "https://www.bosch-professional.com/de/de/",
+        "readOnline": "Online lesen",
+        "followUs": "Folge uns auf",
+        "instagram": "https://www.instagram.com/boschprofessionaldach",
+        "facebook": "https://www.facebook.com/bosch.profi.elektrowerkzeuge",
+        "youtube": "https://www.youtube.com/user/BoschProfessionalDE"
+      },
+      {
+        "code": "FR",
+        "boschLogo": "https://www.bosch-professional.com/fr/fr/",
+        "readOnline": "Lire en ligne",
+        "followUs": "Suivez-nous",
+        "instagram": "https://www.instagram.com/boschprofessionaleurope/",
+        "facebook": "https://www.facebook.com/bosch.ProfessionalPowerToolsFR",
+        "youtube": "https://www.youtube.com/@BoschProfessionalFR"
+      }
+    ]
+  },
+  "masterTemplateHG": {
+    "name": "Bosch DIY Master Template",
+    "marketingArea": "HG",
+    "region": "Europe",
+    "languages": [
+      {
+        "code": "EN",
+        "boschLogo": "https://www.bosch-diy.com/gb/en",
+        "followUs": "Follow us",
+        "instagram": "https://www.instagram.com/boschdiyandgarden/",
+        "facebook": "https://www.facebook.com/BoschDIYpowertoolsUK/",
+        "youtube": "https://www.youtube.com/user/BoschDIYpowertoolsUK"
+      },
+      {
+        "code": "DE",
+        "boschLogo": "https://www.bosch-diy.com/de/de",
+        "readOnline": "Online lesen",
+        "followUs": "Folge uns auf",
+        "instagram": "https://www.instagram.com/boschdiyandgarden/",
+        "facebook": "https://www.facebook.com/BoschHeimwerkenDeutschland",
+        "youtube": "https://www.youtube.com/user/BoschHeimwerkenDE"
+      },
+      {
+        "code": "FR",
+        "boschLogo": "https://www.bosch-diy.com/fr/fr",
+        "readOnline": "Lire en ligne",
+        "followUs": "Suivez nous",
+        "instagram": "https://www.instagram.com/boschdiyandgarden/",
+        "facebook": "https://www.facebook.com/BoschBricolage/",
+        "youtube": "https://www.youtube.com/BoschBricolage"
+      }
+    ]
+  }
+}

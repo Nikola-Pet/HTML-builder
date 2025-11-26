@@ -12,6 +12,7 @@ import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
 import { BlockFormRenderer } from "@/components/email-builder/BlockFormRenderer";
 import { BlockLivePreview } from "@/components/email-builder/BlockLivePreview";
 import { getDefaultContent } from "@/constants/defaultBlockContent";
+import { isBlockValid, BlockType } from "@/utils/formValidation";
 
 interface BlockEditorModalProps {
   isOpen: boolean;
@@ -71,6 +72,10 @@ export const BlockEditorModal = ({
     return generateBlockPreviewHTML(previewBlock);
   }, [type, formData]);
 
+  const isValid = useMemo(() => {
+    return isBlockValid(type as BlockType, formData);
+  }, [type, formData]);
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -80,9 +85,9 @@ export const BlockEditorModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-2 gap-6 overflow-auto flex-1">
-          {/* Form */}
-          <div className="space-y-4 pl-2">
+        <div className="grid md:grid-cols-2 gap-6 flex-1 overflow-hidden">
+          {/* Form - Scrollable */}
+          <div className="space-y-4 pl-2 overflow-y-auto pr-2">
             <h3 className="font-semibold text-foreground">Block Settings</h3>
             <BlockFormRenderer
               type={type}
@@ -91,15 +96,17 @@ export const BlockEditorModal = ({
             />
           </div>
 
-          {/* Preview */}
-          <BlockLivePreview previewHTML={previewHTML} />
+          {/* Preview - Fixed Position */}
+          <div className="overflow-hidden">
+            <BlockLivePreview previewHTML={previewHTML} />
+          </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t">
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} disabled={!isValid}>
             {isEditing ? "Update Block" : "Add Block"}
           </Button>
         </div>
