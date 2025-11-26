@@ -10,6 +10,7 @@ import { EmailMetadataForm } from "@/components/blockCanvasComponents/EmailMetad
 import { BlocksOrEmptyState } from "@/components/blockCanvasComponents/BlocksOrEmptyState";
 import { BlockPreviewItem } from "@/components/blockCanvasComponents/BlockPreviewItem";
 import { TemplateSection } from "@/components/blockCanvasComponents/TemplateSection";
+import EmailEditorMenu from "../menus/EmailEditorMenu";
 
 interface BlockCanvasProps {
   onAddBlock: () => void;
@@ -40,13 +41,11 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
 
         {/* Email Template Preview - Stacked */}
         <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
-          <div className="bg-gray-100 px-4 py-2 border-b flex items-center justify-between">
-            <span className="text-sm font-semibold text-foreground">
+          <div className="bg-gray-100 px-4 py-2 border-b flex items-center">
+            {/* <span className="text-sm font-semibold text-foreground">
               Email Template Preview
-            </span>
-            <span className="text-xs text-gray-500">
-              Desktop View - 640px width
-            </span>
+            </span> */}
+            <EmailEditorMenu />
           </div>
           <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
             {/* Header */}

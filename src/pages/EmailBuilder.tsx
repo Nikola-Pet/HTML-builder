@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
 import { BlockLibraryModal } from "@/components/modals/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
@@ -7,28 +8,13 @@ import EmailEditorMenu from "@/components/menus/EmailEditorMenu";
 
 const EmailBuilder = () => {
   useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
+  const navigate = useNavigate();
 
-  const {
-    blocks,
-    overrideBlocks,
-    subjectLine,
-    preheader,
-    setSubjectLine,
-    setPreheader,
-  } = useEmailBuilder();
+  const { blocks, subjectLine, preheader } = useEmailBuilder();
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 
   return (
     <div className="h-screen flex flex-col">
-      {/*<EmailEditorMenu
-        blocks={blocks}
-        subjectLine={subjectLine}
-        preheader={preheader}
-        setSubjectLine={setSubjectLine}
-        setPreheader={setPreheader}
-        overrideBlocks={overrideBlocks}
-        onAddBlock={() => setIsLibraryOpen(true)}
-      />*/}
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <BlockCanvas onAddBlock={() => setIsLibraryOpen(true)} />
