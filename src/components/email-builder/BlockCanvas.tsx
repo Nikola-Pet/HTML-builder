@@ -71,10 +71,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
 
         {/* Email Template Preview - Stacked */}
         <div className="bg-card shadow-lg border overflow-hidden">
-          <div className="bg-gray-100 px-4 py-2 border-b flex items-center">
-            {/* <span className="text-sm font-semibold text-foreground">
-              Email Template Preview
-            </span> */}
+          <div className="bg-gray-100 px-4 py-2 border-b flex flex-col gap-2">
             <EmailEditorMenu
               blocks={blocks}
               subjectLine={subjectLine}
