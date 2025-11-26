@@ -121,7 +121,7 @@ const EmailEditorMenu = ({
     navigate("/briefing");
   };
 
-  // Save Newsletter
+  // Save Newsletter - Publish all language drafts as ONE newsletter
   const handleSaveNewsletter = () => {
     try {
       console.log("Save newsletter clicked");
@@ -134,11 +134,6 @@ const EmailEditorMenu = ({
         template,
         language,
       });
-      console.log(
-        "setNewsletterId is:",
-        typeof setNewsletterId,
-        setNewsletterId
-      );
 
       if (!subjectLine.trim()) {
         toast.error("Please add a subject line before saving.");
@@ -150,49 +145,71 @@ const EmailEditorMenu = ({
         return;
       }
 
-      const newsletterData = {
-        name: newsletterName || "Untitled Newsletter",
-        subjectLine,
-        preheader,
-        header: {
-          template,
-          language,
-        },
-        blocks,
-        footer: {
-          template,
-          language,
-        },
-      };
+      // Check if multi-language system is active
+      if ((window as any).publishAllLanguageDraftsAsOne) {
+        console.log("Publishing all language drafts as ONE newsletter...");
+        const newsletter = (window as any).publishAllLanguageDraftsAsOne(
+          newsletterName || "Untitled Newsletter",
+          template
+        );
 
-      console.log("Newsletter data to save:", newsletterData);
-
-      if (newsletterId) {
-        // Update existing newsletter
-        console.log("Updating existing newsletter:", newsletterId);
-        const updated = updateNewsletter(newsletterId, newsletterData);
-        if (updated) {
-          console.log("Newsletter updated:", updated);
-          toast.success("Newsletter updated successfully!");
+        if (newsletter) {
+          toast.success(
+            `Successfully saved newsletter with ${newsletter.languages.length} language(s)!`
+          );
+          console.log("Published newsletter:", newsletter);
         } else {
-          console.error("Failed to update newsletter");
-          toast.error("Failed to update newsletter.");
+          toast.error("Failed to publish newsletter.");
         }
       } else {
-        // Save new newsletter
-        console.log("Saving new newsletter");
-        const saved = saveNewsletter(newsletterData);
-        console.log("Newsletter saved:", saved);
+        // Fallback: Original save logic for single newsletter
+        const newsletterData = {
+          name: newsletterName || "Untitled Newsletter",
+          subjectLine,
+          preheader,
+          header: {
+            template,
+            language,
+          },
+          blocks,
+          footer: {
+            template,
+            language,
+          },
+        };
 
-        // Check if setNewsletterId is a function before calling
-        if (typeof setNewsletterId === "function") {
-          setNewsletterId(saved.id);
-          console.log("Newsletter ID set to:", saved.id);
+        console.log("Newsletter data to save:", newsletterData);
+
+        if (newsletterId) {
+          // Update existing newsletter
+          console.log("Updating existing newsletter:", newsletterId);
+          const updated = updateNewsletter(newsletterId, newsletterData);
+          if (updated) {
+            console.log("Newsletter updated:", updated);
+            toast.success("Newsletter updated successfully!");
+          } else {
+            console.error("Failed to update newsletter");
+            toast.error("Failed to update newsletter.");
+          }
         } else {
-          console.error("setNewsletterId is not a function:", setNewsletterId);
-        }
+          // Save new newsletter
+          console.log("Saving new newsletter");
+          const saved = saveNewsletter(newsletterData);
+          console.log("Newsletter saved:", saved);
 
-        toast.success("Newsletter saved successfully!");
+          // Check if setNewsletterId is a function before calling
+          if (typeof setNewsletterId === "function") {
+            setNewsletterId(saved.id);
+            console.log("Newsletter ID set to:", saved.id);
+          } else {
+            console.error(
+              "setNewsletterId is not a function:",
+              setNewsletterId
+            );
+          }
+
+          toast.success("Newsletter saved successfully!");
+        }
       }
     } catch (error) {
       console.error("Error saving newsletter:", error);

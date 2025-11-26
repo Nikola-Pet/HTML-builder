@@ -11,6 +11,7 @@ import { BlocksOrEmptyState } from "@/components/blockCanvasComponents/BlocksOrE
 import { BlockPreviewItem } from "@/components/blockCanvasComponents/BlockPreviewItem";
 import { TemplateSection } from "@/components/blockCanvasComponents/TemplateSection";
 import EmailEditorMenu from "../menus/EmailEditorMenu";
+import { LanguageTabsMenu } from "../menus/LanguageBar";
 
 interface BlockCanvasProps {
   onAddBlock: () => void;
@@ -21,9 +22,14 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
     blocks,
     subjectLine,
     preheader,
+    newsletterId,
+    newsletterName,
+    template,
+    language,
     setSubjectLine,
     setPreheader,
     overrideBlocks,
+    setNewsletterId,
   } = useEmailBuilder();
 
   const headerHTML = useMemo(() => {
@@ -47,18 +53,21 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
 
         {/* Email Template Preview - Stacked */}
         <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
-          <div className="bg-gray-100 px-4 py-2 border-b flex items-center">
-            {/* <span className="text-sm font-semibold text-foreground">
-              Email Template Preview
-            </span> */}
+          <div className="bg-gray-100 px-4 py-2 border-b flex flex-col gap-2">
             <EmailEditorMenu
               blocks={blocks}
               subjectLine={subjectLine}
               preheader={preheader}
+              newsletterId={newsletterId}
+              newsletterName={newsletterName}
+              template={template}
+              language={language}
               setSubjectLine={setSubjectLine}
               setPreheader={setPreheader}
               overrideBlocks={overrideBlocks}
+              setNewsletterId={setNewsletterId}
             />
+            <LanguageTabsMenu />
           </div>
           <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
             {/* Header */}
