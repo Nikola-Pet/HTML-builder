@@ -26,7 +26,7 @@ export const BlockLivePreview = ({ previewHTML }: BlockLivePreviewProps) => {
   return (
     <div className="space-y-4 sticky top-0 h-fit">
       <h3 className="font-semibold text-foreground">Live Preview</h3>
-      <div className="border rounded-lg bg-gray-50 overflow-hidden">
+      <div className="border bg-gray-50 overflow-hidden">
         <div className="bg-gray-100 px-3 py-1 text-xs text-gray-600 border-b flex items-center justify-between">
           <span>Desktop Preview</span>
           <span className="text-gray-500">640px width (scaled 75%)</span>
@@ -36,7 +36,7 @@ export const BlockLivePreview = ({ previewHTML }: BlockLivePreviewProps) => {
           style={{ maxHeight: "680px" }}
         >
           <div
-            className="bg-white shadow-lg rounded-sm"
+            className="bg-white shadow-lg"
             style={{
               width: "480px",
               maxWidth: "100%",

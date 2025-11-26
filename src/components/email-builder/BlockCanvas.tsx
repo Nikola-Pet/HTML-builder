@@ -70,8 +70,11 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
         />
 
         {/* Email Template Preview - Stacked */}
-        <div className="bg-card rounded-lg shadow-lg border overflow-hidden">
-          <div className="bg-gray-100 px-4 py-2 border-b flex flex-col gap-2">
+        <div className="bg-card shadow-lg border overflow-hidden">
+          <div className="bg-gray-100 px-4 py-2 border-b flex items-center">
+            {/* <span className="text-sm font-semibold text-foreground">
+              Email Template Preview
+            </span> */}
             <EmailEditorMenu
               blocks={blocks}
               subjectLine={subjectLine}
@@ -109,7 +112,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
             {blocks.length > 0 && (
               <div className="bg-gray-50 p-4 flex justify-center">
                 <div
-                  className="bg-white shadow-lg rounded-sm flex-shrink-0"
+                  className="bg-white shadow-lg flex-shrink-0"
                   style={{
                     width: "640px",
                     minWidth: "640px",

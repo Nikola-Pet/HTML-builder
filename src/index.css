@@ -123,3 +123,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom dialog backdrop override for better visibility */
+dialog.m-dialog::backdrop {
+  backdrop-filter: blur(0.25rem);
+  background-color: rgba(0, 0, 0, 0.5);
+}
