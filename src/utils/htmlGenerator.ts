@@ -2224,6 +2224,32 @@ export function generateHTML(
   console.log("🌍 Language Data in htmlGenerator:", languageData);
 
   if (languageData) {
+    // Replace Bosch logo link in header
+    if (languageData.boschLogo) {
+      console.log(
+        `  📝 Original header contains logo link:`,
+        header.includes("https://www.bosch-professional.com/gb/en/")
+      );
+      console.log(
+        `  🔗 Replacing Bosch logo URL with ${languageData.boschLogo}`
+      );
+      const beforeReplace = header;
+      header = header.replace(
+        /https:\/\/www\.bosch-professional\.com\/gb\/en\//g,
+        languageData.boschLogo
+      );
+      const replaced = beforeReplace !== header;
+      console.log(
+        `  ✅ Logo URL replacement ${replaced ? "SUCCESS" : "FAILED"}`
+      );
+      if (replaced) {
+        console.log(
+          `  ✓ New header now contains:`,
+          header.includes(languageData.boschLogo)
+        );
+      }
+    }
+
     // Replace "Read online" text in header
     if (languageData.readOnline) {
       console.log(
@@ -2334,13 +2360,32 @@ export function generateHeaderPreviewHTML(languageData?: LanguageData): string {
   let header = HEADER;
 
   // Apply language-specific translations if provided
-  if (languageData && languageData.readOnline) {
-    header = header
-      .replace(/Read online &rsaquo;/g, `${languageData.readOnline} &rsaquo;`)
-      .replace(
-        /title="Read online &rsaquo;"/g,
-        `title="${languageData.readOnline} &rsaquo;"`
+  if (languageData) {
+    console.log(`🎨 Header Preview - Language Data:`, languageData);
+
+    // Replace Bosch logo link
+    if (languageData.boschLogo) {
+      console.log(`  🔗 Replacing logo URL with: ${languageData.boschLogo}`);
+      const beforeReplace = header;
+      header = header.replace(
+        /https:\/\/www\.bosch-professional\.com\/gb\/en\//g,
+        languageData.boschLogo
       );
+      const replaced = beforeReplace !== header;
+      console.log(
+        `  ${replaced ? "✅ SUCCESS" : "❌ FAILED"} - Logo URL replacement`
+      );
+    }
+
+    // Replace "Read online" text
+    if (languageData.readOnline) {
+      header = header
+        .replace(/Read online &rsaquo;/g, `${languageData.readOnline} &rsaquo;`)
+        .replace(
+          /title="Read online &rsaquo;"/g,
+          `title="${languageData.readOnline} &rsaquo;"`
+        );
+    }
   }
 
   return `<!DOCTYPE html>
