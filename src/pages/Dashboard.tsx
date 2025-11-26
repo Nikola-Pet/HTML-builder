@@ -11,7 +11,7 @@ const Dashboard = () => {
 
   useBreadcrumbs([{ label: "Dashboard", href: "/" }]);
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen -secondary">
       {/* Template Selection */}
       <div className="container mx-auto px-6 py-12">
         <div style={{ display: "flex", gap: "3rem" }}>

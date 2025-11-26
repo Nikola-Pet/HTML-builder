@@ -17,7 +17,6 @@ function Header() {
         {breadcrumbs[breadcrumbs?.length - 1]?.label || "Dashboard"}
       </div>
       <span className="header-content">
-        <SearchField />
         <Link to="/" aria-label="Bosch logo" className="bosch-logo-container">
           <img src={boschLogoSvg} alt="Bosch logo" />
         </Link>
