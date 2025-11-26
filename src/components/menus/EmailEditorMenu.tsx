@@ -131,34 +131,31 @@ const EmailEditorMenu = ({
           {/* Left side - Undo/Redo */}
           <div className="flex items-center gap-2">
             <Button
-              variant="ghost"
-              size="sm"
+              variant="tertiary"
               onClick={onUndo}
               disabled={!canUndo}
               title="Undo"
+              icon="undo"
             >
-              <Undo className="h-4 w-4" />
             </Button>
             <Button
-              variant="ghost"
-              size="sm"
+              variant="tertiary"
               onClick={onRedo}
               disabled={!canRedo}
               title="Redo"
+              icon="redo"
             >
-              <Redo className="h-4 w-4" />
             </Button>
           </div>
 
           {/* Right side - Download buttons and Briefing */}
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              size="sm"
+              variant="tertiary"
               onClick={handleImportTrigger}
               title="Import Excel"
+              icon="upload"
             >
-              <Upload className="h-4 w-4 mr-2" />
               Import Excel
             </Button>
             <input
@@ -171,41 +168,37 @@ const EmailEditorMenu = ({
               aria-label="Import Excel briefing"
             />
             <Button
-              variant="outline"
-              size="sm"
+              variant="tertiary"
               onClick={handleDownloadExcelClick}
               disabled={blocks.length === 0}
               title="Download Excel"
+              icon="document-xls"
             >
-              <FileSpreadsheet className="h-4 w-4 mr-2" />
               Export Excel
             </Button>
             <Button
-              variant="outline"
-              size="sm"
+              variant="tertiary"
               onClick={handleDownloadHTMLClick}
               disabled={blocks.length === 0}
               title="Download HTML"
+              icon="document-code-stack"
             >
-              <Download className="h-4 w-4 mr-2" />
               HTML
             </Button>
             <Button
               onClick={handleOpenBriefing}
-              size="sm"
               title="Open Briefing Page"
+              icon="summary"
             >
-              <FileText className="h-4 w-4 mr-2" />
               Briefing
             </Button>
             <Button
-              variant="destructive"
-              size="sm"
+              variant="tertiary"
               onClick={handleDeleteClick}
               disabled={blocks.length === 0}
               title="Delete Newsletter"
+              icon="delete"
             >
-              <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
