@@ -153,7 +153,7 @@ const EmailEditorMenu = ({
               onClick={handleDownloadExcelClick}
               disabled={blocks.length === 0}
               title="Download Excel"
-              icon="document-xls"
+              icon="save"
             >
               Save
             </Button>
