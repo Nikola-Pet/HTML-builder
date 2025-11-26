@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
-import { BlockLibraryModal } from "@/components/email-builder/BlockLibraryModal";
+import { BlockLibraryModal } from "@/components/modals/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import EmailBuilderMenu from "@/components/menus/EmailBuilderMenu";

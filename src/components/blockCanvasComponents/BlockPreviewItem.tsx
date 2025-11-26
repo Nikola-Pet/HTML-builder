@@ -1,7 +1,7 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
-import { BlockEditorModal } from "@/components/email-builder/BlockEditorModal";
+import { BlockEditorModal } from "@/components/modals/BlockEditorModal";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { BlockEditingMenu } from "@/components/menus/BlockEditingMenu";
 

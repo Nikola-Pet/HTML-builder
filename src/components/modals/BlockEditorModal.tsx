@@ -9,8 +9,8 @@ import { useEmailBuilder, BlockData } from "@/contexts/EmailBuilderContext";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
-import { BlockFormRenderer } from "./BlockFormRenderer";
-import { BlockLivePreview } from "./BlockLivePreview";
+import { BlockFormRenderer } from "@/components/email-builder/BlockFormRenderer";
+import { BlockLivePreview } from "@/components/email-builder/BlockLivePreview";
 import { getDefaultContent } from "@/constants/defaultBlockContent";
 
 interface BlockEditorModalProps {
