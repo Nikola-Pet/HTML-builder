@@ -17,8 +17,14 @@ interface BlockCanvasProps {
 }
 
 export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
-  const { blocks, subjectLine, preheader, setSubjectLine, setPreheader } =
-    useEmailBuilder();
+  const {
+    blocks,
+    subjectLine,
+    preheader,
+    setSubjectLine,
+    setPreheader,
+    overrideBlocks,
+  } = useEmailBuilder();
 
   const headerHTML = useMemo(() => {
     return generateHeaderPreviewHTML();
@@ -45,7 +51,14 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
             {/* <span className="text-sm font-semibold text-foreground">
               Email Template Preview
             </span> */}
-            <EmailEditorMenu />
+            <EmailEditorMenu
+              blocks={blocks}
+              subjectLine={subjectLine}
+              preheader={preheader}
+              setSubjectLine={setSubjectLine}
+              setPreheader={setPreheader}
+              overrideBlocks={overrideBlocks}
+            />
           </div>
           <div className="bg-gray-100 p-4 space-y-0 overflow-visible">
             {/* Header */}
