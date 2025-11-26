@@ -21,6 +21,7 @@ interface CopyModalData {
   text?: string;
   link?: string;
   imageSrc?: string;
+  imageLink?: string; // Link that wraps the image
 }
 
 export const BriefingPage = () => {
@@ -90,10 +91,15 @@ export const BriefingPage = () => {
         const imgSrc = img.getAttribute("src") || "";
         const imgAlt = img.getAttribute("alt") || "";
 
+        // Check if image is wrapped in a link
+        const parentLink = img.closest("a");
+        const imgLink = parentLink ? parentLink.getAttribute("href") || "" : "";
+
         setModalData({
           type: "image",
           imageSrc: imgSrc,
           text: imgAlt,
+          imageLink: imgLink,
         });
         setModalOpen(true);
       };
@@ -250,6 +256,7 @@ export const BriefingPage = () => {
           text={modalData.text}
           link={modalData.link}
           imageSrc={modalData.imageSrc}
+          imageLink={modalData.imageLink}
         />
       )}
 

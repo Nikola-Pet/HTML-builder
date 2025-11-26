@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { X, Plus, Languages } from "lucide-react";
+import { X, Plus, Languages, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -431,6 +431,115 @@ export const LanguageTabsMenu = () => {
     }
   };
 
+  // Translate current content from EN to active language
+  const handleTranslateCurrentContent = async () => {
+    if (activeLanguage === "EN") {
+      toast.error("Already viewing English version");
+      return;
+    }
+
+    if (!isDeepLConfigured()) {
+      toast.error("DeepL API key not configured", {
+        description:
+          "Add VITE_DEEPL_API_KEY to .env file to enable translation",
+      });
+      return;
+    }
+
+    // First, save the current state before translating
+    saveCurrentLanguageDraft();
+
+    // Get current language draft (which now includes any new blocks)
+    const currentDraft = getDraftByLanguage(activeLanguage);
+
+    // Get EN draft as source
+    const enDraft = getDraftByLanguage("EN");
+    if (!enDraft) {
+      toast.error("English version not found. Please save EN content first.");
+      return;
+    }
+
+    try {
+      setIsTranslating(true);
+      toast.info(`Translating from EN to ${activeLanguage}...`, {
+        icon: <Languages className="h-4 w-4" />,
+      });
+
+      // Translate the EN content
+      const translatedContent = await translateEmailContent(
+        enDraft.blocks,
+        enDraft.subjectLine,
+        enDraft.preheader,
+        activeLanguage,
+        "EN"
+      );
+
+      // If there are blocks in current draft that don't exist in EN, translate them too
+      const currentBlocks = currentDraft?.blocks || blocks;
+      const translatedBlocks = translatedContent.blocks;
+
+      // Merge: use translated blocks, but append any extra blocks from current version
+      const mergedBlocks = [...translatedBlocks];
+
+      // If current has more blocks than EN, translate and keep the extra ones
+      if (currentBlocks.length > translatedBlocks.length) {
+        const extraBlocks = currentBlocks.slice(translatedBlocks.length);
+
+        // Translate the extra blocks
+        console.log(
+          `[Translation] Found ${extraBlocks.length} extra blocks to translate`
+        );
+        const extraTranslated = await translateEmailContent(
+          extraBlocks,
+          "", // No subject needed for extra blocks
+          "", // No preheader needed
+          activeLanguage,
+          "EN" // Assuming extra blocks are in EN or need translation from EN
+        );
+
+        mergedBlocks.push(...extraTranslated.blocks);
+      }
+
+      // Update the current view with translated content
+      setSubjectLine(translatedContent.subjectLine);
+      setPreheader(translatedContent.preheader);
+      overrideBlocks(mergedBlocks);
+
+      // Save the translated content to draft
+      const templateLangData = getTemplateHeaderFooterData(
+        "masterTemplateBI",
+        activeLanguage
+      );
+
+      const updatedDraft = {
+        language: activeLanguage,
+        name: `${newsletterName || "Untitled"} [${activeLanguage}]`,
+        subjectLine: translatedContent.subjectLine,
+        preheader: translatedContent.preheader,
+        header: {
+          template: "masterTemplateBI",
+          language: activeLanguage,
+          data: templateLangData,
+        },
+        blocks: mergedBlocks,
+        footer: {
+          template: "masterTemplateBI",
+          language: activeLanguage,
+          data: templateLangData,
+        },
+      };
+
+      saveDraft(updatedDraft);
+
+      toast.success(`Content translated to ${activeLanguage}!`);
+    } catch (error) {
+      console.error("[Translation] Failed:", error);
+      toast.error("Translation failed. Please check your DeepL API key.");
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
   // Remove a language tab and DELETE its draft
   const handleRemoveLanguage = (languageCode: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -462,49 +571,69 @@ export const LanguageTabsMenu = () => {
 
   return (
     <>
-      <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-        {/* Language Tabs */}
-        {selectedLanguages.map((langCode) => {
-          const language = AVAILABLE_LANGUAGES.find((l) => l.code === langCode);
-          if (!language) return null;
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
+          {/* Language Tabs */}
+          {selectedLanguages.map((langCode) => {
+            const language = AVAILABLE_LANGUAGES.find(
+              (l) => l.code === langCode
+            );
+            if (!language) return null;
 
-          return (
-            <div
-              key={langCode}
-              className={`
-                flex items-center gap-2 px-3 py-1.5 rounded-md cursor-pointer transition-colors
-                ${
-                  activeLanguage === langCode
-                    ? "bg-white shadow-sm text-gray-900"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }
-              `}
-              onClick={() => setActiveLanguage(langCode)}
+            return (
+              <div
+                key={langCode}
+                className={`
+                  flex items-center gap-2 px-3 py-1.5 rounded-md cursor-pointer transition-colors
+                  ${
+                    activeLanguage === langCode
+                      ? "bg-white shadow-sm text-gray-900"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }
+                `}
+                onClick={() => setActiveLanguage(langCode)}
+              >
+                <span className="text-sm font-medium">{langCode}</span>
+                {langCode !== "EN" && (
+                  <button
+                    className="hover:bg-gray-200 rounded p-0.5 transition-colors"
+                    onClick={(e) => handleRemoveLanguage(langCode, e)}
+                    aria-label={`Close ${language.label} tab`}
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Add Tab Button */}
+          {availableLanguagesToAdd.length > 0 && (
+            <Button
+              variant="neutraltertiary"
+              small
+              className="h-8 w-8 p-0 hover:bg-gray-200"
+              onClick={() => setIsModalOpen(true)}
+              aria-label="Add new language tab"
             >
-              <span className="text-sm font-medium">{langCode}</span>
-              {langCode !== "EN" && (
-                <button
-                  className="hover:bg-gray-200 rounded p-0.5 transition-colors"
-                  onClick={(e) => handleRemoveLanguage(langCode, e)}
-                  aria-label={`Close ${language.label} tab`}
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              )}
-            </div>
-          );
-        })}
+              <Plus className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
 
-        {/* Add Tab Button */}
-        {availableLanguagesToAdd.length > 0 && (
+        {/* Translate Button - Only show for non-EN languages */}
+        {activeLanguage !== "EN" && (
           <Button
-            variant="neutraltertiary"
+            variant="secondary"
             small
-            className="h-8 w-8 p-0 hover:bg-gray-200"
-            onClick={() => setIsModalOpen(true)}
-            aria-label="Add new language tab"
+            className="gap-2"
+            onClick={handleTranslateCurrentContent}
+            disabled={isTranslating}
           >
-            <Plus className="h-4 w-4" />
+            <RefreshCw
+              className={`h-4 w-4 ${isTranslating ? "animate-spin" : ""}`}
+            />
+            {isTranslating ? "Translating..." : "Translate from EN"}
           </Button>
         )}
       </div>

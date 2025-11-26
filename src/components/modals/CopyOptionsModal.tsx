@@ -16,6 +16,7 @@ interface CopyOptionsModalProps {
   text?: string;
   link?: string;
   imageSrc?: string;
+  imageLink?: string; // Link that wraps the image
 }
 
 export const CopyOptionsModal = ({
@@ -25,6 +26,7 @@ export const CopyOptionsModal = ({
   text,
   link,
   imageSrc,
+  imageLink,
 }: CopyOptionsModalProps) => {
   const handleCopyText = async () => {
     if (text) {
@@ -126,6 +128,21 @@ export const CopyOptionsModal = ({
                     <div className="font-semibold">Copy Image URL</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {imageSrc}
+                    </div>
+                  </div>
+                </Button>
+              )}
+              {imageLink && (
+                <Button
+                  variant="secondary"
+                  onClick={handleCopyLink}
+                  className="w-full justify-start gap-3"
+                >
+                  <LinkIcon className="h-5 w-5" />
+                  <div className="text-left flex-1">
+                    <div className="font-semibold">Copy Image Link</div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {imageLink}
                     </div>
                   </div>
                 </Button>
