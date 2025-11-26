@@ -18,12 +18,11 @@ export const BlockPreviewCard = ({
 }: BlockPreviewCardProps) => {
   return (
     <Card
-      className="p-6 hover:border-primary cursor-pointer transition-all hover:shadow-md fit-content"
-      style={{ maxHeight: "fit-content" }}
+      className="p-6 hover:border-primary cursor-pointer transition-all hover:shadow-md"
       onClick={onClick}
     >
       <div className="flex items-start gap-4 mb-4">
-        <div className="flex-shrink-0 w-12 h-12 bg-secondary rounded-lg flex items-center justify-center fit-content">
+        <div className="flex-shrink-0 w-12 h-12 bg-secondary flex items-center justify-center fit-content">
           <Icon className="h-6 w-6 text-secondary-foreground" />
         </div>
         <div className="flex-1">
@@ -33,7 +32,7 @@ export const BlockPreviewCard = ({
       </div>
 
       {/* Preview */}
-      <div className="mt-4 border rounded-lg bg-gray-50 overflow-hidden">
+      <div className="mt-4 border bg-gray-50 overflow-hidden">
         <div className="bg-gray-100 px-3 py-1 text-xs text-gray-600 border-b flex items-center justify-between">
           <span>Desktop Preview</span>
           <span className="text-gray-500">640px width</span>
@@ -48,7 +47,7 @@ export const BlockPreviewCard = ({
           }}
         >
           <div
-            className="bg-white shadow-lg rounded-sm flex-shrink-0"
+            className="bg-white shadow-lg flex-shrink-0"
             style={{
               width: "640px",
               minWidth: "640px",

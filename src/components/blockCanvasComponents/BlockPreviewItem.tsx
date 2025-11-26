@@ -62,7 +62,7 @@ export const BlockPreviewItem = ({
 
   return (
     <>
-      <div className="group relative bg-card rounded-lg border hover:border-primary/50 transition-all">
+      <div className="group relative bg-card border hover:border-primary/50 transition-all">
         {/* Actions Menu */}
         <BlockEditingMenu
           blockId={block.id}
@@ -80,7 +80,7 @@ export const BlockPreviewItem = ({
           style={{ minHeight: `${blockHeight}px` }}
         >
           <div
-            className="bg-white shadow-lg rounded-sm flex-shrink-0"
+            className="bg-white shadow-lg flex-shrink-0"
             style={{
               width: "640px",
               minWidth: "640px",

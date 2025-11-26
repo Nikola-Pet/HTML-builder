@@ -48,7 +48,7 @@ export const TemplateSection = ({ html, title }: TemplateSectionProps) => {
       style={{ minHeight: `${sectionHeight}px` }}
     >
       <div
-        className="bg-white shadow-lg rounded-sm flex-shrink-0"
+        className="bg-white shadow-lg flex-shrink-0"
         style={{
           width: "640px",
           minWidth: "640px",
