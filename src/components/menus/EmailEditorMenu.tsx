@@ -126,7 +126,15 @@ const EmailEditorMenu = ({
 
   // Open Briefing
   const handleOpenBriefing = () => {
-    navigate("/briefing");
+    navigate("/briefing", {
+      state: {
+        blocks,
+        subjectLine,
+        preheader,
+        language,
+        template,
+      },
+    });
   };
 
   // Save Newsletter - Publish all language drafts as ONE newsletter
