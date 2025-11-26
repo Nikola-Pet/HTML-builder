@@ -85,9 +85,9 @@ export const BlockEditorModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-2 gap-6 overflow-auto flex-1">
-          {/* Form */}
-          <div className="space-y-4 pl-2">
+        <div className="grid md:grid-cols-2 gap-6 flex-1 overflow-hidden">
+          {/* Form - Scrollable */}
+          <div className="space-y-4 pl-2 overflow-y-auto pr-2">
             <h3 className="font-semibold text-foreground">Block Settings</h3>
             <BlockFormRenderer
               type={type}
@@ -96,8 +96,10 @@ export const BlockEditorModal = ({
             />
           </div>
 
-          {/* Preview */}
-          <BlockLivePreview previewHTML={previewHTML} />
+          {/* Preview - Fixed Position */}
+          <div className="overflow-hidden">
+            <BlockLivePreview previewHTML={previewHTML} />
+          </div>
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t">
