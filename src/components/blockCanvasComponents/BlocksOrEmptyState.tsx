@@ -17,7 +17,7 @@ export const BlocksOrEmptyState = ({
     return (
       <div className="bg-gray-50 p-4 flex justify-center">
         <div
-          className="bg-white shadow-lg rounded-sm flex-shrink-0"
+          className="bg-white shadow-lg flex-shrink-0"
           style={{
             width: "640px",
             minWidth: "640px",

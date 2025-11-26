@@ -15,7 +15,7 @@ export const EmailMetadataForm = ({
   onPreheaderChange,
 }: EmailMetadataFormProps) => {
   return (
-    <div className="bg-card rounded-lg shadow border p-6">
+    <div className="bg-card shadow border p-6">
       <div className="mb-4">
         <h2 className="text-base font-semibold text-foreground">
           Master Template Metadata
@@ -29,7 +29,7 @@ export const EmailMetadataForm = ({
           <Label htmlFor="subject-line">Subject line</Label>
           <Input
             id="subject-line"
-            placeholder="Unesite subject line"
+            placeholder="Enter subject line"
             value={subjectLine}
             onChange={(event) => onSubjectLineChange(event.target.value)}
           />
@@ -38,7 +38,7 @@ export const EmailMetadataForm = ({
           <Label htmlFor="preheader">Preheader</Label>
           <Input
             id="preheader"
-            placeholder="Unesite preheader"
+            placeholder="Enter preheader"
             value={preheader}
             onChange={(event) => onPreheaderChange(event.target.value)}
           />

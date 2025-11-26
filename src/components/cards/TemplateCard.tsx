@@ -17,7 +17,7 @@ export const TemplateCard = ({
   return (
     <Card className="p-8 hover:shadow-lg transition-all duration-300 border-2 hover:border-primary cursor-pointer">
       <div className="flex flex-col md:flex-row gap-6 items-center">
-        <div className="flex-shrink-0 w-full md:w-48 h-64 bg-muted rounded-lg overflow-hidden border-2 border-border">
+        <div className="flex-shrink-0 w-full md:w-48 h-64 bg-muted overflow-hidden  border-border">
           <div className="h-16 bg-primary"></div>
           <div className="p-4 space-y-3">
             <div className="h-3 bg-muted-foreground/20 rounded"></div>
