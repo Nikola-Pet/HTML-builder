@@ -398,6 +398,16 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#39;");
 }
 
+// Language-specific data interface for header/footer
+export interface LanguageData {
+  boschLogo?: string;
+  readOnline?: string;
+  followUs?: string;
+  instagram?: string;
+  facebook?: string;
+  youtube?: string;
+}
+
 const HEADER = `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
     <div
       style="float: left; width: 100%"
@@ -2200,17 +2210,69 @@ function generateParagraphBlock(content: GenericContent): string {
 export function generateHTML(
   blocks: BlockData[],
   subjectLine: string,
-  preheader: string
+  preheader: string,
+  languageData?: LanguageData
 ): string {
   const contentBlocks = blocks.map(generateBlockHTML).join("\n");
   const subjectHTML = generateSubjectLineBlock(subjectLine || "");
   const preheaderHTML = generatePreheaderBlock(preheader || "");
+
+  // Apply language-specific translations to header and footer
+  let header = HEADER;
+  let footer = FOOTER;
+
+  console.log("🌍 Language Data in htmlGenerator:", languageData);
+
+  if (languageData) {
+    // Replace "Read online" text in header
+    if (languageData.readOnline) {
+      console.log(
+        `  Replacing "Read online" with "${languageData.readOnline}"`
+      );
+      header = header
+        .replace(/Read online &rsaquo;/g, `${languageData.readOnline} &rsaquo;`)
+        .replace(
+          /title="Read online &rsaquo;"/g,
+          `title="${languageData.readOnline} &rsaquo;"`
+        );
+    }
+
+    // Replace "Follow us" text in footer
+    if (languageData.followUs) {
+      console.log(`  Replacing "Follow us" with "${languageData.followUs}"`);
+      footer = footer.replace(/Follow us</g, `${languageData.followUs}<`);
+    }
+
+    // Replace social media links in footer
+    if (languageData.facebook) {
+      console.log(`  Replacing Facebook URL with ${languageData.facebook}`);
+      footer = footer.replace(
+        /https:\/\/www\.facebook\.com\/BoschProfessionalPowerToolsUK/g,
+        languageData.facebook
+      );
+    }
+    if (languageData.instagram) {
+      console.log(`  Replacing Instagram URL with ${languageData.instagram}`);
+      footer = footer.replace(
+        /https:\/\/www\.instagram\.com\/boschprouk\//g,
+        languageData.instagram
+      );
+    }
+    if (languageData.youtube) {
+      console.log(`  Replacing YouTube URL with ${languageData.youtube}`);
+      footer = footer.replace(
+        /https:\/\/www\.youtube\.com\/user\/BoschProfessionalUK/g,
+        languageData.youtube
+      );
+    }
+  }
+
   return `${MASTER_TEMPLATE_START}
 ${subjectHTML}
 ${preheaderHTML}
-${HEADER}
+${header}
 ${contentBlocks}
-${FOOTER}
+${footer}
 ${MASTER_TEMPLATE_END}`;
 }
 
@@ -2268,7 +2330,19 @@ ${blockHTML}
 </html>`;
 }
 
-export function generateHeaderPreviewHTML(): string {
+export function generateHeaderPreviewHTML(languageData?: LanguageData): string {
+  let header = HEADER;
+
+  // Apply language-specific translations if provided
+  if (languageData && languageData.readOnline) {
+    header = header
+      .replace(/Read online &rsaquo;/g, `${languageData.readOnline} &rsaquo;`)
+      .replace(
+        /title="Read online &rsaquo;"/g,
+        `title="${languageData.readOnline} &rsaquo;"`
+      );
+  }
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -2315,12 +2389,41 @@ a:visited {
 </style>
 </head>
 <body>
-${HEADER}
+${header}
 </body>
 </html>`;
 }
 
-export function generateFooterPreviewHTML(): string {
+export function generateFooterPreviewHTML(languageData?: LanguageData): string {
+  let footer = FOOTER;
+
+  // Apply language-specific translations if provided
+  if (languageData) {
+    if (languageData.followUs) {
+      footer = footer.replace(/Follow us</g, `${languageData.followUs}<`);
+    }
+
+    // Replace social media links
+    if (languageData.facebook) {
+      footer = footer.replace(
+        /https:\/\/www\.facebook\.com\/BoschProfessionalPowerToolsUK/g,
+        languageData.facebook
+      );
+    }
+    if (languageData.instagram) {
+      footer = footer.replace(
+        /https:\/\/www\.instagram\.com\/boschprouk\//g,
+        languageData.instagram
+      );
+    }
+    if (languageData.youtube) {
+      footer = footer.replace(
+        /https:\/\/www\.youtube\.com\/user\/BoschProfessionalUK/g,
+        languageData.youtube
+      );
+    }
+  }
+
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -2367,7 +2470,7 @@ a:visited {
 </style>
 </head>
 <body>
-${FOOTER}
+${footer}
 </body>
 </html>`;
 }

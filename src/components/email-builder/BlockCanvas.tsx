@@ -6,6 +6,7 @@ import {
   generateHeaderPreviewHTML,
   generateFooterPreviewHTML,
 } from "@/utils/htmlGenerator";
+import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
 import { EmailMetadataForm } from "@/components/blockCanvasComponents/EmailMetadataForm";
 import { BlocksOrEmptyState } from "@/components/blockCanvasComponents/BlocksOrEmptyState";
 import { BlockPreviewItem } from "@/components/blockCanvasComponents/BlockPreviewItem";
@@ -32,13 +33,30 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
     setNewsletterId,
   } = useEmailBuilder();
 
+  // Get language-specific data and regenerate header/footer when language changes
   const headerHTML = useMemo(() => {
-    return generateHeaderPreviewHTML();
-  }, []);
+    const languageData = getTemplateHeaderFooterData(
+      "masterTemplateBI",
+      language
+    );
+    console.log(
+      `🎨 BlockCanvas: Generating header preview for ${language}`,
+      languageData
+    );
+    return generateHeaderPreviewHTML(languageData);
+  }, [language]);
 
   const footerHTML = useMemo(() => {
-    return generateFooterPreviewHTML();
-  }, []);
+    const languageData = getTemplateHeaderFooterData(
+      "masterTemplateBI",
+      language
+    );
+    console.log(
+      `🎨 BlockCanvas: Generating footer preview for ${language}`,
+      languageData
+    );
+    return generateFooterPreviewHTML(languageData);
+  }, [language]);
 
   return (
     <div className="container mx-auto px-6 py-8 max-w-6xl">

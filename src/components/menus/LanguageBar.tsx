@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +19,11 @@ import {
   publishAllDraftsAsOne,
   saveCurrentWorkAsDraft,
 } from "@/utils/languageDraftStorage";
+import {
+  translateEmailContent,
+  isDeepLConfigured,
+} from "@/utils/deeplTranslation";
+import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
 
 const AVAILABLE_LANGUAGES = [
   { code: "EN", label: "English" },
@@ -30,6 +35,7 @@ export const LanguageTabsMenu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeLanguage, setActiveLanguage] = useState<string>("EN");
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(["EN"]);
+  const [isTranslating, setIsTranslating] = useState(false);
 
   // Track session draft ID to update same draft
   const sessionDraftId = useRef<string | null>(null);
@@ -64,14 +70,29 @@ export const LanguageTabsMenu = () => {
   const saveCurrentLanguageDraft = () => {
     if (isSwitchingLanguage.current) return;
 
+    // Get template-specific language data for header/footer
+    // Always use masterTemplateBI
+    const templateLangData = getTemplateHeaderFooterData(
+      "masterTemplateBI",
+      activeLanguage
+    );
+
     const draftData = {
       language: activeLanguage,
       name: `${newsletterName || "Untitled"} [${activeLanguage}]`,
       subjectLine,
       preheader,
-      header: { template, language: activeLanguage },
+      header: {
+        template: "masterTemplateBI", // Always use BI template
+        language: activeLanguage,
+        data: templateLangData, // Include language-specific links and text
+      },
       blocks: deepCloneBlocks(blocks),
-      footer: { template, language: activeLanguage },
+      footer: {
+        template: "masterTemplateBI", // Always use BI template
+        language: activeLanguage,
+        data: templateLangData, // Include language-specific links and text
+      },
     };
 
     try {
@@ -229,8 +250,8 @@ export const LanguageTabsMenu = () => {
     template,
   ]);
 
-  // Add a new language tab - Create new draft from EN version
-  const handleAddLanguage = (languageCode: string) => {
+  // Add a new language tab - Create new draft from EN version with translation
+  const handleAddLanguage = async (languageCode: string) => {
     setIsModalOpen(false);
 
     // Check if this language already has a draft in language_drafts array
@@ -256,38 +277,158 @@ export const LanguageTabsMenu = () => {
     if (enDraft) {
       enContent = enDraft;
     } else {
-      // If no EN draft, use current content
+      // If no EN draft, use current content with template data
+      const enTemplateLangData = getTemplateHeaderFooterData(
+        "masterTemplateBI",
+        "EN"
+      );
+
       enContent = {
         language: "EN",
         name: `${newsletterName || "Untitled"} [EN]`,
         subjectLine,
         preheader,
         blocks,
-        header: { template, language: "EN" },
-        footer: { template, language: "EN" },
+        header: {
+          template: "masterTemplateBI",
+          language: "EN",
+          data: enTemplateLangData,
+        },
+        footer: {
+          template: "masterTemplateBI",
+          language: "EN",
+          data: enTemplateLangData,
+        },
       };
     }
+
+    // Check if DeepL is configured and translate if available
+    const shouldTranslate = isDeepLConfigured() && languageCode !== "EN";
+
+    console.log(
+      `[Translation] DeepL configured: ${isDeepLConfigured()}, Should translate: ${shouldTranslate}`
+    );
+
+    if (!isDeepLConfigured() && languageCode !== "EN") {
+      console.warn(
+        `[Translation] ⚠️ DeepL API key not configured! Translation disabled.`,
+        `\nTo enable automatic translation:`,
+        `\n1. Create .env file in project root`,
+        `\n2. Add: VITE_DEEPL_API_KEY=your_api_key_here`,
+        `\n3. Restart dev server`,
+        `\nGet free API key at: https://www.deepl.com/pro-api`
+      );
+    }
+
+    let translatedContent = {
+      blocks: deepCloneBlocks(enContent.blocks),
+      subjectLine: enContent.subjectLine,
+      preheader: enContent.preheader,
+    };
+
+    if (shouldTranslate) {
+      try {
+        setIsTranslating(true);
+        console.log(
+          `[Translation] Starting translation from EN to ${languageCode}`
+        );
+        console.log(`[Translation] Source content:`, {
+          blocksCount: enContent.blocks.length,
+          subjectLine: enContent.subjectLine,
+          preheader: enContent.preheader,
+        });
+
+        toast.info(`Translating content to ${languageCode}...`, {
+          icon: <Languages className="h-4 w-4" />,
+        });
+
+        // Translate the content
+        translatedContent = await translateEmailContent(
+          enContent.blocks,
+          enContent.subjectLine,
+          enContent.preheader,
+          languageCode,
+          "EN"
+        );
+
+        console.log(`[Translation] Translation completed successfully!`);
+        console.log(`[Translation] Translated content:`, {
+          blocksCount: translatedContent.blocks.length,
+          subjectLine: translatedContent.subjectLine,
+          preheader: translatedContent.preheader,
+        });
+
+        toast.success(`Content translated to ${languageCode}!`);
+      } catch (error) {
+        console.error("[Translation] Translation failed:", error);
+        toast.error(
+          "Translation failed. Using original content. Please check your DeepL API key."
+        );
+        // Fall back to original content (already set above)
+      } finally {
+        setIsTranslating(false);
+      }
+    }
+
+    // Get language-specific template data for header/footer
+    // Always use masterTemplateBI for consistent translations
+    console.log(
+      `📋 Retrieving template data for ${languageCode} from masterTemplateBI`
+    );
+    const templateLangData = getTemplateHeaderFooterData(
+      "masterTemplateBI",
+      languageCode
+    );
+    console.log(`📋 Template data retrieved:`, templateLangData);
 
     // Create new draft for this language in language_drafts array
     const newDraftData = {
       language: languageCode,
       name: `${newsletterName || "Untitled"} [${languageCode}]`,
-      subjectLine: enContent.subjectLine,
-      preheader: enContent.preheader,
-      header: { template, language: languageCode },
-      blocks: deepCloneBlocks(enContent.blocks),
-      footer: { template, language: languageCode },
+      subjectLine: translatedContent.subjectLine,
+      preheader: translatedContent.preheader,
+      header: {
+        template: "masterTemplateBI", // Always use BI template
+        language: languageCode,
+        data: templateLangData, // Language-specific links and text from templates.json
+      },
+      blocks: translatedContent.blocks,
+      footer: {
+        template: "masterTemplateBI", // Always use BI template
+        language: languageCode,
+        data: templateLangData, // Language-specific links and text from templates.json
+      },
     };
 
     saveDraft(newDraftData);
     console.log(
-      `Created ${languageCode} draft from EN in language_drafts array`
+      `[Draft] Created ${languageCode} draft from EN in language_drafts array${
+        shouldTranslate ? " with translation" : ""
+      }`
     );
+    console.log(`[Draft] Draft data saved:`, {
+      language: languageCode,
+      blocksCount: newDraftData.blocks.length,
+      subjectLine: newDraftData.subjectLine,
+    });
 
     setSelectedLanguages((prev) => [...prev, languageCode]);
     setActiveLanguage(languageCode);
 
-    toast.success(`${languageCode} language added`);
+    if (!shouldTranslate) {
+      if (!isDeepLConfigured()) {
+        toast.warning(
+          `${languageCode} language added (no translation - DeepL API key not configured)`,
+          {
+            description:
+              "Add VITE_DEEPL_API_KEY to .env file to enable automatic translation",
+            duration: 5000,
+          }
+        );
+      } else {
+        toast.success(`${languageCode} language added`);
+      }
+    }
   };
 
   // Remove a language tab and DELETE its draft

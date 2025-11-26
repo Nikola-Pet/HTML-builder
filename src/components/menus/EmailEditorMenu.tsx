@@ -19,6 +19,7 @@ import {
 import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
 import { toast } from "sonner";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
+import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
 
 interface EmailEditorMenuProps {
   blocks: BlockData[];
@@ -66,7 +67,14 @@ const EmailEditorMenu = ({
   // Download HTML
   const handleDownloadHTMLClick = () => {
     try {
-      downloadHTML(blocks, subjectLine, preheader);
+      console.log("📋 Template:", template, "Language:", language);
+      // Always use masterTemplateBI for consistent translations
+      const templateLangData = getTemplateHeaderFooterData(
+        "masterTemplateBI",
+        language
+      );
+      console.log("📋 Template Language Data:", templateLangData);
+      downloadHTML(blocks, subjectLine, preheader, templateLangData);
       toast.success("HTML downloaded successfully!");
     } catch (error) {
       toast.error("Failed to download HTML.");

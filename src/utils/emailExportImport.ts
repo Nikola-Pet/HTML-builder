@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import { BlockData } from "@/contexts/EmailBuilderContext";
-import { generateHTML } from "@/utils/htmlGenerator";
+import { generateHTML, LanguageData } from "@/utils/htmlGenerator";
 import { getDefaultContent } from "@/constants/defaultBlockContent";
 
 // ============================================================================
@@ -108,13 +108,20 @@ export const formatLabel = (key: string): string => {
  * @param blocks - Array of email blocks
  * @param subjectLine - Email subject line
  * @param preheader - Email preheader text
+ * @param languageData - Optional language-specific header/footer data
  */
 export const handleDownloadHTML = (
   blocks: BlockData[],
   subjectLine: string,
-  preheader: string
+  preheader: string,
+  languageData?: LanguageData
 ): void => {
-  const htmlContent = generateHTML(blocks, subjectLine, preheader);
+  const htmlContent = generateHTML(
+    blocks,
+    subjectLine,
+    preheader,
+    languageData
+  );
 
   const blob = new Blob([htmlContent], { type: "text/html" });
   const url = URL.createObjectURL(blob);
