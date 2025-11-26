@@ -136,20 +136,27 @@ const EmailEditorMenu = ({
               disabled={!canUndo}
               title="Undo"
               icon="undo"
-            >
-            </Button>
+            ></Button>
             <Button
               variant="tertiary"
               onClick={onRedo}
               disabled={!canRedo}
               title="Redo"
               icon="redo"
-            >
-            </Button>
+            ></Button>
           </div>
 
           {/* Right side - Download buttons and Briefing */}
           <div className="flex items-center gap-2">
+            <Button
+              variant="primary"
+              onClick={handleDownloadExcelClick}
+              disabled={blocks.length === 0}
+              title="Download Excel"
+              icon="document-xls"
+            >
+              Save
+            </Button>
             <Button
               variant="tertiary"
               onClick={handleImportTrigger}
@@ -198,8 +205,7 @@ const EmailEditorMenu = ({
               disabled={blocks.length === 0}
               title="Delete Newsletter"
               icon="delete"
-            >
-            </Button>
+            ></Button>
           </div>
         </div>
       </header>
