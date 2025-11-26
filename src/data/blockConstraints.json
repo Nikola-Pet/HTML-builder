@@ -15,7 +15,7 @@
       "maxLength": 100
     }
   },
-  "imageText": {
+  "image-text": {
     "imageUrl": {
       "required": true,
       "maxLength": 2048
@@ -59,7 +59,7 @@
       "maxLength": 2048
     }
   },
-  "twinTeaser": {
+  "twin-teaser": {
     "leftImageUrl": {
       "required": true,
       "maxLength": 2048

@@ -12,6 +12,7 @@ import { generateBlockPreviewHTML } from "@/utils/htmlGenerator";
 import { BlockFormRenderer } from "@/components/email-builder/BlockFormRenderer";
 import { BlockLivePreview } from "@/components/email-builder/BlockLivePreview";
 import { getDefaultContent } from "@/constants/defaultBlockContent";
+import { isBlockValid, BlockType } from "@/utils/formValidation";
 
 interface BlockEditorModalProps {
   isOpen: boolean;
@@ -71,6 +72,10 @@ export const BlockEditorModal = ({
     return generateBlockPreviewHTML(previewBlock);
   }, [type, formData]);
 
+  const isValid = useMemo(() => {
+    return isBlockValid(type as BlockType, formData);
+  }, [type, formData]);
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
@@ -99,7 +104,7 @@ export const BlockEditorModal = ({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} disabled={!isValid}>
             {isEditing ? "Update Block" : "Add Block"}
           </Button>
         </div>
