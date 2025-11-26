@@ -6,8 +6,8 @@ import { X, Menu } from "lucide-react";
 
 const NavItems = [
   { id: 1, label: "Dashboard", link: "/", icon: "home" },
-  { id: 2, label: "Drafts", link: "/drafts", icon: "box-closed" },
-  { id: 3, label: "Available blocks", link: "/settings", icon: "wrench" },
+  { id: 3, label: "Newsletters", link: "/newsletters", icon: "document" },
+  { id: 2, label: "Drafts", link: "/drafts", icon: "edit" },
 ];
 
 function SideNav() {

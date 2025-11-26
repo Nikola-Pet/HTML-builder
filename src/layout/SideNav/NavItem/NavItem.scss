@@ -1,44 +1,20 @@
-@import '../../../styles/variables';
-@import '../../../styles/basic.mixin';
-
-li {
-  list-style: none;
-}
-
 .nav-item {
   height: 48px;
   display: flex;
   align-items: center;
-  gap: $xs;
-  padding: $s;
+  gap: 0.5rem;
+  padding: 1rem;
   cursor: pointer;
-  color: var(--bosch-white);
+  color: var(--bosch-white); 
   white-space: nowrap;
-  list-style: none;
-  position: relative;
-
-  svg {
-    flex-shrink: 0;
-    min-width: 20px;
-  }
-
-  .nav-label {
-    opacity: 1;
-    transition: opacity $default-transition-timing $default-transition-easing;
-  }
 
   &:hover {
     background-color: var(--bosch-gray-30);
     color: var(--bosch-white);
   }
 
-  .arrow {
-    margin-left: auto;
-    flex-shrink: 0;
-
-    &::before {
-      padding: 12px;
-    }
+  .icon{
+    font-size: 24px;
   }
 }
 
@@ -49,38 +25,4 @@ li {
   &:hover {
     background-color: var(--bosch-gray-90);
   }
-}
-
-.sub-nav {
-  max-height: 0;
-  overflow: hidden;
-  margin: 0;
-  list-style: none;
-
-  & > ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    
-    li {
-      list-style: none;
-      
-      a {
-        padding-left: 56px;
-      }
-    }
-  }
-}
-
-.subnav-label {
-  white-space: nowrap;
-}
-
-.subnav-icon {
-  flex-shrink: 0;
-  min-width: 20px;
-}
-
-.sub-nav.expanded {
-  max-height: fit-content;
 }
