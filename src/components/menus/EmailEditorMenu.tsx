@@ -149,15 +149,6 @@ const EmailEditorMenu = ({
           {/* Right side - Download buttons and Briefing */}
           <div className="flex items-center gap-2">
             <Button
-              variant="primary"
-              onClick={handleDownloadExcelClick}
-              disabled={blocks.length === 0}
-              title="Download Excel"
-              icon="save"
-            >
-              Save
-            </Button>
-            <Button
               variant="tertiary"
               onClick={handleImportTrigger}
               title="Import Excel"
@@ -198,6 +189,15 @@ const EmailEditorMenu = ({
               icon="summary"
             >
               Briefing
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleDownloadExcelClick}
+              disabled={blocks.length === 0}
+              title="Download Excel"
+              icon="save"
+            >
+              Save
             </Button>
             <Button
               variant="tertiary"
