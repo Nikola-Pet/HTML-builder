@@ -90,8 +90,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
                   }}
                 >
                   <div className="flex flex-col items-center justify-center py-8 px-8">
-                    <Button onClick={onAddBlock} variant="outline" size="lg">
-                      <Plus className="h-4 w-4 mr-2" />
+                    <Button onClick={onAddBlock} icon="add">
                       Add Block
                     </Button>
                   </div>

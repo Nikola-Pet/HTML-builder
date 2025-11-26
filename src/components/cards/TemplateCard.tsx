@@ -42,7 +42,7 @@ export const TemplateCard = ({
               </span>
             ))}
           </div>
-          <Button onClick={onSelect} size="lg" className="w-full md:w-auto">
+          <Button onClick={onSelect}>
             Use This Template
           </Button>
         </div>

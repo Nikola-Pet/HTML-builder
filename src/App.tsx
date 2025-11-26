@@ -9,6 +9,7 @@ import SideNav from "./layout/SideNav/SideNav";
 import { Breadcrumb, BreadcrumbsContext } from "./contexts/breadcrumbsContext";
 import { useState } from "react";
 import Header from "./layout/Header/Header";
+import '../../HTML-builder/public/frontend-kit.complete.css'
 
 
 const queryClient = new QueryClient();

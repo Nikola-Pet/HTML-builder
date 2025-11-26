@@ -36,8 +36,7 @@ export const BlocksOrEmptyState = ({
                 Start building your email by adding content blocks. Click the
                 button below to get started.
               </p>
-              <Button onClick={onAddBlock} size="lg">
-                <Plus className="h-4 w-4 mr-2" />
+              <Button onClick={onAddBlock} icon="add">
                 Add Your First Block
               </Button>
             </div>

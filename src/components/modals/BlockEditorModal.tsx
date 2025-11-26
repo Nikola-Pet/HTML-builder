@@ -96,7 +96,7 @@ export const BlockEditorModal = ({
         </div>
 
         <div className="flex justify-end gap-3 pt-4 border-t">
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button onClick={handleSave}>
