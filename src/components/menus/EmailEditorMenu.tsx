@@ -18,6 +18,7 @@ import {
 } from "@/utils/emailExportImport";
 import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
 import SaveModal from "@/components/modals/SaveModal";
+import PreviewModal from "@/components/modals/PreviewModal";
 import { toast } from "sonner";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
 import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
@@ -65,7 +66,10 @@ const EmailEditorMenu = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
-  const [pendingNewsletterData, setPendingNewsletterData] = useState<any | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [pendingNewsletterData, setPendingNewsletterData] = useState<
+    any | null
+  >(null);
 
   // Download HTML
   const handleDownloadHTMLClick = () => {
@@ -183,7 +187,10 @@ const EmailEditorMenu = ({
         toast.success("Newsletter saved successfully!");
       }
     } catch (error) {
-      toast.error("Failed to save newsletter: " + (error instanceof Error ? error.message : String(error)));
+      toast.error(
+        "Failed to save newsletter: " +
+          (error instanceof Error ? error.message : String(error))
+      );
     }
     setIsSaveModalOpen(false);
     setPendingNewsletterData(null);
@@ -204,8 +211,8 @@ const EmailEditorMenu = ({
   };
 
   return (
-  <>
-  <header className="w-full border-b bg-white sticky top-0 z-10">
+    <>
+      <header className="w-full border-b bg-white sticky top-0 z-10">
         <div className="h-14 px-6 flex items-center justify-between w-full">
           {/* Left side - Undo/Redo */}
           <div className="flex items-center gap-2">
@@ -227,6 +234,15 @@ const EmailEditorMenu = ({
 
           {/* Right side - Download buttons and Briefing */}
           <div className="flex items-center gap-2">
+            <Button
+              variant="tertiary"
+              onClick={() => setIsPreviewModalOpen(true)}
+              disabled={blocks.length === 0}
+              title="Preview Email"
+              icon="eye"
+            >
+              Preview
+            </Button>
             <Button
               variant="tertiary"
               onClick={handleImportTrigger}
@@ -292,8 +308,22 @@ const EmailEditorMenu = ({
       {/* Save Newsletter Modal */}
       <SaveModal
         isOpen={isSaveModalOpen}
-        onClose={() => { setIsSaveModalOpen(false); setPendingNewsletterData(null); }}
+        onClose={() => {
+          setIsSaveModalOpen(false);
+          setPendingNewsletterData(null);
+        }}
         onSave={handleSaveModalSubmit}
+      />
+
+      {/* Preview Modal */}
+      <PreviewModal
+        isOpen={isPreviewModalOpen}
+        onClose={() => setIsPreviewModalOpen(false)}
+        blocks={blocks}
+        subjectLine={subjectLine}
+        preheader={preheader}
+        language={language}
+        template={template}
       />
 
       {/* Delete Confirmation Modal */}
