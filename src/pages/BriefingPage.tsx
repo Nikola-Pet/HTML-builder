@@ -242,7 +242,7 @@ export const BriefingPage = () => {
   }, [htmlContent]);
 
   const handleBack = () => {
-    navigate(-1);
+    navigate("/builder", { state: { fromBriefing: true } });
   };
 
   return (

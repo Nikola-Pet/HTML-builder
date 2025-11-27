@@ -18,6 +18,7 @@ import {
   clearAllDrafts,
   publishAllDraftsAsOne,
   saveCurrentWorkAsDraft,
+  getAllDrafts,
 } from "@/utils/languageDraftStorage";
 import {
   translateEmailContent,
@@ -36,6 +37,7 @@ export const LanguageTabsMenu = () => {
   const [activeLanguage, setActiveLanguage] = useState<string>("EN");
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(["EN"]);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // Track session draft ID to update same draft
   const sessionDraftId = useRef<string | null>(null);
@@ -57,6 +59,50 @@ export const LanguageTabsMenu = () => {
 
   const isSwitchingLanguage = useRef(false);
   const previousLanguage = useRef<string>("EN");
+
+  // Initialize language tabs from existing drafts on mount
+  useEffect(() => {
+    if (!isInitialized) {
+      const existingDrafts = getAllDrafts();
+
+      if (existingDrafts.length > 0) {
+        // Get all unique language codes from existing drafts
+        const existingLanguages = [
+          ...new Set(existingDrafts.map((draft) => draft.language)),
+        ];
+
+        console.log("🌍 Detected existing language drafts:", existingLanguages);
+
+        // Update selected languages to include all existing ones
+        setSelectedLanguages(existingLanguages);
+
+        // Set active language to the context language or first available
+        const initialLanguage = language || existingLanguages[0];
+        setActiveLanguage(initialLanguage);
+        previousLanguage.current = initialLanguage;
+
+        // Load the active language draft
+        const activeDraft = getDraftByLanguage(initialLanguage);
+        if (activeDraft) {
+          isSwitchingLanguage.current = true;
+          setSubjectLine(activeDraft.subjectLine || "");
+          setPreheader(activeDraft.preheader || "");
+          overrideBlocks(deepCloneBlocks(activeDraft.blocks || []));
+          setLanguage(initialLanguage);
+
+          setTimeout(() => {
+            isSwitchingLanguage.current = false;
+          }, 150);
+
+          console.log(`✓ Loaded ${initialLanguage} draft on initialization`);
+        }
+
+        toast.success(`Loaded ${existingLanguages.length} language version(s)`);
+      }
+
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
 
   // Helper function for deep cloning to ensure complete independence
   const deepCloneBlocks = (blocks: BlockData[]): BlockData[] => {
@@ -207,6 +253,7 @@ export const LanguageTabsMenu = () => {
     clearAllDrafts();
     setSelectedLanguages(["EN"]);
     setActiveLanguage("EN");
+    setIsInitialized(false); // Reset initialization flag
     console.log("Cleared all language drafts");
   };
 

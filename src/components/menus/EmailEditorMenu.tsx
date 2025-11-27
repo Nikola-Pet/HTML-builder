@@ -17,6 +17,7 @@ import {
   handleImportExcel as importExcel,
 } from "@/utils/emailExportImport";
 import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
+import { saveDraft } from "@/utils/languageDraftStorage";
 import SaveModal from "@/components/modals/SaveModal";
 import PreviewModal from "@/components/modals/PreviewModal";
 import { toast } from "sonner";
@@ -133,6 +134,40 @@ const EmailEditorMenu = ({
 
   // Open Briefing
   const handleOpenBriefing = () => {
+    // Save current language draft before navigating to briefing
+    const templateLangData = getTemplateHeaderFooterData(
+      "masterTemplateBI",
+      language
+    );
+
+    const draftData = {
+      language: language,
+      name: `${newsletterName || "Untitled"} [${language}]`,
+      subjectLine,
+      preheader,
+      header: {
+        template: "masterTemplateBI",
+        language: language,
+        data: templateLangData,
+      },
+      blocks: blocks.map((block) => ({
+        ...block,
+        content: JSON.parse(JSON.stringify(block.content)),
+      })),
+      footer: {
+        template: "masterTemplateBI",
+        language: language,
+        data: templateLangData,
+      },
+    };
+
+    try {
+      saveDraft(draftData);
+      console.log(`Saved ${language} draft before navigating to briefing`);
+    } catch (error) {
+      console.error(`Error saving ${language} draft:`, error);
+    }
+
     navigate("/briefing", {
       state: {
         blocks,
