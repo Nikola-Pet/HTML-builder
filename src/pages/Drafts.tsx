@@ -45,9 +45,11 @@ const Drafts: React.FC = () => {
 						return (
 							<NewsletterCard
 								key={draft.id}
+								id={draft.id}
 								name={draft.name}
 								keywords={draft.keywords}
 								imageHtml={imageHtml}
+								isDraft={true}
 							/>
 						);
 					})

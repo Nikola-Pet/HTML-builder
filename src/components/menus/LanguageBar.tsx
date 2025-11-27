@@ -620,17 +620,25 @@ export const LanguageTabsMenu = () => {
     <>
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1 bg-gray-100 p-1 rounded-lg">
-          {/* Language Tabs */}
-          {selectedLanguages.map((langCode) => {
-            const language = AVAILABLE_LANGUAGES.find(
-              (l) => l.code === langCode
-            );
-            if (!language) return null;
+          {/* Language Tabs - Only show languages that have drafts (or EN as default) */}
+          {selectedLanguages
+            .filter((langCode) => {
+              // Always show EN (default language)
+              if (langCode === "EN") return true;
+              // For other languages, only show if they have a draft
+              const draft = getDraftByLanguage(langCode);
+              return draft !== null;
+            })
+            .map((langCode) => {
+              const language = AVAILABLE_LANGUAGES.find(
+                (l) => l.code === langCode
+              );
+              if (!language) return null;
 
-            return (
-              <div
-                key={langCode}
-                className={`
+              return (
+                <div
+                  key={langCode}
+                  className={`
                   flex items-center gap-2 px-3 py-1.5 rounded-md cursor-pointer transition-colors
                   ${
                     activeLanguage === langCode
@@ -638,21 +646,21 @@ export const LanguageTabsMenu = () => {
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }
                 `}
-                onClick={() => setActiveLanguage(langCode)}
-              >
-                <span className="text-sm font-medium">{langCode}</span>
-                {langCode !== "EN" && (
-                  <button
-                    className="hover:bg-gray-200 rounded p-0.5 transition-colors"
-                    onClick={(e) => handleRemoveLanguage(langCode, e)}
-                    aria-label={`Close ${language.label} tab`}
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                )}
-              </div>
-            );
-          })}
+                  onClick={() => setActiveLanguage(langCode)}
+                >
+                  <span className="text-sm font-medium">{langCode}</span>
+                  {langCode !== "EN" && (
+                    <button
+                      className="hover:bg-gray-200 rounded p-0.5 transition-colors"
+                      onClick={(e) => handleRemoveLanguage(langCode, e)}
+                      aria-label={`Close ${language.label} tab`}
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
 
           {/* Add Tab Button */}
           {availableLanguagesToAdd.length > 0 && (

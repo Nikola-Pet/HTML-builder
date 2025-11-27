@@ -293,6 +293,14 @@ export const getAllSavedDrafts = (): MultiLanguageNewsletter[] => {
 };
 
 /**
+ * Get a saved draft by ID
+ */
+export const getSavedDraftById = (id: string): MultiLanguageNewsletter | null => {
+  const savedDrafts = getAllSavedDrafts();
+  return savedDrafts.find((draft) => draft.id === id) || null;
+};
+
+/**
  * Save current work as a saved draft (when navigating away)
  * This converts all language_drafts to one saved draft
  * Uses sessionDraftId to update same draft instead of creating new ones
