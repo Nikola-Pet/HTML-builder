@@ -245,6 +245,32 @@ export const BriefingPage = () => {
     navigate("/builder", { state: { fromBriefing: true } });
   };
 
+  const handleCopySubjectLine = async () => {
+    const state = location.state as BriefingPageState;
+    if (state?.subjectLine) {
+      try {
+        await navigator.clipboard.writeText(state.subjectLine);
+        toast.success("Subject line copied to clipboard!");
+      } catch (err) {
+        toast.error("Failed to copy subject line");
+        console.error("Copy failed:", err);
+      }
+    }
+  };
+
+  const handleCopyPreheader = async () => {
+    const state = location.state as BriefingPageState;
+    if (state?.preheader) {
+      try {
+        await navigator.clipboard.writeText(state.preheader);
+        toast.success("Preheader copied to clipboard!");
+      } catch (err) {
+        toast.error("Failed to copy preheader");
+        console.error("Copy failed:", err);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Copy Options Modal */}
@@ -282,9 +308,25 @@ export const BriefingPage = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Copy className="h-4 w-4" />
-              <span>Click to Copy</span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="tertiary"
+                onClick={handleCopySubjectLine}
+                className="gap-2"
+                title="Copy Subject Line"
+                icon="copy"
+              >
+                Copy Subject Line
+              </Button>
+              <Button
+                variant="tertiary"
+                onClick={handleCopyPreheader}
+                className="gap-2"
+                title="Copy Preheader"
+                icon="copy"
+              >
+                Copy Preheader
+              </Button>
             </div>
           </div>
         </div>
