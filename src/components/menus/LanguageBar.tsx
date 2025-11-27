@@ -659,11 +659,11 @@ export const LanguageTabsMenu = () => {
             <Button
               variant="neutraltertiary"
               small
-              icon="add"
+              className="h-8 w-8 p-0 hover:bg-gray-200"
               onClick={() => setIsModalOpen(true)}
               aria-label="Add new language tab"
             >
-              
+              <Plus className="h-4 w-4" />
             </Button>
           )}
         </div>
@@ -699,16 +699,10 @@ export const LanguageTabsMenu = () => {
             {availableLanguagesToAdd.map((language) => (
               <Button
                 key={language.code}
-                variant="neutralsecondary"
-                className="w-full justify-start text-left h-auto py-3"
+                variant="secondary"
                 onClick={() => handleAddLanguage(language.code)}
               >
-                <div className="flex items-center gap-3">
-                  <span className="font-bold text-lg w-8">{language.code}</span>
-                  <span className="text-sm text-gray-600">
-                    {language.label}
-                  </span>
-                </div>
+                {language.label} ({language.code})
               </Button>
             ))}
 
