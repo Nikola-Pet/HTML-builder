@@ -3,11 +3,14 @@ import { NewsletterCard } from "@/components/cards/NewsletterCard";
 import { getAllSavedDrafts } from "@/utils/languageDraftStorage";
 import { generateHTML } from "@/utils/htmlGenerator";
 import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 const Drafts: React.FC = () => {
 	// Read all saved drafts from localStorage
 	const [drafts, setDrafts] = React.useState<any[]>([]);
-
+    useBreadcrumbs([{ label: "Drafts", href: "/drafts" }]);
+ 
+ 
 	React.useEffect(() => {
 		setDrafts(getAllSavedDrafts());
 	}, []);

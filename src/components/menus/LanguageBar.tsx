@@ -659,11 +659,11 @@ export const LanguageTabsMenu = () => {
             <Button
               variant="neutraltertiary"
               small
-              className="h-8 w-8 p-0 hover:bg-gray-200"
+              icon="add"
               onClick={() => setIsModalOpen(true)}
               aria-label="Add new language tab"
             >
-              <Plus className="h-4 w-4" />
+              
             </Button>
           )}
         </div>

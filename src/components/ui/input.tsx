@@ -1,10 +1,14 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
-
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
-  ({ className, type, ...props }, ref) => {
+ 
+interface InputProps extends React.ComponentProps<"input"> {
+  label?: string;
+}
+ 
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, label, ...props }, ref) => {
     return (
       <div className="a-text-field">
+        {label && <label className="a-text-field__label">{label}</label>}
         <input
           type={type}
           ref={ref}
@@ -15,5 +19,5 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   }
 );
 Input.displayName = "Input";
-
+ 
 export { Input };
