@@ -5,12 +5,13 @@ import { generateImageFromHtml } from "@/utils/generateImageFromHtml";
 
 
 interface NewsletterCardProps {
-	title?: string;
-	listItems?: string[];
-	imageHtml?: string;
+  name?: string;
+  keywords?: string[];
+  imageHtml?: string;
 }
 
-export const NewsletterCard: React.FC<NewsletterCardProps> = ({ title, listItems, imageHtml }) => {
+
+export const NewsletterCard: React.FC<NewsletterCardProps> = ({ name, keywords, imageHtml }) => {
 	const [imageSrc, setImageSrc] = React.useState<string | null>(null);
 
 	React.useEffect(() => {
@@ -30,15 +31,19 @@ export const NewsletterCard: React.FC<NewsletterCardProps> = ({ title, listItems
 	return (
 		<Card className="relative w-full max-w-md h-96 flex flex-col justify-between overflow-hidden">
 			<CardHeader className="flex flex-row items-start justify-between p-4 pb-2">
-				<CardTitle className="text-lg font-bold">{title ?? "Untitled Newsletter"}</CardTitle>
+				<CardTitle className="text-lg font-bold">{name ?? "Untitled Newsletter"}</CardTitle>
 				<NewsletterPreviewMenu />
 			</CardHeader>
 			<CardContent className="flex flex-row gap-4 p-4 pt-0 h-full">
 				<div className="flex-1 flex flex-col justify-center">
 					<ul className="list-disc pl-5 space-y-1">
-						{(listItems ?? ["No details available"]).map((item, idx) => (
-							<li key={idx} className="text-sm text-card-foreground">{item}</li>
-						))}
+						{keywords && keywords.length > 0 ? (
+							keywords.map((kw, idx) => (
+								<li key={idx} className="text-sm text-card-foreground">{kw}</li>
+							))
+						) : (
+							<li className="text-sm text-card-foreground">No keywords available</li>
+						)}
 					</ul>
 				</div>
 				<div className="flex-shrink-0 w-40 relative h-full overflow-visible">

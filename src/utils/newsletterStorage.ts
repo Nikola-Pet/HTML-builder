@@ -16,6 +16,7 @@ export interface Newsletter {
   };
   createdAt: string;
   updatedAt: string;
+  keywords?: string[];
 }
 
 /**
@@ -24,7 +25,7 @@ export interface Newsletter {
  * For now, we'll simulate saving to localStorage and show how it would work with a JSON file.
  */
 export const saveNewsletter = (
-  newsletter: Omit<Newsletter, "id" | "createdAt" | "updatedAt">
+  newsletter: Omit<Newsletter, "id" | "createdAt" | "updatedAt"> & { keywords?: string[] }
 ): Newsletter => {
   console.log("saveNewsletter called with:", newsletter);
   const now = new Date().toISOString();
@@ -34,6 +35,7 @@ export const saveNewsletter = (
     id: `newsletter-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     createdAt: now,
     updatedAt: now,
+    keywords: newsletter.keywords || [],
   };
 
   console.log("New newsletter object:", newNewsletter);

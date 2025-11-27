@@ -4,6 +4,7 @@ import Dashboard from "../pages/Dashboard";
 import EmailBuilder from "../pages/EmailBuilder";
 import { BriefingPage } from "../pages/BriefingPage";
 import Newsletters from "../pages/Newsletters";
+import Drafts from "../pages/Drafts";
 import NotFound from "../pages/NotFound";
 
 const ErrorBoundaryWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -50,6 +51,14 @@ function AppRoutes() {
         element={
           <ErrorBoundaryWrapper>
             <Newsletters />
+          </ErrorBoundaryWrapper>
+        }
+      />
+      <Route
+        path="/drafts"
+        element={
+          <ErrorBoundaryWrapper>
+            <Drafts />
           </ErrorBoundaryWrapper>
         }
       />

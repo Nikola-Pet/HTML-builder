@@ -17,6 +17,7 @@ import {
   handleImportExcel as importExcel,
 } from "@/utils/emailExportImport";
 import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
+import SaveModal from "@/components/modals/SaveModal";
 import { toast } from "sonner";
 import { ConfirmationModal } from "@/components/modals/ConfirmationModal";
 import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
@@ -63,6 +64,8 @@ const EmailEditorMenu = ({
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [pendingNewsletterData, setPendingNewsletterData] = useState<any | null>(null);
 
   // Download HTML
   const handleDownloadHTMLClick = () => {
@@ -139,101 +142,51 @@ const EmailEditorMenu = ({
 
   // Save Newsletter - Publish all language drafts as ONE newsletter
   const handleSaveNewsletter = () => {
+    if (!subjectLine.trim()) {
+      toast.error("Please add a subject line before saving.");
+      return;
+    }
+    if (blocks.length === 0) {
+      toast.error("Please add at least one block before saving.");
+      return;
+    }
+    // Open SaveModal and pass current newsletter data
+    setPendingNewsletterData({
+      subjectLine,
+      preheader,
+      header: { template, language },
+      blocks,
+      footer: { template, language },
+    });
+    setIsSaveModalOpen(true);
+  };
+
+  const handleSaveModalSubmit = (name: string, keywords: string[]) => {
     try {
-      console.log("Save newsletter clicked");
-      console.log("Current state:", {
-        blocks: blocks.length,
-        subjectLine,
-        preheader,
-        newsletterId,
-        newsletterName,
-        template,
-        language,
-      });
-
-      if (!subjectLine.trim()) {
-        toast.error("Please add a subject line before saving.");
-        return;
-      }
-
-      if (blocks.length === 0) {
-        toast.error("Please add at least one block before saving.");
-        return;
-      }
-
-      // Check if multi-language system is active
-      if ((window as any).publishAllLanguageDraftsAsOne) {
-        console.log("Publishing all language drafts as ONE newsletter...");
-        const newsletter = (window as any).publishAllLanguageDraftsAsOne(
-          newsletterName || "Untitled Newsletter",
-          template
-        );
-
-        if (newsletter) {
-          toast.success(
-            `Successfully saved newsletter with ${newsletter.languages.length} language(s)!`
-          );
-          console.log("Published newsletter:", newsletter);
+      const newsletterData = {
+        ...pendingNewsletterData,
+        name: name || "Untitled Newsletter",
+        keywords,
+      };
+      if (newsletterId) {
+        const updated = updateNewsletter(newsletterId, newsletterData);
+        if (updated) {
+          toast.success("Newsletter updated successfully!");
         } else {
-          toast.error("Failed to publish newsletter.");
+          toast.error("Failed to update newsletter.");
         }
       } else {
-        // Fallback: Original save logic for single newsletter
-        const newsletterData = {
-          name: newsletterName || "Untitled Newsletter",
-          subjectLine,
-          preheader,
-          header: {
-            template,
-            language,
-          },
-          blocks,
-          footer: {
-            template,
-            language,
-          },
-        };
-
-        console.log("Newsletter data to save:", newsletterData);
-
-        if (newsletterId) {
-          // Update existing newsletter
-          console.log("Updating existing newsletter:", newsletterId);
-          const updated = updateNewsletter(newsletterId, newsletterData);
-          if (updated) {
-            console.log("Newsletter updated:", updated);
-            toast.success("Newsletter updated successfully!");
-          } else {
-            console.error("Failed to update newsletter");
-            toast.error("Failed to update newsletter.");
-          }
-        } else {
-          // Save new newsletter
-          console.log("Saving new newsletter");
-          const saved = saveNewsletter(newsletterData);
-          console.log("Newsletter saved:", saved);
-
-          // Check if setNewsletterId is a function before calling
-          if (typeof setNewsletterId === "function") {
-            setNewsletterId(saved.id);
-            console.log("Newsletter ID set to:", saved.id);
-          } else {
-            console.error(
-              "setNewsletterId is not a function:",
-              setNewsletterId
-            );
-          }
-
-          toast.success("Newsletter saved successfully!");
+        const saved = saveNewsletter(newsletterData);
+        if (typeof setNewsletterId === "function") {
+          setNewsletterId(saved.id);
         }
+        toast.success("Newsletter saved successfully!");
       }
     } catch (error) {
-      console.error("Error saving newsletter:", error);
-      toast.error(
-        "Failed to save newsletter: " +
-          (error instanceof Error ? error.message : String(error))
-      );
+      toast.error("Failed to save newsletter: " + (error instanceof Error ? error.message : String(error)));
     }
+    setIsSaveModalOpen(false);
+    setPendingNewsletterData(null);
   };
 
   // Open delete confirmation modal
@@ -251,8 +204,8 @@ const EmailEditorMenu = ({
   };
 
   return (
-    <>
-      <header className="w-full border-b bg-white sticky top-0 z-10">
+  <>
+  <header className="w-full border-b bg-white sticky top-0 z-10">
         <div className="h-14 px-6 flex items-center justify-between w-full">
           {/* Left side - Undo/Redo */}
           <div className="flex items-center gap-2">
@@ -335,6 +288,13 @@ const EmailEditorMenu = ({
           </div>
         </div>
       </header>
+
+      {/* Save Newsletter Modal */}
+      <SaveModal
+        isOpen={isSaveModalOpen}
+        onClose={() => { setIsSaveModalOpen(false); setPendingNewsletterData(null); }}
+        onSave={handleSaveModalSubmit}
+      />
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModal
