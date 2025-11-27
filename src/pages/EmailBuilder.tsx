@@ -4,26 +4,14 @@ import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
 import { BlockLibraryModal } from "@/components/modals/BlockLibraryModal";
 import { BlockCanvas } from "@/components/email-builder/BlockCanvas";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import EmailEditorMenu from "@/components/menus/EmailEditorMenu";
 import { clearAllDrafts } from "@/utils/languageDraftStorage";
 
 const EmailBuilder = () => {
   useBreadcrumbs([{ label: "Email Builder", href: "/builder" }]);
   const navigate = useNavigate();
 
-  const {
-    blocks,
-    subjectLine,
-    preheader,
-    newsletterId,
-    newsletterName,
-    template,
-    language,
-    setSubjectLine,
-    setPreheader,
-    overrideBlocks,
-    setNewsletterId,
-  } = useEmailBuilder();
+  const { setSubjectLine, setPreheader, overrideBlocks, setNewsletterId } =
+    useEmailBuilder();
 
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
 

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { useEmailBuilder } from "@/contexts/EmailBuilderContext";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -13,6 +13,7 @@ import { BlockPreviewItem } from "@/components/blockCanvasComponents/BlockPrevie
 import { TemplateSection } from "@/components/blockCanvasComponents/TemplateSection";
 import EmailEditorMenu from "../menus/EmailEditorMenu";
 import { LanguageTabsMenu } from "../menus/LanguageBar";
+import { useUndoRedo } from "@/hooks/useUndoRedo";
 
 interface BlockCanvasProps {
   onAddBlock: () => void;
@@ -32,6 +33,37 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
     overrideBlocks,
     setNewsletterId,
   } = useEmailBuilder();
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Undo/Redo functionality
+  const { undo, redo, canUndo, canRedo, saveState } = useUndoRedo({
+    blocks,
+    subjectLine,
+    preheader,
+    setSubjectLine,
+    setPreheader,
+    overrideBlocks,
+  });
+
+  // Mark as initialized after mount
+  useEffect(() => {
+    setTimeout(() => {
+      setIsInitialized(true);
+    }, 100);
+  }, []);
+
+  // Save state whenever blocks, subject, or preheader change
+  // Use a timeout to debounce rapid changes
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const timeout = setTimeout(() => {
+      saveState();
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeout);
+  }, [blocks, subjectLine, preheader, isInitialized, saveState]);
 
   // Get language-specific data and regenerate header/footer when language changes
   const headerHTML = useMemo(() => {
@@ -84,6 +116,10 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
               setPreheader={setPreheader}
               overrideBlocks={overrideBlocks}
               setNewsletterId={setNewsletterId}
+              onUndo={undo}
+              onRedo={redo}
+              canUndo={canUndo}
+              canRedo={canRedo}
             />
             <LanguageTabsMenu />
           </div>
