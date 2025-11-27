@@ -34,12 +34,24 @@ const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSave }) => {
   const handleSave = () => {
     if (name.trim()) {
       onSave(name.trim(), keywords);
+      // Reset form after save
+      setName("");
+      setKeywords([]);
+      setKeywordInput("");
       onClose();
     }
   };
 
+  const handleClose = () => {
+    // Reset form on close
+    setName("");
+    setKeywords([]);
+    setKeywordInput("");
+    onClose();
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Save Newsletter</DialogTitle>
@@ -70,7 +82,11 @@ const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSave }) => {
                   if (e.key === "Enter") handleAddKeyword();
                 }}
               />
-              <Button type="button" variant="secondary" onClick={handleAddKeyword}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleAddKeyword}
+              >
                 Add
               </Button>
             </div>
@@ -95,10 +111,15 @@ const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSave }) => {
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="primary" onClick={handleSave} disabled={!name.trim()}>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleSave}
+              disabled={!name.trim()}
+            >
               Save
             </Button>
-            <Button type="button" variant="secondary" onClick={onClose}>
+            <Button type="button" variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
           </div>
