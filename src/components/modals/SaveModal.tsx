@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 interface SaveModalProps {
   isOpen: boolean;
@@ -94,18 +95,14 @@ const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSave }) => {
               {keywords.map((kw, idx) => (
                 <span
                   key={idx}
-                  className="px-2 py-1 bg-gray-100 rounded text-sm flex items-center gap-1"
+                  className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-full flex items-center gap-1"
                 >
                   {kw}
-                  <Button
-                    type="button"
-                    variant="tertiary"
-                    className="ml-1 h-4 w-4 p-0"
+                  <X 
+                    className="h-3 w-3 cursor-pointer hover:text-destructive transition-colors" 
                     onClick={() => handleRemoveKeyword(kw)}
                     aria-label={`Remove ${kw}`}
-                  >
-                    ×
-                  </Button>
+                  />
                 </span>
               ))}
             </div>

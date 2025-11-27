@@ -11,8 +11,7 @@ export const NewsletterPreviewMenu: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="neutraltertiary" className="h-8 w-8 p-0">
-          <MoreVertical className="h-5 w-5" />
+        <Button variant="neutraltertiary" icon="options-vertical">
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
