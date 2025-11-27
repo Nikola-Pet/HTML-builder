@@ -34,7 +34,7 @@ function SideNav() {
       aria-label="Main navigation"
     >
       <div className="nav-header">
-        <span aria-label="BASS Application">TemplateXYC</span>
+        <span aria-label="BASS Application">TemplateX</span>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="close-nav-icon"

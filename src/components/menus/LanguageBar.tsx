@@ -707,16 +707,10 @@ export const LanguageTabsMenu = () => {
             {availableLanguagesToAdd.map((language) => (
               <Button
                 key={language.code}
-                variant="neutralsecondary"
-                className="w-full justify-start text-left h-auto py-3"
+                variant="secondary"
                 onClick={() => handleAddLanguage(language.code)}
               >
-                <div className="flex items-center gap-3">
-                  <span className="font-bold text-lg w-8">{language.code}</span>
-                  <span className="text-sm text-gray-600">
-                    {language.label}
-                  </span>
-                </div>
+                {language.label} ({language.code})
               </Button>
             ))}
 

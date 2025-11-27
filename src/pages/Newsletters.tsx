@@ -3,10 +3,12 @@ import { NewsletterCard } from "@/components/cards/NewsletterCard";
 import { getAllNewsletters, Newsletter } from "@/utils/newsletterStorage";
 import { generateHTML } from "@/utils/htmlGenerator";
 import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 const Newsletters: React.FC = () => {
   // Read all newsletters from localStorage
   const [newsletters, setNewsletters] = React.useState<any[]>([]);
+  useBreadcrumbs([{ label: "Newsletters", href: "/newsletters" }]);
 
   React.useEffect(() => {
     setNewsletters(getAllNewsletters());

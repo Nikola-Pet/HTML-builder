@@ -1544,427 +1544,162 @@ function generateTwinTeaserBlock(content: GenericContent): string {
   const rightButtonAlias = getLinkAlias(String(rightButtonUrl));
 
   return `<!--[if mso]><table border="0" cellpadding="0" cellspacing="0" align="left" style="mso-table-lspace:0pt;  mso-table-rspace:0pt; border-collapse: collapse; width: 100%"><tr><td style="width: 100%;"><![endif]-->
-    <div
-      style="float: left; width: 100%"
-      class="sapMktBlock"
-      data-sap-hpa-ceimo-block-type="TEXT"
-      data-sap-hpa-ceimo-condition=""
-      data-sap-hpa-ceimo-blockid="1763988120606773"
-      data-sap-hpa-ceimo-blockid-parent=""
-      data-sap-hpa-ceimo-block-editable="X"
-    >
-      <center
-        role="main"
-        class="wrapper"
-        style="
-          table-layout: fixed !important;
-          width: 100%;
-          background-color: #efeff0;
-        "
-      >
-        <div
-          class="webkit"
-          style="
-            max-width: 640px !important;
-            background-color: #ffffff !important;
-            display: block !important;
-            margin: 0;
-            width: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-            mso-line-height-rule: exactly;
-            -webkit-font-smoothing: antialiased;
-            -ms-text-size-adjust: none !important;
-            padding: 0;
-          "
-        >
-          <table
-            width="100%"
-            align="center"
-            border="0"
-            cellpadding="0"
-            cellspacing="0"
-            bgcolor="#efeff0"
-            style="
-              border-spacing: 0;
-              background-color: #efeff0 !important;
-              border-collapse: collapse;
-              width: 100%;
-            "
-            role="presentation"
-          >
-            <tbody>
-              <tr>
-                <td>
-                  <table
-                    border="0"
-                    align="center"
-                    cellpadding="0"
-                    cellspacing="0"
-                    width="640"
-                    style="width: 640px"
-                    class="width-100 dark-bgd"
-                    bgcolor="#ffffff"
-                    role="presentation"
-                  >
-                    <tbody>
-                      <tr>
-                        <td width="16"></td>
-                        <td>
-                          <table
-                            align="center"
-                            bgcolor="#EFEFF0"
-                            border="0"
-                            cellpadding="0"
-                            cellspacing="0"
-                            style="border-spacing: 0; width: 100%"
-                            class="width-100 dark-bgd"
-                            role="presentation"
-                          >
-                            <tbody>
-                              <tr>
-                                <td
-                                  align="center"
-                                  bgcolor="#FFFFFF"
-                                  width="296"
-                                  valign="top"
-                                  class="templateColumnContainer"
-                                >
-                                  <table
-                                    border="0"
-                                    cellpadding="0"
-                                    cellspacing="0"
-                                    style="
-                                      width: 100%;
-                                      background-color: #efeff0;
-                                    "
-                                    class="width-100 dark-bgd"
-                                    role="presentation"
-                                  >
-                                    <tbody>
-                                      <tr>
-                                        <td
-                                          align="center"
-                                          style="font-size: 0; line-height: 0"
-                                        >
-                                          <a
-                                            rel="noopener noreferrer"
-                                            href="${leftImageLinkUrl}"
-                                            target="_blank"
-                                            aria-label="${leftHeadline}"
-                                            data-sap-hpa-ceimo-link-id="17478271544314020"
-                                            data-sap-hpa-ceimo-link-outboundid="X"
-                                            data-sap-hpa-ceimo-link-utm="X"
-                                            data-sap-hpa-ceimo-link-trackable="X"
-                                          data-sap-hpa-ceimo-link-alias="${leftImageLinkAlias}"
-                                          >
-                                            <img
-                                              src="${leftImageUrl}"
-                                              alt="${leftHeadline}"
-                                              title="${leftHeadline}"
-                                              width="296"
-                                              height="auto"
-                                              style="border: 0; width: 100%"
-                                              data-sap-hpa-ceimo-image-id="17478271544334024"
-                                              data-sap-hpa-ceimo-image="SMOImage"
-                                              data-sap-hpa-ceimo-image-type="Static"
-                                            />
-                                          </a>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td style="padding: 30px 0 0 0">
-                                          <table
-                                            border="0"
-                                            cellpadding="0"
-                                            cellspacing="0"
-                                            align="center"
-                                            style="
-                                              width: 100%;
-                                              background-color: #efeff0;
-                                            "
-                                            class="width-100 dark-bgd"
-                                            role="presentation"
-                                          >
-                                            <tbody>
-                                              <tr>
-                                                <td width="12"></td>
-                                                <td>
-                                                  <table
-                                                    border="0"
-                                                    cellpadding="0"
-                                                    cellspacing="0"
-                                                    align="center"
-                                                    style="
-                                                      width: 100%;
-                                                      background-color: #efeff0;
-                                                    "
-                                                    class="dark-bgd"
-                                                    role="presentation"
-                                                  >
-                                                    <tbody>
-                                                      <tr>
-                                                        <td
-                                                          style="
-                                                            padding: 0 0 18px 0;
-                                                          "
-                                                        >
-                                                          <h5
-                                                            translate="yes"
-                                                            style="
-                                                              font-size: 18px;
-                                                              line-height: 24px;
-                                                              color: #003b6a;
-                                                              text-transform: uppercase;
-                                                              letter-spacing: -0.02em;
-                                                              font-family: 'Arial Black',
-                                                                Arial, Helvetica,
-                                                                sans-serif !important;
-                                                              font-weight: 900;
-                                                              text-align: left;
-                                                              padding: 0;
-                                                              margin: 0;
-                                                            "
-                                                            class="dark-font"
-                                                          >
-                                                            ${leftHeadline}
-                                                          </h5>
-                                                        </td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td
-                                                          style="
-                                                            padding: 0 0 24px 0;
-                                                          "
-                                                        >
-                                                          <p
-                                                            role="paragraph"
-                                                            translate="yes"
-                                                            style="
-                                                              font-size: 16px;
-                                                              line-height: 24px;
-                                                              color: #000000;
-                                                              font-family: Arial,
-                                                                Helvetica,
-                                                                sans-serif;
-                                                              padding: 0;
-                                                              margin: 0;
-                                                            "
-                                                            class="dark-font"
-                                                          >
-                                                            ${leftText}
-                                                          </p>
-                                                        </td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td
-                                                          style="
-                                                            padding: 0 0 24px 0;
-                                                          "
-                                                        >
-                                                          <a
-                                                            href="${leftButtonUrl}"
-                                                            class="dark-button"
-                                                            style="
-                                                              font-size: 16px;
-                                                              line-height: 24px;
-                                                              font-family: Arial,
-                                                                Helvetica,
-                                                                sans-serif !important;
-                                                              text-decoration: none;
-                                                              padding: 13px 16px;
-                                                              color: #ffffff;
-                                                              display: inline-block;
-                                                              background-color: #003b6a;
-                                                              mso-padding-alt: 0;
-                                                            "
-                                                            aria-label="${leftButtonText}"
-                                                            data-sap-hpa-ceimo-link-id="17478271544324021"
-                                                            data-sap-hpa-ceimo-link-outboundid="X"
-                                                            data-sap-hpa-ceimo-link-utm="X"
-                                                            data-sap-hpa-ceimo-link-trackable="X"
-                                                            data-sap-hpa-ceimo-link-alias="${leftButtonAlias}"
-                                                          >
-                                                            <!--[if mso]>
-                                                              <i
-                                                                style="
-                                                                  letter-spacing: 25px;
-                                                                  mso-font-width: -100%;
-                                                                  mso-text-raise: 20pt;
-                                                                "
-                                                                >&nbsp;</i
-                                                              >
-                                                            <![endif]-->
-                                                            <span
-                                                              translate="yes"
+<div style="float: left; width: 100%" class="sapMktBlock"
+data-sap-hpa-ceimo-block-type="TEXT"
+data-sap-hpa-ceimo-condition=""
+data-sap-hpa-ceimo-blockid="1764237127791863"
+data-sap-hpa-ceimo-blockid-parent=""
+data-sap-hpa-ceimo-block-editable="X">
+<center role="main" class="wrapper" style="table-layout: fixed !important; width: 100%; background-color: #efeff0;">
+<div class="webkit" style="max-width: 640px !important; background-color: #ffffff !important; display: block !important; margin: 0; width: 100%; font-family: Arial, Helvetica, sans-serif; mso-line-height-rule: exactly; -webkit-font-smoothing: antialiased; -ms-text-size-adjust: none !important; padding: 0;">
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#efeff0" style="border-spacing: 0; background-color: #efeff0 !important; border-collapse: collapse; width: 100%;" role="presentation">
+<tbody>
+<tr>
+<td>
+<table border="0" align="center" cellpadding="0" cellspacing="0" width="640" style="width: 640px;" class="width-100 dark-bgd" bgcolor="#ffffff" role="presentation">
+<tbody>
+<tr>
+<td width="16"></td>
+<td>
+<table align="center" bgcolor="#EFEFF0" border="0" cellpadding="0" cellspacing="0" style="border-spacing: 0; width: 100%;" class="width-100 dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td align="center" bgcolor="#FFFFFF" width="296" valign="top" class="templateColumnContainer">
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td align="center" style="font-size: 0; line-height: 0;"><a rel="noopener noreferrer" href="${leftImageLinkUrl}" target="_blank" aria-label="${leftHeadline}" data-sap-hpa-ceimo-link-id="17478271544314020" data-sap-hpa-ceimo-link-outboundid="X" data-sap-hpa-ceimo-link-utm="X" data-sap-hpa-ceimo-link-trackable="X" data-sap-hpa-ceimo-link-alias="${leftImageLinkAlias}"> <img src="${leftImageUrl}" alt="${leftHeadline}" title="${leftHeadline}" width="296" height="auto" style="border: 0; width: 100%;" data-sap-hpa-ceimo-image-id="17478271544334024" data-sap-hpa-ceimo-image="SMOImage" data-sap-hpa-ceimo-image-type="Static"> </a></td>
+</tr>
+<tr>
+<td style="padding: 30px 0 0 0;">
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td width="12"></td>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td style="padding: 0 0 18px 0;">
+<h5 translate="yes" style="font-size: 18px; line-height: 24px; color: #003b6a; text-transform: uppercase; letter-spacing: -0.02em; font-family: 'Arial Black',                                                              Arial, Helvetica,                                                              sans-serif !important; font-weight: 900; text-align: left; padding: 0; margin: 0;" class="dark-font">${leftHeadline}</h5>
+</td>
+</tr>
+<tr>
+<td style="padding: 0 0 24px 0;">
+<p role="paragraph" translate="yes" style="font-size: 16px; line-height: 24px; color: #000000; font-family: Arial,                                                              Helvetica,                                                              sans-serif; padding: 0; margin: 0;" class="dark-font">${leftText}</p>
+</td>
+</tr>
+<tr>
+<td style="padding: 0 0 24px 0;"><a href="${leftButtonUrl}" class="dark-button" style="font-size: 16px; line-height: 24px; font-family: Arial,                                                              Helvetica,                                                              sans-serif !important; text-decoration: none; padding: 13px 16px; color: #ffffff; display: inline-block; background-color: #003b6a; mso-padding-alt: 0;" aria-label="${leftButtonText}" data-sap-hpa-ceimo-link-id="17478271544324021" data-sap-hpa-ceimo-link-outboundid="X" data-sap-hpa-ceimo-link-utm="X" data-sap-hpa-ceimo-link-trackable="X" data-sap-hpa-ceimo-link-alias="${leftButtonAlias}"> <!--[if mso]>
+                                                            <i
                                                               style="
-                                                                mso-text-raise: 10pt;
-                                                                color: #ffffff;
+                                                                letter-spacing: 25px;
+                                                                mso-font-width: -100%;
+                                                                mso-text-raise: 20pt;
                                                               "
-                                                              >${leftButtonText}</span
+                                                              >&nbsp;</i
                                                             >
-                                                            <!--[if mso]>
-                                                              <i
-                                                                style="
-                                                                  letter-spacing: 25px;
-                                                                  mso-font-width: -100%;
-                                                                "
-                                                                >&nbsp;</i
-                                                              >
-                                                            <![endif]-->
-                                                          </a>
-                                                        </td>
-                                                      </tr>
-                                                    </tbody>
-                                                  </table>
-                                                </td>
-                                                <td width="12"></td>
-                                              </tr>
-                                            </tbody>
-                                          </table>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td
-                                          bgcolor="#ffffff"
-                                          style="padding: 0 0 32px 0"
-                                          class="block-vertical-spacing dark-bgd"
-                                        ></td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </td>
-                                <td
-                                  align="center"
-                                  bgcolor="#ffffff"
-                                  width="16"
-                                  valign="top"
-                                  class="templateColumnContainer dark-bgd"
-                                ></td>
-                                <td
-                                  align="center"
-                                  bgcolor="#ffffff"
-                                  width="296"
-                                  valign="top"
-                                  class="templateColumnContainer"
-                                >
-                                  <table
-                                    border="0"
-                                    cellpadding="0"
-                                    cellspacing="0"
-                                    style="
-                                      width: 100%;
-                                      background-color: #efeff0;
-                                    "
-                                    class="width-100 dark-bgd"
-                                    role="presentation"
-                                  >
-                                    <tbody>
-                                      <tr>
-                                        <td
-                                          align="center"
-                                          style="font-size: 0; line-height: 0"
-                                        >
-                                          <a
-                                            rel="noopener noreferrer"
-                                            href="${rightImageLinkUrl}"
-                                            target="_blank"
-                                            aria-label="${rightHeadline}"
-                                            data-sap-hpa-ceimo-link-id="17478271544324022"
-                                            data-sap-hpa-ceimo-link-outboundid="X"
-                                            data-sap-hpa-ceimo-link-utm="X"
-                                            data-sap-hpa-ceimo-link-trackable="X"
-                                          data-sap-hpa-ceimo-link-alias="${rightImageLinkAlias}"
-                                          >
-                                            <img
-                                              src="${rightImageUrl}"
-                                              alt="${rightHeadline}"
-                                              title="${rightHeadline}"
-                                              width="296"
-                                              height="auto"
-                                              style="border: 0; width: 100%"
-                                              data-sap-hpa-ceimo-image-id="17478271544334025"
-                                              data-sap-hpa-ceimo-image="SMOImage"
-                                              data-sap-hpa-ceimo-image-type="Static"
-                                            />
-                                          </a>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td style="padding: 30px 0 0 0">
-                                          <table
-                                            border="0"
-                                            cellpadding="0"
-                                            cellspacing="0"
-                                            align="center"
-                                            style="
-                                              width: 100%;
-                                              background-color: #efeff0;
-                                            "
-                                            class="width-100 dark-bgd"
-                                            role="presentation"
-                                          >
-                                            <tbody>
-                                              <tr>
-                                                <td width="12"></td>
-                                                <td>
-                                                  <table
-                                                    border="0"
-                                                    cellpadding="0"
-                                                    cellspacing="0"
-                                                    align="center"
-                                                    style="
-                                                      width: 100%;
-                                                      background-color: #efeff0;
-                                                    "
-                                                    class="dark-bgd"
-                                                    role="presentation"
-                                                  >
-                                                    <tbody>
-                                                      <tr>
-                                                        <td
-                                                          style="
-                                                            padding: 0 0 18px 0;
-                                                          "
-                                                        >
-                                                          <h5
-                                                            translate="yes"
-                                                            style="
-                                                              font-size: 18px;
-                                                              line-height: 24px;
-                                                              color: #003b6a;
-                                                              text-transform: uppercase;
-                                                              letter-spacing: -0.02em;
-                                                              font-family: 'Arial Black',
-                                                                Arial, Helvetica,
-                                                                sans-serif !important;
-                                                              text-align: left;
-                                                              font-weight: 900;
-                                                              padding: 0;
-                                                              margin: 0;
-                                                            "
-                                                            class="dark-font"
-                                                          >
-                                                            ${rightHeadline}
-                                                          </h5>
-                                                        </td>
-                                                      </tr>
-                                                      <tr>
-                                                        <td
-                                                          style="
-                                                            padding: 0 0 24px 0;
-                                                          "
-                                                        >
-                                                          <p
-                                                            role="paragraph"
-                                                            translate="yes"
-                                                            style="
-                                                              font-size: 16px;
-                                                              line-height: 24px;
-                                                              color: #000000;
-                                                              font-family: Arial,
-                                                                Helvetica,
-                                                                sans-serif;
-`;
+                                                          <![endif]--> <span translate="yes" style="mso-text-raise: 10pt; color: #ffffff;">${leftButtonText}</span> <!--[if mso]>
+                                                            <i
+                                                              style="
+                                                                letter-spacing: 25px;
+                                                                mso-font-width: -100%;
+                                                              "
+                                                              >&nbsp;</i
+                                                            >
+                                                          <![endif]--> </a></td>
+</tr>
+</tbody>
+</table>
+</td>
+<td width="12"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" style="padding: 0 0 32px 0;" class="block-vertical-spacing dark-bgd"></td>
+</tr>
+</tbody>
+</table>
+</td>
+<td align="center" bgcolor="#ffffff" width="16" valign="top" class="templateColumnContainer dark-bgd"></td>
+<td align="center" bgcolor="#ffffff" width="296" valign="top" class="templateColumnContainer">
+<table border="0" cellpadding="0" cellspacing="0" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td align="center" style="font-size: 0; line-height: 0;"><a rel="noopener noreferrer" href="${rightImageLinkUrl}" target="_blank" aria-label="${rightHeadline}" data-sap-hpa-ceimo-link-id="17478271544324022" data-sap-hpa-ceimo-link-outboundid="X" data-sap-hpa-ceimo-link-utm="X" data-sap-hpa-ceimo-link-trackable="X" data-sap-hpa-ceimo-link-alias="${rightImageLinkAlias}"> <img src="${rightImageUrl}" alt="${rightHeadline}" title="${rightHeadline}" width="296" height="auto" style="border: 0; width: 100%;" data-sap-hpa-ceimo-image-id="17478271544334025" data-sap-hpa-ceimo-image="SMOImage" data-sap-hpa-ceimo-image-type="Static"> </a></td>
+</tr>
+<tr>
+<td style="padding: 30px 0 0 0;">
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="width-100 dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td width="12"></td>
+<td>
+<table border="0" cellpadding="0" cellspacing="0" align="center" style="width: 100%; background-color: #efeff0;" class="dark-bgd" role="presentation">
+<tbody>
+<tr>
+<td style="padding: 0 0 18px 0;">
+<h5 translate="yes" style="font-size: 18px; line-height: 24px; color: #003b6a; text-transform: uppercase; letter-spacing: -0.02em; font-family: 'Arial Black',                                                              Arial, Helvetica,                                                              sans-serif !important; text-align: left; font-weight: 900; padding: 0; margin: 0;" class="dark-font">${rightHeadline}</h5>
+</td>
+</tr>
+<tr>
+<td style="padding: 0 0 24px 0;">
+<p role="paragraph" translate="yes" style="font-size: 16px; line-height: 24px; color: #000000; font-family: Arial,                                                              Helvetica,                                                              sans-serif; padding: 0; margin: 0;" class="dark-font">${rightText}</p>
+</td>
+</tr>
+<tr>
+<td style="padding: 0 0 24px 0;"><a href="${rightButtonUrl}" class="dark-button" style="font-size: 16px; line-height: 24px; font-family: Arial,                                                              Helvetica,                                                              sans-serif !important; text-decoration: none; padding: 13px 16px; color: #ffffff; display: inline-block; background-color: #003b6a; mso-padding-alt: 0;" aria-label="${rightButtonText}" data-sap-hpa-ceimo-link-id="17478271544334023" data-sap-hpa-ceimo-link-outboundid="X" data-sap-hpa-ceimo-link-utm="X" data-sap-hpa-ceimo-link-trackable="X" data-sap-hpa-ceimo-link-alias="${rightButtonAlias}"> <!--[if mso]>
+                                                            <i
+                                                              style="
+                                                                letter-spacing: 25px;
+                                                                mso-font-width: -100%;
+                                                                mso-text-raise: 20pt;
+                                                              "
+                                                              >&nbsp;</i
+                                                            >
+                                                          <![endif]--> <span translate="yes" style="mso-text-raise: 10pt; color: #ffffff;">${rightButtonText}</span> <!--[if mso]>
+                                                            <i
+                                                              style="
+                                                                letter-spacing: 25px;
+                                                                mso-font-width: -100%;
+                                                              "
+                                                              >&nbsp;</i
+                                                            >
+                                                          <![endif]--> </a></td>
+</tr>
+</tbody>
+</table>
+</td>
+<td width="12"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td bgcolor="#ffffff" style="padding: 0 0 32px 0;" class="block-vertical-spacing dark-bgd"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td width="16"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</center>
+</div><!--[if mso]></td></tr></table><![endif]-->`;
 }
 function generateParagraphBlock(content: GenericContent): string {
   const greeting = content.greeting || "Hello,";
