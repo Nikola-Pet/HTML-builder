@@ -14,9 +14,10 @@ const Newsletters: React.FC = () => {
 	}, []);
 
 	 return (
-	    <div className="container mx-auto py-8">
-	      <h1 className="text-2xl font-bold mb-6">All Newsletters</h1>
-	      <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+	    <div className="min-h-screen">
+	      <div className="container mx-auto py-8">
+	        <h1 className="text-2xl font-bold mb-6">All Newsletters</h1>
+	        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 	        {newsletters.length === 0 ? (
 	          <div className="col-span-full text-center text-muted-foreground">No newsletters found.</div>
 	        ) : (
@@ -52,6 +53,7 @@ const Newsletters: React.FC = () => {
 	            );
 	          })
 	        )}
+	        </div>
 	      </div>
 	    </div>
 	  );
