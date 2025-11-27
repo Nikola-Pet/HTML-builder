@@ -3,6 +3,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Dashboard from "../pages/Dashboard";
 import EmailBuilder from "../pages/EmailBuilder";
 import { BriefingPage } from "../pages/BriefingPage";
+import Newsletters from "../pages/Newsletters";
 import NotFound from "../pages/NotFound";
 
 const ErrorBoundaryWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -41,6 +42,14 @@ function AppRoutes() {
         element={
           <ErrorBoundaryWrapper>
             <BriefingPage />
+          </ErrorBoundaryWrapper>
+        }
+      />
+      <Route
+        path="/newsletters"
+        element={
+          <ErrorBoundaryWrapper>
+            <Newsletters />
           </ErrorBoundaryWrapper>
         }
       />
