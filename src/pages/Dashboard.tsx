@@ -17,7 +17,7 @@ const Dashboard = () => {
         <div style={{ display: "flex", gap: "3rem" }}>
           <div className="grid gap-6">
             <TemplateCard
-              title="Professional Newsletter"
+              title="BI"
               description="Perfect for corporate communications and professional newsletters. Includes header with logo, content area for blocks, and footer with social media links."
               tags={["Fixed Header", "Fixed Footer", "Flexible Content"]}
               onSelect={handleSelectTemplate}
@@ -26,7 +26,7 @@ const Dashboard = () => {
 
           <div className="grid gap-6">
             <TemplateCard
-              title="Professional Newsletter"
+              title="HG"
               description="Perfect for corporate communications and professional newsletters. Includes header with logo, content area for blocks, and footer with social media links."
               tags={["Fixed Header", "Fixed Footer", "Flexible Content"]}
               onSelect={handleSelectTemplate}
