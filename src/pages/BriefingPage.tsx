@@ -294,10 +294,10 @@ export const BriefingPage = () => {
               <Button
                 variant="secondary"
                 onClick={handleBack}
-                className="gap-2"
+                icon="back-menu"
               >
-                <ArrowLeft className="h-4 w-4" />
-                Back to Editor
+                
+                
               </Button>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">
