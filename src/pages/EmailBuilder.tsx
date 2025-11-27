@@ -49,7 +49,7 @@ const EmailBuilder = () => {
         // Clear any existing drafts first
         clearAllDrafts();
 
-        // Set draft metadata
+        // Set draft metadata FIRST (before saving drafts)
         setNewsletterId(savedDraft.id);
         setNewsletterName(savedDraft.name);
         setTemplate(savedDraft.template);
@@ -73,6 +73,8 @@ const EmailBuilder = () => {
           };
           saveDraft(draftData);
         });
+
+        console.log(`✅ Saved ${savedDraft.languages.length} language drafts`);
 
         // Load the first language version (or EN if available) into the editor
         const enVersion = savedDraft.languages.find((l) => l.language === "EN");
@@ -113,7 +115,7 @@ const EmailBuilder = () => {
           // Clear any existing drafts first
           clearAllDrafts();
 
-          // Set newsletter metadata
+          // Set newsletter metadata FIRST (before saving drafts)
           setNewsletterId(multiLangNewsletter.id);
           setNewsletterName(multiLangNewsletter.name);
           setTemplate(multiLangNewsletter.template);
@@ -137,6 +139,10 @@ const EmailBuilder = () => {
             };
             saveDraft(draftData);
           });
+
+          console.log(
+            `✅ Saved ${multiLangNewsletter.languages.length} language drafts`
+          );
 
           // Load the first language version (or EN if available) into the editor
           const enVersion = multiLangNewsletter.languages.find(

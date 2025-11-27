@@ -59,11 +59,19 @@ export const LanguageTabsMenu = () => {
 
   const isSwitchingLanguage = useRef(false);
   const previousLanguage = useRef<string>("EN");
+  const initTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize language tabs from existing drafts on mount
   useEffect(() => {
-    if (!isInitialized) {
+    // Clear any pending initialization timeout
+    if (initTimeoutRef.current) {
+      clearTimeout(initTimeoutRef.current);
+    }
+
+    // Small delay to ensure drafts are saved first (when loading from newsletter/draft)
+    initTimeoutRef.current = setTimeout(() => {
       const existingDrafts = getAllDrafts();
+      console.log("🔍 LanguageBar checking drafts:", existingDrafts.length);
 
       if (existingDrafts.length > 0) {
         // Get all unique language codes from existing drafts
@@ -78,12 +86,16 @@ export const LanguageTabsMenu = () => {
 
         // Set active language to the context language or first available
         const initialLanguage = language || existingLanguages[0];
-        setActiveLanguage(initialLanguage);
-        previousLanguage.current = initialLanguage;
 
-        // Load the active language draft
+        // Only update active language if it changed
+        if (activeLanguage !== initialLanguage) {
+          setActiveLanguage(initialLanguage);
+          previousLanguage.current = initialLanguage;
+        }
+
+        // Load the active language draft if not already loaded
         const activeDraft = getDraftByLanguage(initialLanguage);
-        if (activeDraft) {
+        if (activeDraft && !isInitialized) {
           isSwitchingLanguage.current = true;
           setSubjectLine(activeDraft.subjectLine || "");
           setPreheader(activeDraft.preheader || "");
@@ -97,12 +109,30 @@ export const LanguageTabsMenu = () => {
           console.log(`✓ Loaded ${initialLanguage} draft on initialization`);
         }
 
-        toast.success(`Loaded ${existingLanguages.length} language version(s)`);
+        if (!isInitialized) {
+          toast.success(
+            `Loaded ${existingLanguages.length} language version(s)`
+          );
+        }
+      } else {
+        // No existing drafts - fresh start
+        console.log("🌍 No existing drafts - starting fresh with EN only");
+        setSelectedLanguages(["EN"]);
+        if (activeLanguage !== "EN") {
+          setActiveLanguage("EN");
+        }
+        previousLanguage.current = "EN";
       }
 
       setIsInitialized(true);
-    }
-  }, [isInitialized]);
+    }, 100); // 100ms delay to ensure drafts are saved
+
+    return () => {
+      if (initTimeoutRef.current) {
+        clearTimeout(initTimeoutRef.current);
+      }
+    };
+  }, [newsletterId]); // Re-run when newsletterId changes (draft/newsletter loaded)
 
   // Helper function for deep cloning to ensure complete independence
   const deepCloneBlocks = (blocks: BlockData[]): BlockData[] => {
@@ -243,8 +273,15 @@ export const LanguageTabsMenu = () => {
 
   // Get available languages that haven't been added yet
   const getAvailableLanguagesToAdd = () => {
+    // Get languages that actually have drafts (visible tabs)
+    const languagesWithDrafts = selectedLanguages.filter((langCode) => {
+      if (langCode === "EN") return true; // EN always counts
+      return getDraftByLanguage(langCode) !== null;
+    });
+
+    // Return languages that aren't in the visible tabs yet
     return AVAILABLE_LANGUAGES.filter(
-      (lang) => !selectedLanguages.includes(lang.code)
+      (lang) => !languagesWithDrafts.includes(lang.code)
     );
   };
 
@@ -459,8 +496,25 @@ export const LanguageTabsMenu = () => {
       subjectLine: newDraftData.subjectLine,
     });
 
+    // Set switching flag to prevent auto-save from firing during switch
+    isSwitchingLanguage.current = true;
+
     setSelectedLanguages((prev) => [...prev, languageCode]);
     setActiveLanguage(languageCode);
+
+    // Load the translated content into the editor
+    setSubjectLine(translatedContent.subjectLine);
+    setPreheader(translatedContent.preheader);
+    overrideBlocks(translatedContent.blocks);
+    setLanguage(languageCode);
+
+    // Update previous language ref
+    previousLanguage.current = languageCode;
+
+    // Reset switching flag after a delay
+    setTimeout(() => {
+      isSwitchingLanguage.current = false;
+    }, 150);
 
     if (!shouldTranslate) {
       if (!isDeepLConfigured()) {
