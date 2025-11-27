@@ -88,8 +88,7 @@ export const CopyOptionsModal = ({
                   onClick={handleCopyText}
                   className="w-full justify-start gap-3"
                 >
-                  <Type className="h-5 w-5" />
-                  <div className="text-left flex-1">
+                  <div className="text-center flex-1">
                     <div className="font-semibold">Copy Button Text</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {text}
@@ -103,8 +102,7 @@ export const CopyOptionsModal = ({
                   onClick={handleCopyLink}
                   className="w-full justify-start gap-3"
                 >
-                  <LinkIcon className="h-5 w-5" />
-                  <div className="text-left flex-1">
+                  <div className="text-center flex-1">
                     <div className="font-semibold">Copy Button Link</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {link}
@@ -123,8 +121,7 @@ export const CopyOptionsModal = ({
                   onClick={handleCopyImageSrc}
                   className="w-full justify-start gap-3"
                 >
-                  <ImageIcon className="h-5 w-5" />
-                  <div className="text-left flex-1">
+                  <div className="text-center flex-1">
                     <div className="font-semibold">Copy Image URL</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {imageSrc}
@@ -138,8 +135,7 @@ export const CopyOptionsModal = ({
                   onClick={handleCopyLink}
                   className="w-full justify-start gap-3"
                 >
-                  <LinkIcon className="h-5 w-5" />
-                  <div className="text-left flex-1">
+                  <div className="text-center flex-1">
                     <div className="font-semibold">Copy Image Link</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {imageLink}
@@ -153,8 +149,7 @@ export const CopyOptionsModal = ({
                   onClick={handleCopyText}
                   className="w-full justify-start gap-3"
                 >
-                  <Type className="h-5 w-5" />
-                  <div className="text-left flex-1">
+                  <div className="text-center flex-1">
                     <div className="font-semibold">Copy Alt Text</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {text}
