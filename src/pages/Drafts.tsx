@@ -13,9 +13,10 @@ const Drafts: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="container mx-auto py-8">
-			<h1 className="text-2xl font-bold mb-6">Saved Drafts</h1>
-			<div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+		<div className="min-h-screen">
+			<div className="container mx-auto py-8">
+				<h1 className="text-2xl font-bold mb-6">Saved Drafts</h1>
+				<div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 				{drafts.length === 0 ? (
 					<div className="col-span-full text-center text-muted-foreground">No drafts found.</div>
 				) : (
@@ -51,6 +52,7 @@ const Drafts: React.FC = () => {
 						);
 					})
 				)}
+				</div>
 			</div>
 		</div>
 	);
