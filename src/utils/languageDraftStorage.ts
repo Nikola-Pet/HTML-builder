@@ -295,7 +295,9 @@ export const getAllSavedDrafts = (): MultiLanguageNewsletter[] => {
 /**
  * Get a saved draft by ID
  */
-export const getSavedDraftById = (id: string): MultiLanguageNewsletter | null => {
+export const getSavedDraftById = (
+  id: string
+): MultiLanguageNewsletter | null => {
   const savedDrafts = getAllSavedDrafts();
   return savedDrafts.find((draft) => draft.id === id) || null;
 };

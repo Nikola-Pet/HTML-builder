@@ -103,10 +103,13 @@ const EmailBuilder = () => {
         console.log("Newsletter found:", newsletter);
 
         // Check if it's a multi-language newsletter or old-style single language
-        if ((newsletter as any).languages && Array.isArray((newsletter as any).languages)) {
+        if (
+          (newsletter as any).languages &&
+          Array.isArray((newsletter as any).languages)
+        ) {
           // Multi-language newsletter
           const multiLangNewsletter = newsletter as any;
-          
+
           // Clear any existing drafts first
           clearAllDrafts();
 
@@ -136,7 +139,9 @@ const EmailBuilder = () => {
           });
 
           // Load the first language version (or EN if available) into the editor
-          const enVersion = multiLangNewsletter.languages.find((l: any) => l.language === "EN");
+          const enVersion = multiLangNewsletter.languages.find(
+            (l: any) => l.language === "EN"
+          );
           const firstVersion = enVersion || multiLangNewsletter.languages[0];
 
           if (firstVersion) {
