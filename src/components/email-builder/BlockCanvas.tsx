@@ -25,6 +25,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
     subjectLine,
     preheader,
     newsletterId,
+    draftId,
     newsletterName,
     template,
     language,
@@ -32,6 +33,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
     setPreheader,
     overrideBlocks,
     setNewsletterId,
+    setDraftId,
   } = useEmailBuilder();
 
   const [isInitialized, setIsInitialized] = useState(false);
@@ -109,6 +111,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
               subjectLine={subjectLine}
               preheader={preheader}
               newsletterId={newsletterId}
+              draftId={draftId}
               newsletterName={newsletterName}
               template={template}
               language={language}
@@ -116,6 +119,7 @@ export const BlockCanvas = ({ onAddBlock }: BlockCanvasProps) => {
               setPreheader={setPreheader}
               overrideBlocks={overrideBlocks}
               setNewsletterId={setNewsletterId}
+              setDraftId={setDraftId}
               onUndo={undo}
               onRedo={redo}
               canUndo={canUndo}

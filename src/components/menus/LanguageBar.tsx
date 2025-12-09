@@ -39,14 +39,12 @@ export const LanguageTabsMenu = () => {
   const [isTranslating, setIsTranslating] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Track session draft ID to update same draft
-  const sessionDraftId = useRef<string | null>(null);
-
   const {
     blocks,
     subjectLine,
     preheader,
     newsletterId,
+    draftId,
     newsletterName,
     template,
     language,
@@ -54,6 +52,7 @@ export const LanguageTabsMenu = () => {
     setPreheader,
     overrideBlocks,
     setNewsletterId,
+    setDraftId,
     setLanguage,
   } = useEmailBuilder();
 
@@ -132,7 +131,7 @@ export const LanguageTabsMenu = () => {
         clearTimeout(initTimeoutRef.current);
       }
     };
-  }, [newsletterId]); // Re-run when newsletterId changes (draft/newsletter loaded)
+  }, [newsletterId, draftId]); // Re-run when newsletterId or draftId changes
 
   // Helper function for deep cloning to ensure complete independence
   const deepCloneBlocks = (blocks: BlockData[]): BlockData[] => {
@@ -150,80 +149,245 @@ export const LanguageTabsMenu = () => {
     // Always use masterTemplateBI
     const templateLangData = getTemplateHeaderFooterData(
       "masterTemplateBI",
-      activeLanguage
+      language // Use language from context, not activeLanguage
     );
 
     const draftData = {
-      language: activeLanguage,
-      name: `${newsletterName || "Untitled"} [${activeLanguage}]`,
+      language: language, // Use language from context, not activeLanguage
+      name: `${newsletterName || "Untitled"} [${language}]`,
       subjectLine,
       preheader,
       header: {
         template: "masterTemplateBI", // Always use BI template
-        language: activeLanguage,
+        language: language, // Use language from context
         data: templateLangData, // Include language-specific links and text
       },
       blocks: deepCloneBlocks(blocks),
       footer: {
         template: "masterTemplateBI", // Always use BI template
-        language: activeLanguage,
+        language: language, // Use language from context
         data: templateLangData, // Include language-specific links and text
       },
     };
 
     try {
       saveDraft(draftData);
-      console.log(`Saved draft for ${activeLanguage} to language_drafts array`);
+      console.log(`Saved draft for ${language} to language_drafts array`);
     } catch (error) {
-      console.error(`Error saving ${activeLanguage} draft:`, error);
+      console.error(`Error saving ${language} draft:`, error);
     }
   };
 
   // Auto-save current language draft when content changes
   useEffect(() => {
+    // Always save to localStorage for language switching (even for existing newsletters)
+    // This just updates the local language_drafts array so SaveModal can collect all languages
     saveCurrentLanguageDraft();
   }, [blocks, subjectLine, preheader]);
 
-  // Save all drafts before page unload AND save to saved_drafts
+  // Periodic auto-save to backend every 30 seconds
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Save current language to language_drafts
-      saveCurrentLanguageDraft();
-
-      // Save all work to saved_drafts array (update same draft if exists)
-      const savedDraft = saveCurrentWorkAsDraft(
-        newsletterName || "Untitled",
-        template,
-        sessionDraftId.current
-      );
-
-      if (savedDraft && !sessionDraftId.current) {
-        sessionDraftId.current = savedDraft.id;
+    const saveDraftToBackendPeriodic = async () => {
+      // Don't auto-save as draft if this is already a saved newsletter
+      if (newsletterId) {
+        return;
       }
 
-      console.log("Saved all language drafts before page unload");
+      // Get current drafts from localStorage (already saved by the other effect)
+      try {
+        const currentDrafts = getAllDrafts();
+
+        if (currentDrafts.length === 0) {
+          return;
+        }
+
+        // Filter out empty languages
+        const languageVersions = currentDrafts
+          .filter(
+            (draft) =>
+              draft.blocks.length > 0 ||
+              draft.subjectLine.trim() !== "" ||
+              draft.preheader.trim() !== ""
+          )
+          .map((draft) => ({
+            language: draft.language,
+            subjectLine: draft.subjectLine,
+            preheader: draft.preheader,
+            blocks: draft.blocks,
+          }));
+
+        if (languageVersions.length === 0) {
+          return;
+        }
+
+        const draftData = {
+          id: draftId || undefined,
+          name: newsletterName || "Untitled Draft",
+          template: template,
+          languages: languageVersions,
+        };
+
+        // Use regular fetch for periodic saves (not sendBeacon)
+        const response = await fetch("http://localhost:3001/api/drafts/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(draftData),
+        });
+
+        if (response.ok) {
+          const saved = await response.json();
+          if (!draftId && saved.id) {
+            setDraftId(saved.id);
+          }
+          console.log("⏰ Periodic auto-save completed:", saved.id);
+        }
+      } catch (error) {
+        console.error("❌ Periodic auto-save failed:", error);
+      }
     };
 
+    // Run periodic save every 30 seconds
+    const autoSaveInterval = setInterval(() => {
+      console.log("⏰ Periodic auto-save check...");
+      saveDraftToBackendPeriodic();
+    }, 30000); // 30 seconds
+
+    // Run once immediately after 5 seconds (initial save)
+    const initialSave = setTimeout(() => {
+      console.log("🚀 Initial auto-save check...");
+      saveDraftToBackendPeriodic();
+    }, 5000);
+
+    return () => {
+      clearInterval(autoSaveInterval);
+      clearTimeout(initialSave);
+    };
+  }, [newsletterId, draftId, newsletterName, template, setDraftId]); // Don't include blocks to avoid recreating interval
+
+  // Save all drafts before page unload AND save to saved_drafts
+  useEffect(() => {
+    console.log(
+      `🔄 LanguageBar effect registered - newsletterId: ${newsletterId}, draftId: ${draftId}`
+    );
+
+    const saveDraftToBackend = () => {
+      // Don't auto-save as draft if this is already a saved newsletter
+      if (newsletterId) {
+        console.log("⏭️ Skipping draft auto-save - this is a saved newsletter");
+        return;
+      }
+
+      // Save current language to language_drafts (localStorage)
+      saveCurrentLanguageDraft();
+
+      // Save all work to backend using sendBeacon for reliable delivery
+      try {
+        const currentDrafts = getAllDrafts();
+
+        if (currentDrafts.length === 0) {
+          console.log("⏭️ No drafts to save");
+          return;
+        }
+
+        // Filter out empty languages and convert to language versions
+        const languageVersions = currentDrafts
+          .filter(
+            (draft) =>
+              draft.blocks.length > 0 ||
+              draft.subjectLine.trim() !== "" ||
+              draft.preheader.trim() !== ""
+          )
+          .map((draft) => ({
+            language: draft.language,
+            subjectLine: draft.subjectLine,
+            preheader: draft.preheader,
+            blocks: draft.blocks,
+          }));
+
+        if (languageVersions.length === 0) {
+          console.log("⏭️ No content to save");
+          return;
+        }
+
+        const draftData = {
+          id: draftId || undefined,
+          name: newsletterName || "Untitled Draft",
+          template: template,
+          languages: languageVersions,
+        };
+
+        // Use sendBeacon for reliable delivery during page unload
+        const blob = new Blob([JSON.stringify(draftData)], {
+          type: "application/json",
+        });
+
+        const sent = navigator.sendBeacon(
+          "http://localhost:3001/api/drafts/save",
+          blob
+        );
+
+        if (sent) {
+          console.log("✅ Draft save queued via sendBeacon");
+        } else {
+          console.warn("⚠️ Failed to queue draft save");
+        }
+      } catch (error) {
+        console.error("❌ Error preparing draft for save:", error);
+      }
+    };
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      saveDraftToBackend();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        console.log("📱 Page hidden, saving draft...");
+        saveDraftToBackend();
+      }
+    };
+
+    const handlePageHide = () => {
+      console.log("👋 Page hiding, saving draft...");
+      saveDraftToBackend();
+    };
+
+    // Use multiple events for better reliability
     window.addEventListener("beforeunload", handleBeforeUnload);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", handlePageHide);
 
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", handlePageHide);
 
-      // Auto-save on component unmount (when navigating away)
-      saveCurrentLanguageDraft();
-
-      // Save to saved_drafts array (update same draft if exists)
-      const savedDraft = saveCurrentWorkAsDraft(
-        newsletterName || "Untitled",
-        template,
-        sessionDraftId.current
+      // Don't auto-save as draft if this is already a saved newsletter
+      console.log(
+        `🔍 Unmount cleanup - newsletterId: ${newsletterId}, draftId: ${draftId}`
       );
 
-      if (savedDraft && !sessionDraftId.current) {
-        sessionDraftId.current = savedDraft.id;
+      if (newsletterId) {
+        console.log(
+          "✋ Skipping draft auto-save on unmount - this is a saved newsletter (ID: " +
+            newsletterId +
+            ")"
+        );
+        return;
       }
 
-      console.log("Saved work to saved_drafts on unmount");
+      console.log("💾 Auto-saving draft on unmount...");
+
+      // Auto-save on component unmount (when navigating away)
+      // ONLY save to localStorage for language switching
+      // Don't save to backend - that only happens on browser close (beforeunload)
+      saveCurrentLanguageDraft();
+
+      console.log(
+        "✅ Saved current language to localStorage (no backend draft created)"
+      );
     };
   }, [
     blocks,
@@ -232,6 +396,8 @@ export const LanguageTabsMenu = () => {
     activeLanguage,
     newsletterName,
     template,
+    newsletterId,
+    draftId,
   ]);
 
   // Load content when switching languages
@@ -308,8 +474,8 @@ export const LanguageTabsMenu = () => {
       const newsletter = publishAllDraftsAsOne(name, tmpl);
 
       if (newsletter) {
-        // Clear session draft ID after successful publish
-        sessionDraftId.current = null;
+        // Clear draft ID after successful publish
+        setDraftId(null);
 
         toast.success(
           `Published ${newsletter.languages.length} language(s) as one newsletter!`
@@ -496,6 +662,57 @@ export const LanguageTabsMenu = () => {
       subjectLine: newDraftData.subjectLine,
     });
 
+    // Immediately save to backend after adding new language
+    if (!newsletterId) {
+      try {
+        const allDrafts = getAllDrafts();
+        const languageVersions = allDrafts
+          .filter(
+            (draft) =>
+              draft.blocks.length > 0 ||
+              draft.subjectLine.trim() !== "" ||
+              draft.preheader.trim() !== ""
+          )
+          .map((draft) => ({
+            language: draft.language,
+            subjectLine: draft.subjectLine,
+            preheader: draft.preheader,
+            blocks: draft.blocks,
+          }));
+
+        if (languageVersions.length > 0) {
+          const response = await fetch(
+            "http://localhost:3001/api/drafts/save",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: draftId || undefined,
+                name: newsletterName || "Untitled Draft",
+                template: template,
+                languages: languageVersions,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const saved = await response.json();
+            if (!draftId && saved.id) {
+              setDraftId(saved.id);
+            }
+            console.log(
+              `✅ Saved draft with new ${languageCode} language:`,
+              saved.id
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Failed to save draft after adding language:", error);
+      }
+    }
+
     // Set switching flag to prevent auto-save from firing during switch
     isSwitchingLanguage.current = true;
 
@@ -642,7 +859,10 @@ export const LanguageTabsMenu = () => {
   };
 
   // Remove a language tab and DELETE its draft
-  const handleRemoveLanguage = (languageCode: string, e: React.MouseEvent) => {
+  const handleRemoveLanguage = async (
+    languageCode: string,
+    e: React.MouseEvent
+  ) => {
     e.stopPropagation();
 
     // Don't allow removing EN
@@ -663,6 +883,61 @@ export const LanguageTabsMenu = () => {
     // If removing active language, switch to EN
     if (activeLanguage === languageCode) {
       setActiveLanguage("EN");
+    }
+
+    // Immediately save to backend after removing language
+    if (!newsletterId) {
+      try {
+        const allDrafts = getAllDrafts();
+        const languageVersions = allDrafts
+          .filter(
+            (draft) =>
+              draft.blocks.length > 0 ||
+              draft.subjectLine.trim() !== "" ||
+              draft.preheader.trim() !== ""
+          )
+          .map((draft) => ({
+            language: draft.language,
+            subjectLine: draft.subjectLine,
+            preheader: draft.preheader,
+            blocks: draft.blocks,
+          }));
+
+        if (languageVersions.length > 0) {
+          const response = await fetch(
+            "http://localhost:3001/api/drafts/save",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: draftId || undefined,
+                name: newsletterName || "Untitled Draft",
+                template: template,
+                languages: languageVersions,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const saved = await response.json();
+            console.log(
+              `✅ Saved draft after removing ${languageCode}:`,
+              saved.id
+            );
+          }
+        } else if (draftId) {
+          // If no languages left, delete the draft from backend
+          await fetch(`http://localhost:3001/api/drafts/${draftId}`, {
+            method: "DELETE",
+          });
+          console.log(`🗑️ Deleted empty draft ${draftId}`);
+          setDraftId(null);
+        }
+      } catch (error) {
+        console.error("Failed to update draft after removing language:", error);
+      }
     }
 
     toast.success(`${languageCode} draft deleted`);

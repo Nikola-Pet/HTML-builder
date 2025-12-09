@@ -1,0 +1,188 @@
+[
+  {
+    "name": "dsadas",
+    "template": "masterTemplateBI",
+    "languages": [
+      {
+        "language": "EN",
+        "subjectLine": "sd",
+        "preheader": "sd",
+        "blocks": [
+          {
+            "id": "block-1765273228411-0.485401574776135",
+            "type": "image-text",
+            "content": {
+              "imageUrl": "https://dummyimage.com/1280x720",
+              "imageLinkUrl": "https://www.example.com",
+              "headline": "Headline",
+              "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+              "buttonText": "Please click me",
+              "buttonUrl": "https://www.example.com/"
+            }
+          },
+          {
+            "id": "block-1765273231396-0.27023928457686097",
+            "type": "twin-teaser",
+            "content": {
+              "leftImageUrl": "https://dummyimage.com/1280x720",
+              "leftImageLinkUrl": "https://www.example.com",
+              "leftHeadline": "Headline",
+              "leftText": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+              "leftButtonText": "Please click me",
+              "leftButtonUrl": "https://www.example.com/",
+              "rightImageUrl": "https://dummyimage.com/1280x720",
+              "rightImageLinkUrl": "https://www.example.com",
+              "rightHeadline": "Headline",
+              "rightText": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+              "rightButtonText": "Please click me",
+              "rightButtonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      },
+      {
+        "language": "DE",
+        "subjectLine": "",
+        "preheader": "",
+        "blocks": [
+          {
+            "id": "block-1765273228411-0.485401574776135",
+            "type": "image-text",
+            "content": {
+              "imageUrl": "https://dummyimage.com/1280x720",
+              "imageLinkUrl": "https://www.example.com",
+              "headline": "Überschrift",
+              "text": "Lorem Ipsum ist einfach ein Blindtext der Druck- und Setzindustrie.",
+              "buttonText": "Bitte klicken Sie auf mich",
+              "buttonUrl": "https://www.example.com/"
+            }
+          },
+          {
+            "id": "block-1765273231396-0.27023928457686097",
+            "type": "twin-teaser",
+            "content": {
+              "leftImageUrl": "https://dummyimage.com/1280x720",
+              "leftImageLinkUrl": "https://www.example.com",
+              "leftHeadline": "Überschrift",
+              "leftText": "Lorem Ipsum ist einfach ein Blindtext der Druck- und Setzindustrie.",
+              "leftButtonText": "Bitte klicken Sie auf mich",
+              "leftButtonUrl": "https://www.example.com/",
+              "rightImageUrl": "https://dummyimage.com/1280x720",
+              "rightImageLinkUrl": "https://www.example.com",
+              "rightHeadline": "Überschrift",
+              "rightText": "Lorem Ipsum ist einfach ein Blindtext der Druck- und Setzindustrie.",
+              "rightButtonText": "Bitte klicken Sie auf mich",
+              "rightButtonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      },
+      {
+        "language": "FR",
+        "subjectLine": "",
+        "preheader": "",
+        "blocks": [
+          {
+            "id": "block-1765273228411-0.485401574776135",
+            "type": "image-text",
+            "content": {
+              "imageUrl": "https://dummyimage.com/1280x720",
+              "imageLinkUrl": "https://www.example.com",
+              "headline": "À la une",
+              "text": "Lorem Ipsum est simplement un texte factice de l'industrie de l'imprimerie et de la composition.",
+              "buttonText": "Cliquez sur moi",
+              "buttonUrl": "https://www.example.com/"
+            }
+          },
+          {
+            "id": "block-1765273231396-0.27023928457686097",
+            "type": "twin-teaser",
+            "content": {
+              "leftImageUrl": "https://dummyimage.com/1280x720",
+              "leftImageLinkUrl": "https://www.example.com",
+              "leftHeadline": "À la une",
+              "leftText": "Lorem Ipsum est simplement un texte factice de l'industrie de l'imprimerie et de la composition.",
+              "leftButtonText": "Cliquez sur moi",
+              "leftButtonUrl": "https://www.example.com/",
+              "rightImageUrl": "https://dummyimage.com/1280x720",
+              "rightImageLinkUrl": "https://www.example.com",
+              "rightHeadline": "À la une",
+              "rightText": "Lorem Ipsum est simplement un texte factice de l'industrie de l'imprimerie et de la composition.",
+              "rightButtonText": "Cliquez sur moi",
+              "rightButtonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      }
+    ],
+    "keywords": [
+      "dsa"
+    ],
+    "id": "newsletter-1765270291590-odwe29xki",
+    "createdAt": "2025-12-09T08:51:31.590Z",
+    "updatedAt": "2025-12-09T09:46:54.905Z"
+  },
+  {
+    "name": "zaxz",
+    "template": "masterTemplateBI",
+    "languages": [
+      {
+        "language": "EN",
+        "subjectLine": "a",
+        "preheader": "aaa",
+        "blocks": [
+          {
+            "id": "block-1765273791625-0.47261487565737326",
+            "type": "paragraph",
+            "content": {
+              "greeting": "Hello,",
+              "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+              "buttonText": "Please click me",
+              "buttonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      },
+      {
+        "language": "DE",
+        "subjectLine": "",
+        "preheader": "",
+        "blocks": [
+          {
+            "id": "block-1765273791625-0.47261487565737326",
+            "type": "paragraph",
+            "content": {
+              "greeting": "Hallo,",
+              "text": "Lorem Ipsum ist einfach ein Blindtext der Druck- und Setzindustrie.",
+              "buttonText": "Bitte klicken Sie auf mich",
+              "buttonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      },
+      {
+        "language": "FR",
+        "subjectLine": "",
+        "preheader": "",
+        "blocks": [
+          {
+            "id": "block-1765273791625-0.47261487565737326",
+            "type": "paragraph",
+            "content": {
+              "greeting": "Bonjour,",
+              "text": "Lorem Ipsum est simplement un texte factice de l'industrie de l'imprimerie et de la composition.",
+              "buttonText": "Cliquez sur moi",
+              "buttonUrl": "https://www.example.com/"
+            }
+          }
+        ]
+      }
+    ],
+    "keywords": [
+      "aa"
+    ],
+    "id": "newsletter-1765273821822-siwnz1psq",
+    "createdAt": "2025-12-09T09:50:21.822Z",
+    "updatedAt": "2025-12-09T09:50:21.822Z"
+  }
+]

@@ -15,6 +15,10 @@ export default defineConfig(({ mode }) => ({
         rewrite: (path) => path.replace(/^\/api\/deepl/, ""),
         secure: true,
       },
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true,
+      },
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(

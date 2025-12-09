@@ -1,9 +1,15 @@
 import { BlockData } from "@/contexts/EmailBuilderContext";
+import {
+  getAllDrafts as getAllDraftsAPI,
+  getDraftById as getDraftByIdAPI,
+  saveDraft as saveDraftAPI,
+  deleteDraft as deleteDraftAPI,
+  Draft,
+} from "./newsletterStorage";
 
 // Storage keys
-const DRAFTS_KEY = "language_drafts"; // Temporary drafts while working (cleared on new session)
-const SAVED_DRAFTS_KEY = "saved_drafts"; // Saved drafts when navigating away (persistent)
-const NEWSLETTERS_KEY = "newsletters"; // Final published newsletters
+const DRAFTS_KEY = "language_drafts"; // Temporary drafts while working (cleared on new session) - STAYS IN LOCALSTORAGE
+const NEWSLETTERS_KEY = "newsletters"; // Final published newsletters - NOW IN BACKEND
 
 // Single language version within a newsletter
 export interface LanguageVersion {
@@ -277,41 +283,32 @@ export const getDraftLanguages = (): string[] => {
   return getAllDrafts().map((d) => d.language);
 };
 
-// ==================== SAVED DRAFTS OPERATIONS ====================
+// ==================== SAVED DRAFTS OPERATIONS (Backend API) ====================
 
 /**
- * Get all saved drafts
+ * Get all saved drafts from backend
  */
-export const getAllSavedDrafts = (): MultiLanguageNewsletter[] => {
-  try {
-    const savedDraftsJson = localStorage.getItem(SAVED_DRAFTS_KEY);
-    return savedDraftsJson ? JSON.parse(savedDraftsJson) : [];
-  } catch (error) {
-    console.error("Error loading saved drafts:", error);
-    return [];
-  }
+export const getAllSavedDrafts = async (): Promise<Draft[]> => {
+  return await getAllDraftsAPI();
 };
 
 /**
- * Get a saved draft by ID
+ * Get a saved draft by ID from backend
  */
-export const getSavedDraftById = (
-  id: string
-): MultiLanguageNewsletter | null => {
-  const savedDrafts = getAllSavedDrafts();
-  return savedDrafts.find((draft) => draft.id === id) || null;
+export const getSavedDraftById = async (id: string): Promise<Draft | null> => {
+  return await getDraftByIdAPI(id);
 };
 
 /**
- * Save current work as a saved draft (when navigating away)
- * This converts all language_drafts to one saved draft
+ * Save current work as a saved draft (when navigating away or auto-saving)
+ * This converts all language_drafts to one saved draft in backend
  * Uses sessionDraftId to update same draft instead of creating new ones
  */
-export const saveCurrentWorkAsDraft = (
+export const saveCurrentWorkAsDraft = async (
   newsletterName: string,
   template: string,
   sessionDraftId?: string | null
-): MultiLanguageNewsletter | null => {
+): Promise<Draft | null> => {
   try {
     const currentDrafts = getAllDrafts();
 
@@ -320,57 +317,39 @@ export const saveCurrentWorkAsDraft = (
       return null;
     }
 
-    // Convert drafts to language versions
-    const languageVersions: LanguageVersion[] = currentDrafts.map((draft) => ({
-      language: draft.language,
-      subjectLine: draft.subjectLine,
-      preheader: draft.preheader,
-      blocks: draft.blocks,
-    }));
+    // Convert drafts to language versions, but ONLY include languages with actual content
+    const languageVersions = currentDrafts
+      .filter(
+        (draft) =>
+          draft.blocks.length > 0 ||
+          draft.subjectLine.trim() !== "" ||
+          draft.preheader.trim() !== ""
+      )
+      .map((draft) => ({
+        language: draft.language,
+        subjectLine: draft.subjectLine,
+        preheader: draft.preheader,
+        blocks: draft.blocks,
+      }));
 
-    const savedDrafts = getAllSavedDrafts();
-
-    // Check if we should update existing draft
-    if (sessionDraftId) {
-      const existingIndex = savedDrafts.findIndex(
-        (d) => d.id === sessionDraftId
-      );
-
-      if (existingIndex >= 0) {
-        // Update existing draft
-        savedDrafts[existingIndex] = {
-          ...savedDrafts[existingIndex],
-          name: newsletterName || "Untitled Draft",
-          template: template,
-          languages: languageVersions,
-          updatedAt: new Date().toISOString(),
-        };
-        localStorage.setItem(SAVED_DRAFTS_KEY, JSON.stringify(savedDrafts));
-
-        console.log(
-          `Updated existing saved draft with ${languageVersions.length} language(s):`,
-          sessionDraftId
-        );
-
-        return savedDrafts[existingIndex];
-      }
+    // Check if there's any actual content after filtering
+    if (languageVersions.length === 0) {
+      console.log("⏭️  Skipping draft save - no content in any language");
+      return null;
     }
 
-    // Create new saved draft
-    const savedDraft: MultiLanguageNewsletter = {
-      id: `draft-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    // Use smart save endpoint - it will update if ID exists, create if not
+    const draftData = {
+      id: sessionDraftId || undefined,
       name: newsletterName || "Untitled Draft",
       template: template,
       languages: languageVersions,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
 
-    savedDrafts.push(savedDraft);
-    localStorage.setItem(SAVED_DRAFTS_KEY, JSON.stringify(savedDrafts));
+    const savedDraft = await saveDraftAPI(draftData);
 
     console.log(
-      `Created new saved draft with ${languageVersions.length} language(s):`,
+      `Saved draft with ${languageVersions.length} language(s):`,
       savedDraft.id
     );
 
@@ -382,25 +361,19 @@ export const saveCurrentWorkAsDraft = (
 };
 
 /**
- * Delete saved draft
+ * Delete saved draft from backend
  */
-export const deleteSavedDraft = (id: string): boolean => {
-  try {
-    const savedDrafts = getAllSavedDrafts();
-    const filtered = savedDrafts.filter((d) => d.id !== id);
-    localStorage.setItem(SAVED_DRAFTS_KEY, JSON.stringify(filtered));
-    console.log(`Deleted saved draft:`, id);
-    return true;
-  } catch (error) {
-    console.error(`Error deleting saved draft:`, error);
-    return false;
-  }
+export const deleteSavedDraft = async (id: string): Promise<boolean> => {
+  return await deleteDraftAPI(id);
 };
 
 /**
- * Clear all saved drafts
+ * Clear all saved drafts (remove all from backend)
  */
-export const clearAllSavedDrafts = (): void => {
-  localStorage.removeItem(SAVED_DRAFTS_KEY);
+export const clearAllSavedDrafts = async (): Promise<void> => {
+  const drafts = await getAllSavedDrafts();
+  for (const draft of drafts) {
+    await deleteDraftAPI(draft.id);
+  }
   console.log("Cleared all saved drafts");
 };

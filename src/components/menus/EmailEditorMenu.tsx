@@ -16,8 +16,11 @@ import {
   handleDownloadExcel as downloadExcel,
   handleImportExcel as importExcel,
 } from "@/utils/emailExportImport";
-import { saveNewsletter, updateNewsletter } from "@/utils/newsletterStorage";
-import { saveDraft } from "@/utils/languageDraftStorage";
+import {
+  saveDraft,
+  getAllDrafts,
+  clearAllDrafts,
+} from "@/utils/languageDraftStorage";
 import SaveModal from "@/components/modals/SaveModal";
 import PreviewModal from "@/components/modals/PreviewModal";
 import { toast } from "sonner";
@@ -29,6 +32,7 @@ interface EmailEditorMenuProps {
   subjectLine: string;
   preheader: string;
   newsletterId: string | null;
+  draftId: string | null;
   newsletterName: string;
   template: string;
   language: string;
@@ -36,6 +40,7 @@ interface EmailEditorMenuProps {
   setPreheader: (value: string) => void;
   overrideBlocks: (blocks: BlockData[]) => void;
   setNewsletterId: (id: string | null) => void;
+  setDraftId: (id: string | null) => void;
   onUndo?: () => void;
   onRedo?: () => void;
   onDelete?: () => void;
@@ -49,6 +54,7 @@ const EmailEditorMenu = ({
   subjectLine,
   preheader,
   newsletterId,
+  draftId,
   newsletterName,
   template,
   language,
@@ -56,6 +62,7 @@ const EmailEditorMenu = ({
   setPreheader,
   overrideBlocks,
   setNewsletterId,
+  setDraftId,
   onUndo,
   onRedo,
   onDelete,
@@ -200,27 +207,120 @@ const EmailEditorMenu = ({
     setIsSaveModalOpen(true);
   };
 
-  const handleSaveModalSubmit = (name: string, keywords: string[]) => {
+  const handleSaveModalSubmit = async (name: string, keywords: string[]) => {
     try {
-      const newsletterData = {
-        ...pendingNewsletterData,
+      // Get all language drafts from localStorage
+      const allDrafts = getAllDrafts();
+
+      console.log("📋 Save initiated:");
+      console.log("  - newsletterName:", name);
+      console.log("  - template from context:", template);
+      console.log("  - newsletterId:", newsletterId);
+      console.log("  - draftId:", draftId);
+      console.log("  - allDrafts count:", allDrafts.length);
+
+      if (allDrafts.length === 0) {
+        toast.error(
+          "No content to save. Please add blocks to at least one language."
+        );
+        return;
+      }
+
+      // Convert drafts to language versions for multi-language newsletter
+      const languageVersions = allDrafts.map((draft) => ({
+        language: draft.language,
+        subjectLine: draft.subjectLine,
+        preheader: draft.preheader,
+        blocks: draft.blocks,
+      }));
+
+      const newsletterData: any = {
         name: name || "Untitled Newsletter",
+        template: template || "masterTemplateBI", // Fallback to default template
+        languages: languageVersions,
         keywords,
       };
+
+      // Only include ID if it exists (for updates)
       if (newsletterId) {
-        const updated = updateNewsletter(newsletterId, newsletterData);
-        if (updated) {
-          toast.success("Newsletter updated successfully!");
-        } else {
-          toast.error("Failed to update newsletter.");
-        }
-      } else {
-        const saved = saveNewsletter(newsletterData);
-        if (typeof setNewsletterId === "function") {
-          setNewsletterId(saved.id);
-        }
-        toast.success("Newsletter saved successfully!");
+        newsletterData.id = newsletterId;
       }
+
+      console.log(
+        "📤 Sending newsletter data to server:",
+        JSON.stringify(newsletterData, null, 2)
+      );
+
+      // Save to backend API
+      const response = await fetch(
+        "http://localhost:3001/api/newsletters/save",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newsletterData),
+        }
+      );
+
+      if (!response.ok) {
+        let errorMessage = `Failed to save newsletter: ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          console.error("❌ Server responded with error:", errorData);
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          console.error("❌ Could not parse error response:", e);
+        }
+        throw new Error(errorMessage);
+      }
+
+      const saved = await response.json();
+      console.log("✅ Newsletter saved successfully:", saved);
+
+      // Clear localStorage drafts after successful save
+      clearAllDrafts();
+      console.log("🧹 Cleared localStorage drafts after newsletter save");
+
+      // If this was a draft being converted to newsletter, delete the draft from backend
+      if (draftId) {
+        try {
+          const deleteResponse = await fetch(
+            `http://localhost:3001/api/drafts/${draftId}`,
+            {
+              method: "DELETE",
+            }
+          );
+
+          if (deleteResponse.ok) {
+            console.log(
+              `✅ Draft ${draftId} deleted from backend after conversion to newsletter`
+            );
+          } else {
+            console.error(
+              `❌ Failed to delete draft ${draftId}:`,
+              await deleteResponse.text()
+            );
+          }
+
+          setDraftId(null); // Clear draft ID
+        } catch (error) {
+          console.error("Failed to delete draft:", error);
+          // Continue anyway - newsletter was saved successfully
+        }
+      }
+
+      // Always set the newsletter ID so no more drafts are created
+      if (typeof setNewsletterId === "function") {
+        setNewsletterId(saved.id);
+        console.log(`📋 Newsletter ID set to: ${saved.id}`);
+      }
+
+      toast.success(
+        newsletterId
+          ? `Newsletter updated successfully with ${languageVersions.length} language(s)!`
+          : `Newsletter saved successfully with ${languageVersions.length} language(s)!`
+      );
     } catch (error) {
       toast.error(
         "Failed to save newsletter: " +

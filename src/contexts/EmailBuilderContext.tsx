@@ -11,6 +11,7 @@ interface EmailBuilderContextType {
   subjectLine: string;
   preheader: string;
   newsletterId: string | null;
+  draftId: string | null;
   newsletterName: string;
   template: string;
   language: string;
@@ -24,6 +25,7 @@ interface EmailBuilderContextType {
   setSubjectLine: (value: string) => void;
   setPreheader: (value: string) => void;
   setNewsletterId: (id: string | null) => void;
+  setDraftId: (id: string | null) => void;
   setNewsletterName: (name: string) => void;
   setTemplate: (template: string) => void;
   setLanguage: (language: string) => void;
@@ -38,6 +40,7 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
   const [subjectLine, setSubjectLine] = useState("");
   const [preheader, setPreheader] = useState("");
   const [newsletterId, setNewsletterId] = useState<string | null>(null);
+  const [draftId, setDraftId] = useState<string | null>(null);
   const [newsletterName, setNewsletterName] = useState("Untitled Newsletter");
   const [template, setTemplate] = useState("masterTemplateBI");
   const [language, setLanguage] = useState("EN");
@@ -106,6 +109,7 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         subjectLine,
         preheader,
         newsletterId,
+        draftId,
         newsletterName,
         template,
         language,
@@ -119,6 +123,7 @@ export const EmailBuilderProvider = ({ children }: { children: ReactNode }) => {
         setSubjectLine,
         setPreheader,
         setNewsletterId,
+        setDraftId,
         setNewsletterName,
         setTemplate,
         setLanguage,

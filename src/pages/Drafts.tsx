@@ -6,12 +6,28 @@ import { getTemplateHeaderFooterData } from "@/utils/templateLanguages";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 const Drafts: React.FC = () => {
-  // Read all saved drafts from localStorage
+  // Read all saved drafts from backend API
   const [drafts, setDrafts] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
   useBreadcrumbs([{ label: "Drafts", href: "/drafts" }]);
 
   React.useEffect(() => {
-    setDrafts(getAllSavedDrafts());
+    const fetchDrafts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const fetchedDrafts = await getAllSavedDrafts();
+        setDrafts(fetchedDrafts);
+      } catch (err) {
+        console.error("Error fetching drafts:", err);
+        setError("Failed to load drafts. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDrafts();
   }, []);
 
   return (
@@ -19,7 +35,15 @@ const Drafts: React.FC = () => {
       <div className="container mx-auto py-8">
         <h1 className="text-2xl font-bold mb-6">Saved Drafts</h1>
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {drafts.length === 0 ? (
+          {loading ? (
+            <div className="col-span-full text-center text-muted-foreground">
+              Loading drafts...
+            </div>
+          ) : error ? (
+            <div className="col-span-full text-center text-red-500">
+              {error}
+            </div>
+          ) : drafts.length === 0 ? (
             <div className="col-span-full text-center text-muted-foreground">
               No drafts found.
             </div>
